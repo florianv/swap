@@ -54,7 +54,7 @@ $swap->addProvider($yahoo);
 ```
 
 Your job is to create a currency pair with a base and quote currencies exprimed as their
-[ISO 4217](http://fr.wikipedia.org/wiki/ISO_4217) code, stick it to Swap and it will set its rate.
+[ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code, stick it to Swap and it will set its rate.
 
 ```php
 // Create the currency pair EUR/USD
@@ -156,7 +156,7 @@ Supports only USD as base currency for the free version and multiple ones for th
 
 Supports multiple currencies as base and quote currencies.
 
-- [Yahoo Finance](https://fr.finance.yahoo.com)
+- [Yahoo Finance](https://finance.yahoo.com/)
 
 Supports multiple currencies as base and quote currencies.
 
