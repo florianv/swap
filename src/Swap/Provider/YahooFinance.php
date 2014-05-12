@@ -31,10 +31,11 @@ class YahooFinance extends AbstractSingleRequestProvider
         $queryPairs = array();
 
         foreach ($pairs as $pair) {
-            $baseIsoCode = $pair->getBaseCurrency();
-            $quoteIsoCode = $pair->getQuoteCurrency();
-            $queryPairs[] = sprintf('"%s%s"', $baseIsoCode, $quoteIsoCode);
-            $hashPairs[$baseIsoCode . $quoteIsoCode] = $pair;
+            $queryPairs[] = sprintf(
+                '"%s%s"',
+                $pair->getBaseCurrency(),
+                $pair->getQuoteCurrency()
+            );
         }
 
         $query = sprintf('select * from yahoo.finance.xchange where pair in (%s)', implode(',', $queryPairs));
