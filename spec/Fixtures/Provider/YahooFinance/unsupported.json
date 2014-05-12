@@ -1,0 +1,20 @@
+{
+
+    "query": {
+        "count": 1,
+        "created": "2014-05-11T15:11:43Z",
+        "lang": "fr",
+        "results": {
+            "rate": {
+                "id": "EURXXX",
+                "Name": "EURXXX=X",
+                "Rate": "0.00",
+                "Date": "N/A",
+                "Time": "N/A",
+                "Ask": "N/A",
+                "Bid": "N/A"
+            }
+        }
+    }
+
+}

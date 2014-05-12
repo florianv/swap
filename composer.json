@@ -1,0 +1,31 @@
+{
+    "name": "florianv/swap",
+    "type": "library",
+    "description": "Exchange rates library for PHP 5.3+",
+    "keywords": ["currency", "money", "exchange rates"],
+    "homepage": "https://github.com/florianv/swap",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Florian Voutzinos",
+            "email": "florian@voutzinos.com",
+            "homepage": "http://voutzinos.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Swap": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "guzzlehttp/guzzle": "~3.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "2.0.*@dev",
+        "phpunit/phpunit": "~3.7"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

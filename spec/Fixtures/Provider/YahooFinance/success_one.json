@@ -1,0 +1,20 @@
+{
+
+    "query": {
+        "count": 1,
+        "created": "2014-05-11T15:33:25Z",
+        "lang": "fr",
+        "results": {
+            "rate": {
+                "id": "EURUSD",
+                "Name": "EUR to USD",
+                "Rate": "1.3758",
+                "Date": "5/10/2014",
+                "Time": "7:23am",
+                "Ask": "1.376",
+                "Bid": "1.3755"
+            }
+        }
+    }
+
+}
