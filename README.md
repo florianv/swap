@@ -1,6 +1,13 @@
 Swap
 ====
 
+[![Build Status](https://travis-ci.org/florianv/swap.svg?branch=master)](https://travis-ci.org/florianv/swap)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/6f546245-569b-4b1b-b520-44e4864380fb/mini.png)](https://insight.sensiolabs.com/projects/6f546245-569b-4b1b-b520-44e4864380fb)
+[![Latest Stable Version](https://poser.pugx.org/florianv/swap/v/stable.png)](https://packagist.org/packages/florianv/swap)
+[![Latest Unstable Version](https://poser.pugx.org/florianv/swap/v/unstable.png)](https://packagist.org/packages/florianv/swap)
+[![Total Downloads](https://poser.pugx.org/florianv/swap/downloads.png)](https://packagist.org/packages/florianv/swap)
+[![License](https://poser.pugx.org/florianv/swap/license.png)](https://packagist.org/packages/florianv/swap)
+
 Swap is an exchange rates library for PHP 5.3+. It offers multiple providers and leverage their ability
 to retrieve multiple quotes at once, while simulating this behavior for those who don't support it
 by using Guzzle's parallel HTTP requests.

@@ -53,11 +53,13 @@ class EuropeanCentralBank extends AbstractSingleRequestProvider
         $xmlElement = $response->xml();
 
         $cube = $xmlElement->Cube->Cube;
-        $cubeAttributes = current($cube->attributes());
+        $cubeAttributes = (array) $cube->attributes();
+        $cubeAttributes = $cubeAttributes['@attributes'];
         $date = new \DateTime($cubeAttributes['time']);
 
         foreach ($cube->Cube as $cube) {
-            $cubeAttributes = current($cube->attributes());
+            $cubeAttributes = (array) $cube->attributes();
+            $cubeAttributes = $cubeAttributes['@attributes'];
 
             if (isset($hashPairs[$cubeAttributes['currency']])) {
                 $pair = $hashPairs[$cubeAttributes['currency']];
