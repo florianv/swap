@@ -53,7 +53,7 @@ $swap = new Swap\Swap();
 $swap->addProvider($yahoo);
 ```
 
-Your job is to create a currency pair with a base and quote currencies exprimed as their
+Your job is to create a currency pair with a base and quote currencies expressed as their
 [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code, stick it to Swap and it will set its rate.
 
 ```php
