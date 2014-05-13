@@ -56,7 +56,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($gbpJpy->getRate() > 0);
         $this->assertTrue($gbpJpy->getDate() <= new \DateTime());
-   }
+    }
 
     public function testQuoteOnePairWithGoogleProvider()
     {
