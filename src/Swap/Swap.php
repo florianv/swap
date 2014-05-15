@@ -119,7 +119,7 @@ class Swap implements SwapInterface
 
         foreach ($pairs as $pair) {
             if ($pair->getBaseCurrency() === $pair->getQuoteCurrency()) {
-                $pair->setRate(1);
+                $pair->setRate('1');
                 $pair->setDate(new \DateTime());
             } else {
                 $pairsToQuote[] = $pair;

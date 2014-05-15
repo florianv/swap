@@ -49,7 +49,7 @@ $yahoo = new \Swap\Provider\YahooFinance($client);
 Create a Swap instance and add the provider:
 
 ```php
-$swap = new Swap\Swap();
+$swap = new \Swap\Swap();
 $swap->addProvider($yahoo);
 ```
 
