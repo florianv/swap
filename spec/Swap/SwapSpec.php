@@ -57,6 +57,7 @@ class SwapSpec extends ObjectBehavior
         $pair->getBaseCurrency()->willReturn('EUR');
         $pair->getQuoteCurrency()->willReturn('USD');
 
+        $pair->getRate()->shouldBeCalled();
         $provider->quote(array($pair))->shouldBeCalled();
 
         $this->addProvider($provider);
@@ -180,5 +181,29 @@ class SwapSpec extends ObjectBehavior
             ->shouldThrow(new \Exception('oops'))
             ->duringQuote(array($pairOne, $pairTwo, $pairThree))
         ;
+    }
+
+    function it_does_not_call_next_providers_if_all_pairs_are_quoted_correctly(
+        CurrencyPairInterface $pairOne,
+        CurrencyPairInterface $pairTwo,
+        ProviderInterface $providerOne,
+        ProviderInterface $providerTwo
+    )
+    {
+        $pairOne->getBaseCurrency()->willReturn('EUR');
+        $pairOne->getQuoteCurrency()->willReturn('USD');
+
+        $pairTwo->getBaseCurrency()->willReturn('USD');
+        $pairTwo->getQuoteCurrency()->willReturn('EUR');
+
+        $providerOne->quote(array($pairOne, $pairTwo))->will(function() use ($pairOne, $pairTwo) {
+            $pairOne->getRate()->willReturn('11');
+            $pairTwo->getRate()->willReturn('22');
+        });
+
+        $providerTwo->quote(Argument::any())->shouldNotBeCalled();
+
+        $this->beConstructedWith(array($providerOne, $providerTwo));
+        $this->quote(array($pairOne, $pairTwo));
     }
 }

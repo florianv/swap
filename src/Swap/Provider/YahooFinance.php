@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of Swap.
  *
  * (c) Florian Voutzinos <florian@voutzinos.com>
@@ -24,7 +24,7 @@ class YahooFinance extends AbstractSingleRequestProvider
     const URI = 'https://query.yahooapis.com/v1/public/yql?q=%s&env=store://datatables.org/alltableswithkeys&format=json';
 
     /**
-     * {@inheritdoc}
+     * {@inheritoc}
      */
     protected function prepareRequestUri(array $pairs)
     {

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of Swap.
  *
  * (c) Florian Voutzinos <florian@voutzinos.com>
@@ -57,26 +57,26 @@ class Swap implements SwapInterface
         $pairsToQuote = $pairs;
 
         for ($i = 0; $count = count($this->providers), $i < $count; $i++) {
-            if (empty($pairsToQuote)) {
-                return;
-            }
-
             try {
                 $this->providers[$i]->quote($pairsToQuote);
             } catch (\Exception $e) {
                 if ($i === $count - 1) {
                     throw $e;
                 }
+            }
 
-                $newPairsToQuote = array();
+            $newPairsToQuote = array();
 
-                foreach ($pairsToQuote as $pair) {
-                    if (null === $pair->getRate()) {
-                        $newPairsToQuote[] = $pair;
-                    }
+            foreach ($pairsToQuote as $pair) {
+                if (null === $pair->getRate()) {
+                    $newPairsToQuote[] = $pair;
                 }
+            }
 
-                $pairsToQuote = $newPairsToQuote;
+            $pairsToQuote = $newPairsToQuote;
+
+            if (empty($pairsToQuote)) {
+                return;
             }
         }
     }
