@@ -10,6 +10,8 @@ Swap is an exchange rates library for PHP 5.3+. It offers multiple providers and
 to retrieve multiple quotes at once, while simulating this behavior for those who don't support it
 by using Guzzle's parallel HTTP requests.
 
+> If you want to use this library with Symfony2, you can install [FlorianvSwapBundle] (https://github.com/florianv/FlorianvSwapBundle).
+
 ## Installation
 
 The recommended way to install Swap is via [Composer](https://getcomposer.org).
@@ -151,6 +153,8 @@ Supports multiple currencies as base and quote currencies.
 Supports only USD as base currency for the free version and multiple ones for the enterprise version.
 
 - [Xignite](https://www.xignite.com)
+
+You must have access to the `XigniteGlobalCurrencies` API.
 
 Supports multiple currencies as base and quote currencies.
 
