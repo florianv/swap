@@ -51,14 +51,14 @@ class YahooFinance extends AbstractSingleRequestProvider
         // Prepare an array of pairs indexed by their "id"
         $hashPairs = array();
         foreach ($pairs as $pair) {
-            $hashPairs[$pair->getBaseCurrency() . $pair->getQuoteCurrency()] = $pair;
+            $hashPairs[$pair->getBaseCurrency().$pair->getQuoteCurrency()] = $pair;
         }
 
         // Process the response content
         $json = $response->json();
         $results = $json['query']['results']['rate'];
 
-        if (count($pairs) === 1) {
+        if (1 === count($pairs)) {
             $results = array($results);
         }
 
@@ -69,7 +69,7 @@ class YahooFinance extends AbstractSingleRequestProvider
                 throw new UnsupportedCurrencyPairException($pair);
             }
 
-            $dateString = $result['Date'] . ' ' . $result['Time'];
+            $dateString = $result['Date'].' '.$result['Time'];
             $date = \DateTime::createFromFormat('m/d/Y H:ia', $dateString);
 
             $pair->setRate($result['Rate']);

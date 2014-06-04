@@ -43,34 +43,26 @@ class EuropeanCentralBank extends AbstractSingleRequestProvider
      */
     protected function processResponse(Response $response, array $pairs)
     {
-        // Prepare an array of pairs indexed by their quote currency
-        $hashPairs = array();
-        foreach ($pairs as $pair) {
-            $hashPairs[$pair->getQuoteCurrency()] = $pair;
-        }
-
-        // Process the response content
         $xmlElement = $response->xml();
-
         $cube = $xmlElement->Cube->Cube;
-        $cubeAttributes = (array) $cube->attributes();
-        $cubeAttributes = $cubeAttributes['@attributes'];
-        $date = new \DateTime($cubeAttributes['time']);
+        $cubeAttributes = $cube->attributes();
+        $date = new \DateTime((string) $cubeAttributes['time']);
+        $quotedPairs = array();
 
         foreach ($cube->Cube as $cube) {
-            $cubeAttributes = (array) $cube->attributes();
-            $cubeAttributes = $cubeAttributes['@attributes'];
-
-            if (isset($hashPairs[$cubeAttributes['currency']])) {
-                $pair = $hashPairs[$cubeAttributes['currency']];
-                $pair->setRate($cubeAttributes['rate']);
-                $pair->setDate($date);
-            }
+            $cubeAttributes = $cube->attributes();
+            $cubeQuoteCurrency = (string) $cubeAttributes['currency'];
+            $cubeRate = (string) $cubeAttributes['rate'];
+            $quotedPairs[$cubeQuoteCurrency] = $cubeRate;
         }
 
-        // The pairs that were not quoted are not supported by this provider
         foreach ($pairs as $pair) {
-            if (null === $pair->getRate()) {
+            $quoteCurrency = $pair->getQuoteCurrency();
+
+            if (isset($quotedPairs[$quoteCurrency])) {
+                $pair->setRate($quotedPairs[$quoteCurrency]);
+                $pair->setDate($date);
+            } else {
                 throw new UnsupportedCurrencyPairException($pair);
             }
         }
