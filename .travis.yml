@@ -11,5 +11,5 @@ before_script:
   - composer --prefer-source --dev install
 
 script:
-  - php bin/phpspec run
-  - php bin/phpunit
+  - bin/phpspec run
+  - bin/phpunit
