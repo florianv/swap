@@ -2,14 +2,14 @@
     "name": "florianv/swap",
     "type": "library",
     "description": "Exchange rates library for PHP 5.3+",
-    "keywords": ["currency", "money", "exchange rates"],
+    "keywords": ["currency", "money", "rate", "exchange rates"],
     "homepage": "https://github.com/florianv/swap",
     "license": "MIT",
     "authors": [
         {
             "name": "Florian Voutzinos",
             "email": "florian@voutzinos.com",
-            "homepage": "http://voutzinos.com"
+            "homepage": "http://florian.voutzinos.com"
         }
     ],
     "autoload": {
