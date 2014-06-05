@@ -162,6 +162,10 @@ Supports multiple currencies as base and quote currencies.
 
 Supports multiple currencies as base and quote currencies.
 
+- [WebserviceX](http://www.webservicex.net/ws/default.aspx)
+
+Supports multiple currencies as base and quote currencies.
+
 ## License
 
 [MIT](https://github.com/florianv/swap/blob/master/LICENSE)

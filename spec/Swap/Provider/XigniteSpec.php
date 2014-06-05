@@ -66,7 +66,7 @@ class XigniteSpec extends ObjectBehavior
 
         $response->json()->willReturn($jsonArray);
         $request->send()->willReturn($response);
-        $client->get(Argument::any())->willReturn($request);
+        $client->get(Argument::exact($uri))->willReturn($request);
 
         $pairOne->getBaseCurrency()->willReturn('EUR');
         $pairOne->getQuoteCurrency()->willReturn('USD');
@@ -119,7 +119,6 @@ class XigniteSpec extends ObjectBehavior
 
     function it_throws_a_quotation_exception_on_exception(
         ClientInterface $client,
-        Response $response,
         RequestInterface $request,
         CurrencyPairInterface $pair
     ) {
