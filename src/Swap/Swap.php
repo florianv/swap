@@ -55,12 +55,13 @@ class Swap implements SwapInterface
         }
 
         $pairsToQuote = $pairs;
+        $providersCount = count($this->providers);
 
-        for ($i = 0; $count = count($this->providers), $i < $count; $i++) {
+        for ($i = 0; $i < $providersCount; $i++) {
             try {
                 $this->providers[$i]->quote($pairsToQuote);
             } catch (\Exception $e) {
-                if ($i === $count - 1) {
+                if ($i === $providersCount - 1) {
                     throw $e;
                 }
             }
