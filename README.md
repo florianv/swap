@@ -37,7 +37,7 @@ Then, you can create a provider and add it to Swap:
 // Creating a YahooFinance provider
 $yahoo = new \Swap\Provider\YahooFinance($adapter);
 
-// Instanciating Swap and adding the provider
+// Instantiating Swap and adding the provider
 $swap = new \Swap\Swap();
 $swap->addProvider($yahoo);
 ```
