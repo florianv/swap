@@ -32,16 +32,11 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="swap" class="anchor" href="#swap"><span class="octicon octicon-link"></span></a>Swap</h1>
+<a name="swap----" class="anchor" href="#swap----"><span class="octicon octicon-link"></span></a>Swap <a href="https://travis-ci.org/florianv/swap"><img src="https://travis-ci.org/florianv/swap.svg?branch=master" alt="Build status"></a> <a href="https://insight.sensiolabs.com/projects/825d1c3f-839b-47e6-969a-7ddefffe94b1"><img src="https://insight.sensiolabs.com/projects/825d1c3f-839b-47e6-969a-7ddefffe94b1/mini.png" alt="Insight"></a> <a href="https://packagist.org/packages/florianv/swap"><img src="http://img.shields.io/packagist/v/florianv/swap.svg" alt="Version"></a> <a href="https://packagist.org/packages/florianv/swap"><img src="http://img.shields.io/packagist/l/florianv/swap.svg" alt="License"></a>
+</h1>
 
-<p><a href="https://travis-ci.org/florianv/swap"><img src="https://travis-ci.org/florianv/swap.svg?branch=master" alt="Build Status"></a>
-<a href="https://insight.sensiolabs.com/projects/825d1c3f-839b-47e6-969a-7ddefffe94b1"><img src="https://insight.sensiolabs.com/projects/825d1c3f-839b-47e6-969a-7ddefffe94b1/mini.png" alt="SensioLabsInsight"></a>
-<a href="https://packagist.org/packages/florianv/swap"><img src="http://img.shields.io/packagist/dt/florianv/swap.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/florianv/swap"><img src="http://img.shields.io/packagist/l/florianv/swap.svg" alt="License"></a></p>
-
-<p>Swap is an exchange rates library for PHP 5.3+. It offers multiple providers and leverage their ability
-to retrieve multiple quotes at once, while simulating this behavior for those who don't support it
-by using Guzzle's parallel HTTP requests.</p>
+<p>Swap helps you to retrieve exchange rates from various providers. It leverages their ability to retrieve multiple quotes
+at once, while simulating this behavior for those who don't support it by sending parallel HTTP requests.</p>
 
 <blockquote>
 <p>If you want to use this library with Symfony2, you can install <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>.</p>
@@ -49,8 +44,6 @@ by using Guzzle's parallel HTTP requests.</p>
 
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
-
-<p>The recommended way to install Swap is via <a href="https://getcomposer.org">Composer</a>.</p>
 
 <p>Add this line to your <code>composer.json</code> file:</p>
 
@@ -61,32 +54,22 @@ by using Guzzle's parallel HTTP requests.</p>
 <span class="p">}</span>
 </pre></div>
 
-<p>Tell Composer to update the dependency by running:</p>
-
-<div class="highlight highlight-bash"><pre><span class="nv">$ </span>php composer.phar update florianv/swap
-</pre></div>
-
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Firstly, you need to create an HTTP client:</p>
+<p>First, you need to create a provider:</p>
 
 <div class="highlight highlight-php"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Guzzle\Http\Client</span><span class="p">();</span>
+<span class="nv">$yahoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\YahooFinance</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
 </pre></div>
 
-<p>Then you can create a provider:</p>
-
-<div class="highlight highlight-php"><pre><span class="nv">$yahoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\YahooFinance</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
-</pre></div>
-
-<p>Create a Swap instance and add the provider:</p>
+<p>Then you can add it to Swap:</p>
 
 <div class="highlight highlight-php"><pre><span class="nv">$swap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Swap</span><span class="p">();</span>
 <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">addProvider</span><span class="p">(</span><span class="nv">$yahoo</span><span class="p">);</span>
 </pre></div>
 
-<p>Your job is to create a currency pair with a base and quote currencies expressed as their
-<a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a> code, stick it to Swap and it will set its rate.</p>
+<p>Your job is to create a currency pair and Swap will set its rate:</p>
 
 <div class="highlight highlight-php"><pre><span class="c1">// Create the currency pair EUR/USD</span>
 <span class="nv">$pair</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Model\CurrencyPair</span><span class="p">(</span><span class="s1">'EUR'</span><span class="p">,</span> <span class="s1">'USD'</span><span class="p">);</span>
@@ -100,6 +83,10 @@ by using Guzzle's parallel HTTP requests.</p>
 
 <p>We created a currency pair <code>EUR/USD</code>, quoted it with the <code>YahooFinance</code> provider and got <code>1.3751</code> as rate
 which means that <code>1 EUR</code> is exchanged for <code>1.3751 USD</code>.</p>
+
+<blockquote>
+<p>Currencies are expressed as their <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a> code.</p>
+</blockquote>
 
 <h3>
 <a name="multiple-pairs" class="anchor" href="#multiple-pairs"><span class="octicon octicon-link"></span></a>Multiple pairs</h3>
@@ -127,8 +114,7 @@ which means that <code>1 EUR</code> is exchanged for <code>1.3751 USD</code>.</p
 <h3>
 <a name="date" class="anchor" href="#date"><span class="octicon octicon-link"></span></a>Date</h3>
 
-<p>It is possible to retrieve the date at which the rate was calculated. If the provider does not give
-this information, it will be set to now.</p>
+<p>You can also retrieve the date at which the rate was calculated:</p>
 
 <div class="highlight highlight-php"><pre><span class="c1">// $date is a \DateTime instance</span>
 <span class="nv">$date</span> <span class="o">=</span> <span class="nv">$pair</span><span class="o">-&gt;</span><span class="na">getDate</span><span class="p">()</span>
@@ -137,8 +123,8 @@ this information, it will be set to now.</p>
 <h3>
 <a name="chained-providers" class="anchor" href="#chained-providers"><span class="octicon octicon-link"></span></a>Chained providers</h3>
 
-<p>Providers can be chained. When an exception is thrown by a provider, the following will be used
-to quote the pairs that were not quoted.</p>
+<p>Providers can be chained so when one of them fails, the next one can be used to quote the pairs
+that were not processed.</p>
 
 <div class="highlight highlight-php"><pre><span class="nv">$yahoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\YahooFinance</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
 <span class="nv">$google</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\GoogleFinance</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
@@ -173,32 +159,26 @@ to quote the pairs that were not quoted.</p>
 <a name="providers" class="anchor" href="#providers"><span class="octicon octicon-link"></span></a>Providers</h2>
 
 <ul>
-<li><a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a></li>
-</ul><p>Supports only EUR as base currency.</p>
-
-<ul>
-<li><a href="http://www.google.com/finance">Google Finance</a></li>
-</ul><p>Supports multiple currencies as base and quote currencies.</p>
-
-<ul>
-<li><a href="https://openexchangerates.org">Open Exchange Rates</a></li>
-</ul><p>Supports only USD as base currency for the free version and multiple ones for the enterprise version.</p>
-
-<ul>
-<li><a href="https://www.xignite.com">Xignite</a></li>
-</ul><p>You must have access to the <code>XigniteGlobalCurrencies</code> API.</p>
-
-<p>Supports multiple currencies as base and quote currencies.</p>
-
-<ul>
-<li><a href="https://finance.yahoo.com/">Yahoo Finance</a></li>
-</ul><p>Supports multiple currencies as base and quote currencies.</p>
-
-<ul>
-<li><a href="http://www.webservicex.net/ws/default.aspx">WebserviceX</a></li>
-</ul><p>Supports multiple currencies as base and quote currencies.</p>
-
-<h2>
+<li>
+<a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a>
+Supports only EUR as base currency.</li>
+<li>
+<a href="http://www.google.com/finance">Google Finance</a>
+Supports multiple currencies as base and quote currencies.</li>
+<li>
+<a href="https://openexchangerates.org">Open Exchange Rates</a>
+Supports only USD as base currency for the free version and multiple ones for the enterprise version.</li>
+<li>
+<a href="https://www.xignite.com">Xignite</a>
+You must have access to the <code>XigniteGlobalCurrencies</code> API.
+Supports multiple currencies as base and quote currencies.</li>
+<li>
+<a href="https://finance.yahoo.com/">Yahoo Finance</a>
+Supports multiple currencies as base and quote currencies.</li>
+<li>
+<a href="http://www.webservicex.net/ws/default.aspx">WebserviceX</a>
+Supports multiple currencies as base and quote currencies.</li>
+</ul><h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p><a href="https://github.com/florianv/swap/blob/master/LICENSE">MIT</a></p>
