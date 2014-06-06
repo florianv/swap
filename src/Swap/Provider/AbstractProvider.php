@@ -12,7 +12,9 @@
 namespace Swap\Provider;
 
 use Guzzle\Http\ClientInterface;
+use Swap\Adapter\Guzzle3Adapter;
 use Swap\ProviderInterface;
+use Swap\AdapterInterface;
 
 /**
  * Base class for providers.
@@ -21,20 +23,24 @@ use Swap\ProviderInterface;
  */
 abstract class AbstractProvider implements ProviderInterface
 {
-    /**
-     * The HTTP client.
-     *
-     * @var ClientInterface
-     */
     protected $client;
 
     /**
      * Creates a new abstract provider.
      *
-     * @param ClientInterface $client
+     * @param ClientInterface|AdapterInterface $client
+     *
+     * @throws \InvalidArgumentException
      */
-    public function __construct(ClientInterface $client)
+    public function __construct($client)
     {
+        // For BC with version 1.0
+        if ($client instanceof ClientInterface) {
+            $client = new Guzzle3Adapter($client);
+        } elseif (!$client instanceof AdapterInterface) {
+            throw new \InvalidArgumentException('The client must implement "Swap\AdapterInterface".');
+        }
+
         $this->client = $client;
     }
 }

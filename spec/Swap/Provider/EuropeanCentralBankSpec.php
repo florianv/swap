@@ -11,20 +11,16 @@
 
 namespace spec\Swap\Provider;
 
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Exception\BadResponseException;
-use Guzzle\Http\Message\RequestInterface;
-use Guzzle\Http\Message\Response;
+use Swap\AdapterInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Swap\Exception\QuotationException;
 use Swap\Exception\UnsupportedBaseCurrencyException;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPairInterface;
 
 class EuropeanCentralBankSpec extends ObjectBehavior
 {
-    function it_is_initializable(ClientInterface $client)
+    function it_is_initializable(AdapterInterface $client)
     {
         $this->beConstructedWith($client);
         $this->shouldHaveType('Swap\Provider\EuropeanCentralBank');
@@ -32,9 +28,10 @@ class EuropeanCentralBankSpec extends ObjectBehavior
     }
 
     function it_throws_an_unsupported_base_currency_exception_when_base_is_not_euro(
-        ClientInterface $client,
+        AdapterInterface $client,
         CurrencyPairInterface $pair
-    ) {
+    )
+    {
         $pair->getBaseCurrency()->willReturn('USD');
 
         $this->beConstructedWith($client);
@@ -46,20 +43,15 @@ class EuropeanCentralBankSpec extends ObjectBehavior
     }
 
     function it_sets_the_bid_and_date_of_three_pairs(
-        ClientInterface $client,
-        RequestInterface $request,
-        Response $response,
+        AdapterInterface $client,
         CurrencyPairInterface $pairOne,
         CurrencyPairInterface $pairTwo,
         CurrencyPairInterface $pairThree
-    ) {
+    )
+    {
         $uri = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
-        $responseContent = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/daily.xml');
-        $xmlElement = new \SimpleXMLElement($responseContent);
-
-        $request->send()->willReturn($response);
-        $response->xml()->willReturn($xmlElement);
-        $client->get($uri)->willReturn($request);
+        $body = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/daily.xml');
+        $client->get($uri)->willReturn($body);
 
         $pairOne->getBaseCurrency()->willReturn('EUR');
         $pairOne->getQuoteCurrency()->willReturn('BGN');
@@ -83,64 +75,13 @@ class EuropeanCentralBankSpec extends ObjectBehavior
         $this->quote(array($pairOne, $pairTwo, $pairThree));
     }
 
-    function it_throws_a_quotation_exception_on_bad_response(
-        ClientInterface $client,
-        RequestInterface $request,
-        Response $response,
-        CurrencyPairInterface $pair
-    ) {
-        $pair->getBaseCurrency()->willReturn('EUR');
-        $pair->getQuoteCurrency()->willReturn('BGN');
-
-        $exception = new BadResponseException();
-        $exception->setRequest($request->getWrappedObject());
-        $exception->setResponse($response->getWrappedObject());
-
-        $request->send()->willThrow($exception);
-        $client->get(Argument::any())->willReturn($request);
-        $response->getStatusCode()->willReturn(500);
-
-        $this->beConstructedWith($client);
-
-        $this
-            ->shouldThrow(new QuotationException('The request failed with a "500" status code.'))
-            ->duringQuote(array($pair))
-        ;
-    }
-
-    function it_throws_a_quotation_exception_on_exception(
-        ClientInterface $client,
-        RequestInterface $request,
-        CurrencyPairInterface $pair
-    ) {
-        $pair->getBaseCurrency()->willReturn('EUR');
-        $pair->getQuoteCurrency()->willReturn('BGN');
-
-        $exception = new \Exception('error');
-
-        $request->send()->willThrow($exception);
-        $client->get(Argument::any())->willReturn($request);
-
-        $this->beConstructedWith($client);
-
-        $this
-            ->shouldThrow(new QuotationException('The request failed with message: "error".'))
-            ->duringQuote(array($pair))
-        ;
-    }
-
     function it_throws_an_unsupported_currency_pair_if_the_pair_is_not_quoted(
-        ClientInterface $client,
-        RequestInterface $request,
-        Response $response,
+        AdapterInterface $client,
         CurrencyPairInterface $pair
-    ) {
-        $responseContent = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/daily.xml');
-        $xmlElement = new \SimpleXMLElement($responseContent);
-
-        $request->send()->willReturn($response);
-        $response->xml()->willReturn($xmlElement);
-        $client->get(Argument::any())->willReturn($request);
+    )
+    {
+        $body = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/daily.xml');
+        $client->get(Argument::any())->willReturn($body);
 
         $pair->getBaseCurrency()->willReturn('EUR');
         $pair->getQuoteCurrency()->willReturn('XXX');

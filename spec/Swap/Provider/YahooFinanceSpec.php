@@ -11,19 +11,15 @@
 
 namespace spec\Swap\Provider;
 
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Exception\BadResponseException;
-use Guzzle\Http\Message\RequestInterface;
-use Guzzle\Http\Message\Response;
+use Swap\AdapterInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Swap\Exception\QuotationException;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPairInterface;
 
 class YahooFinanceSpec extends ObjectBehavior
 {
-    function it_is_initializable(ClientInterface $client)
+    function it_is_initializable(AdapterInterface $client)
     {
         $this->beConstructedWith($client);
         $this->shouldHaveType('Swap\Provider\YahooFinance');
@@ -31,18 +27,13 @@ class YahooFinanceSpec extends ObjectBehavior
     }
 
     function it_sets_bid_and_date_of_one_pair(
-        ClientInterface $client,
-        RequestInterface $request,
-        Response $response,
+        AdapterInterface $client,
         CurrencyPairInterface $pair
-    ) {
+    )
+    {
         $uri = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURUSD%22%29&env=store://datatables.org/alltableswithkeys&format=json';
-        $responseContent = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/success_one.json');
-        $jsonArray = json_decode($responseContent, true);
-
-        $client->get($uri)->willReturn($request);
-        $request->send()->willReturn($response);
-        $response->json()->willReturn($jsonArray);
+        $body = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/success_one.json');
+        $client->get($uri)->willReturn($body);
 
         $pair->getBaseCurrency()->willReturn('EUR');
         $pair->getQuoteCurrency()->willReturn('USD');
@@ -54,20 +45,15 @@ class YahooFinanceSpec extends ObjectBehavior
     }
 
     function it_sets_bid_and_date_of_three_pairs(
-        ClientInterface $client,
-        RequestInterface $request,
-        Response $response,
+        AdapterInterface $client,
         CurrencyPairInterface $pairOne,
         CurrencyPairInterface $pairTwo,
         CurrencyPairInterface $pairThree
-    ) {
+    )
+    {
         $uri = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURUSD%22%2C%22USDGBP%22%2C%22GBPEUR%22%29&env=store://datatables.org/alltableswithkeys&format=json';
-        $responseContent = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/success_three.json');
-        $jsonArray = json_decode($responseContent, true);
-
-        $client->get($uri)->willReturn($request);
-        $request->send()->willReturn($response);
-        $response->json()->willReturn($jsonArray);
+        $body = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/success_three.json');
+        $client->get($uri)->willReturn($body);
 
         $pairOne->getBaseCurrency()->willReturn('EUR');
         $pairOne->getQuoteCurrency()->willReturn('USD');
@@ -89,17 +75,12 @@ class YahooFinanceSpec extends ObjectBehavior
     }
 
     function it_throws_exception_when_currency_pair_is_not_supported(
-        ClientInterface $client,
-        RequestInterface $request,
-        Response $response,
+        AdapterInterface $client,
         CurrencyPairInterface $pair
-    ) {
-        $responseContent = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/unsupported.json');
-        $jsonArray = json_decode($responseContent, true);
-
-        $client->get(Argument::any())->willReturn($request);
-        $request->send()->willReturn($response);
-        $response->json()->willReturn($jsonArray);
+    )
+    {
+        $body = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/unsupported.json');
+        $client->get(Argument::any())->willReturn($body);
 
         $pair->getBaseCurrency()->willReturn('EUR');
         $pair->getQuoteCurrency()->willReturn('XXX');
@@ -108,50 +89,6 @@ class YahooFinanceSpec extends ObjectBehavior
 
         $this
             ->shouldThrow(new UnsupportedCurrencyPairException($pair->getWrappedObject()))
-            ->duringQuote(array($pair))
-        ;
-    }
-
-    function it_throws_a_quotation_exception_on_bad_response(
-        ClientInterface $client,
-        Response $response,
-        RequestInterface $request,
-        CurrencyPairInterface $pair
-    ) {
-        $response->getStatusCode()->willReturn(500);
-
-        $exception = new BadResponseException();
-        $exception->setRequest($request->getWrappedObject());
-        $exception->setResponse($response->getWrappedObject());
-
-        $request->send()->willThrow($exception);
-        $client->get(Argument::any())->willReturn($request);
-
-        $pair->getBaseCurrency()->willReturn('AUD');
-        $pair->getQuoteCurrency()->willReturn('USD');
-
-        $this->beConstructedWith($client, 'secret');
-
-        $this
-            ->shouldThrow(new QuotationException('The request failed with a "500" status code.'))
-            ->duringQuote(array($pair))
-        ;
-    }
-
-    function it_throws_a_quotation_exception_on_exception(
-        ClientInterface $client,
-        RequestInterface $request,
-        CurrencyPairInterface $pair
-    ) {
-        $exception = new \Exception('error');
-
-        $request->send()->willThrow($exception);
-        $client->get(Argument::any())->willReturn($request);
-
-        $this->beConstructedWith($client, 'secret');
-
-        $this
-            ->shouldThrow(new QuotationException('The request failed with message: "error".'))
             ->duringQuote(array($pair))
         ;
     }

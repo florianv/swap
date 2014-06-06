@@ -20,11 +20,6 @@ use Swap\Model\CurrencyPairInterface;
  */
 class UnsupportedCurrencyPairException extends \InvalidArgumentException
 {
-    /**
-     * The currency pair.
-     *
-     * @var CurrencyPairInterface
-     */
     private $currencyPair;
 
     /**

@@ -17,29 +17,38 @@ Add this line to your `composer.json` file:
 }
 ```
 
+Currently Guzzle 3 and 4 are supported HTTP clients, so you will need to require one of them too.
+
 ## Usage
 
-First, you need to create a provider:
+First, you need to create an adapter:
 
 ```php
-$client = new \Guzzle\Http\Client();
-$yahoo = new \Swap\Provider\YahooFinance($client);
+// Creating a Guzzle 3 adapter
+$adapter = new \Swap\Adapter\Guzzle3Adapter(new \Guzzle\Http\Client());
+
+// Creating a Guzzle 4 adapter
+$adapter = new \Swap\Adapter\Guzzle4Adapter(new \GuzzleHttp\Client\Client());
 ```
 
-Then you can add it to Swap:
+Then, you can create a provider and add it to Swap:
 
 ```php
+// Creating a YahooFinance provider
+$yahoo = new \Swap\Provider\YahooFinance($adapter);
+
+// Instanciating Swap and adding the provider
 $swap = new \Swap\Swap();
 $swap->addProvider($yahoo);
 ```
 
-Your job is to create a currency pair and Swap will set its rate:
+Now, your job is to create a currency pair and Swap will set its rate:
 
 ```php
-// Create the currency pair EUR/USD
+// Creating the currency pair EUR/USD
 $pair = new \Swap\Model\CurrencyPair('EUR', 'USD');
 
-// Quotes the pair
+// Quoting the pair
 $swap->quote($pair);
 
 // 1.3751
@@ -94,28 +103,6 @@ $google = new \Swap\Provider\GoogleFinance($client);
 
 $swap->addProvider($yahoo);
 $swap->addProvider($google);
-```
-
-### Exception Handling
-
-Swap throws different types of exceptions:
-
-```php
-try {
-    $swap->quote($pair);
-} catch (\Swap\Exception\QuotationException $e) {
-
-    // Default exception when the quote operation failed
-    // For example when the HTTP request failed
-
-} catch (\Swap\Exception\UnsupportedBaseCurrencyException $e) {
-
-    // Exception thrown when a currency is not supported as base by the provider
-
-} catch (\Swap\Exception\UnsupportedCurrencyPairException $e) {
-
-    // Exception thrown when the currency pair is not supported
-}
 ```
 
 ## Providers

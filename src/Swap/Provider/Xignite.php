@@ -12,8 +12,7 @@
 namespace Swap\Provider;
 
 use Swap\Exception\QuotationException;
-use Guzzle\Http\Message\Response;
-use Guzzle\Http\ClientInterface;
+use Swap\Util\StringUtil;
 
 /**
  * Xignite provider.
@@ -24,20 +23,15 @@ class Xignite extends AbstractSingleRequestProvider
 {
     const URI = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
 
-    /**
-     * The application token.
-     *
-     * @var string
-     */
     private $token;
 
     /**
      * Creates a new provider.
      *
-     * @param ClientInterface $client The HTTP client
-     * @param string          $token  The application token
+     * @param \Guzzle\Http\ClientInterface|\Swap\AdapterInterface $client The HTTP client
+     * @param string                                              $token  The application token
      */
-    public function __construct(ClientInterface $client, $token)
+    public function __construct($client, $token)
     {
         parent::__construct($client);
 
@@ -60,7 +54,7 @@ class Xignite extends AbstractSingleRequestProvider
     /**
      * {@inheritdoc}
      */
-    protected function processResponse(Response $response, array $pairs)
+    protected function processResponse($body, array $pairs)
     {
         // Prepare an array of pairs indexed by their "symbol"
         $hashPairs = array();
@@ -69,7 +63,7 @@ class Xignite extends AbstractSingleRequestProvider
         }
 
         // Process the response content
-        $json = $response->json();
+        $json = StringUtil::jsonToArray($body);
 
         foreach ($json as $row) {
             if ('Success' === $row['Outcome']) {

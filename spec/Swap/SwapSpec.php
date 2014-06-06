@@ -33,7 +33,8 @@ class SwapSpec extends ObjectBehavior
     function it_can_be_constructed_with_multiple_providers(
         ProviderInterface $providerOne,
         ProviderInterface $providerTwo
-    ) {
+    )
+    {
         $this->beConstructedWith(array($providerOne, $providerTwo));
         $this->hasProvider($providerOne)->shouldReturn(true);
         $this->hasProvider($providerTwo)->shouldReturn(true);
@@ -53,7 +54,8 @@ class SwapSpec extends ObjectBehavior
     function it_accepts_a_single_pair(
         ProviderInterface $provider,
         CurrencyPairInterface $pair
-    ) {
+    )
+    {
         $pair->getBaseCurrency()->willReturn('EUR');
         $pair->getQuoteCurrency()->willReturn('USD');
 
@@ -75,7 +77,8 @@ class SwapSpec extends ObjectBehavior
     function it_sets_the_rate_and_date_if_base_and_quote_currencies_are_identical(
         CurrencyPairInterface $pairOne,
         CurrencyPairInterface $pairTwo
-    ) {
+    )
+    {
         $pairOne->getBaseCurrency()->willReturn('EUR');
         $pairOne->getQuoteCurrency()->willReturn('EUR');
         $pairOne->setRate('1')->shouldBeCalled();
@@ -96,7 +99,8 @@ class SwapSpec extends ObjectBehavior
         ProviderInterface $providerOne,
         ProviderInterface $providerTwo,
         ProviderInterface $providerThree
-    ) {
+    )
+    {
         $date = new \DateTime();
 
         $pairOne->getBaseCurrency()->willReturn('EUR');
@@ -148,7 +152,8 @@ class SwapSpec extends ObjectBehavior
         ProviderInterface $providerOne,
         ProviderInterface $providerTwo,
         ProviderInterface $providerThree
-    ) {
+    )
+    {
         $pairOne->getBaseCurrency()->willReturn('EUR');
         $pairOne->getQuoteCurrency()->willReturn('USD');
         $pairOne->getRate()->willReturn(null);

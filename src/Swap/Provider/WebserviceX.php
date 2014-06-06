@@ -11,6 +11,8 @@
 
 namespace Swap\Provider;
 
+use Swap\Util\StringUtil;
+
 /**
  * WebserviceX provider.
  *
@@ -23,28 +25,27 @@ class WebserviceX extends AbstractMultiRequestsProvider
     /**
      * {@inheritdoc}
      */
-    protected function prepareRequests(array $pairs)
+    protected function prepareUris(array $pairs)
     {
-        $requests = array();
+        $uris = array();
 
         foreach ($pairs as $pair) {
-            $url = sprintf(self::URL, $pair->getBaseCurrency(), $pair->getQuoteCurrency());
-            $requests[] = $this->client->get($url);
+            $uris[] = sprintf(self::URL, $pair->getBaseCurrency(), $pair->getQuoteCurrency());
         }
 
-        return $requests;
+        return $uris;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function processResponses(array $responses, array $pairs)
+    protected function processResponses(array $bodies, array $pairs)
     {
         $date = new \DateTime();
 
-        foreach ($responses as $key => $response) {
+        foreach ($bodies as $key => $body) {
             $pair = $pairs[$key];
-            $xml = $response->xml();
+            $xml = StringUtil::xmlToElement($body);
             $rate = (string) $xml;
 
             $pair->setRate($rate);

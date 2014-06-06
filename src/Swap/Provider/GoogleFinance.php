@@ -25,32 +25,29 @@ class GoogleFinance extends AbstractMultiRequestsProvider
     /**
      * {@inheritdoc}
      */
-    protected function prepareRequests(array $pairs)
+    protected function prepareUris(array $pairs)
     {
-        $requests = array();
+        $uris = array();
 
         foreach ($pairs as $pair) {
-            $uri = sprintf(self::URI, $pair->getBaseCurrency(), $pair->getQuoteCurrency());
-            $request = $this->client->get($uri);
-            $requests[] = $request;
+            $uris[] = sprintf(self::URI, $pair->getBaseCurrency(), $pair->getQuoteCurrency());
         }
 
-        return $requests;
+        return $uris;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function processResponses(array $responses, array $pairs)
+    protected function processResponses(array $bodies, array $pairs)
     {
         $date = new \DateTime();
 
-        foreach ($responses as $key => $response) {
+        foreach ($bodies as $key => $body) {
             $pair = $pairs[$key];
 
-            $html = $response->getBody(true);
             $document = new \DOMDocument();
-            @$document->loadHTML($html);
+            @$document->loadHTML($body);
 
             $xpath = new \DOMXPath($document);
             $nodes = $xpath->query('//span[@class="bld"]');

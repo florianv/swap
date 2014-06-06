@@ -13,7 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedBaseCurrencyException;
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Guzzle\Http\ClientInterface;
+use Swap\Util\StringUtil;
 
 /**
  * Open Exchange Rates provider.
@@ -25,28 +25,17 @@ class OpenExchangeRates extends AbstractMultiRequestsProvider
     const FREE_URI = 'https://openexchangerates.org/api/latest.json?app_id=%s';
     const ENTERPRISE_URI = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s';
 
-    /**
-     * The application id.
-     *
-     * @var string
-     */
     private $appId;
-
-    /**
-     * A flag to tell if it is in enterprise mode.
-     *
-     * @var boolean
-     */
     private $enterprise;
 
     /**
      * Creates a new provider.
      *
-     * @param ClientInterface $client     The HTTP client
-     * @param string          $appId      The application id.
-     * @param boolean         $enterprise A flag to tell if it is in enterprise mode
+     * @param \Guzzle\Http\ClientInterface|\Swap\AdapterInterface $client The HTTP client
+     * @param string          $appId                                      The application id.
+     * @param boolean         $enterprise                                 A flag to tell if it is in enterprise mode
      */
-    public function __construct(ClientInterface $client, $appId, $enterprise = false)
+    public function __construct($client, $appId, $enterprise = false)
     {
         parent::__construct($client);
 
@@ -57,7 +46,7 @@ class OpenExchangeRates extends AbstractMultiRequestsProvider
     /**
      * {@inheritdoc}
      */
-    protected function prepareRequests(array $pairs)
+    protected function prepareUris(array $pairs)
     {
         // Build a multi dimensional array with the base currencies
         // as key and an array of quote currencies as value to generate
@@ -76,8 +65,8 @@ class OpenExchangeRates extends AbstractMultiRequestsProvider
             }
         }
 
-        // Prepare the requests
-        $requests = array();
+        // Prepare the uris
+        $uris = array();
 
         foreach ($orderedPairs as $baseCurrency => $orderedPair) {
             $symbols = array();
@@ -92,21 +81,21 @@ class OpenExchangeRates extends AbstractMultiRequestsProvider
                 $uri = sprintf(self::FREE_URI, $this->appId);
             }
 
-            $requests[] = $this->client->get($uri);
+            $uris[] = $uri;
         }
 
-        return $requests;
+        return $uris;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function processResponses(array $responses, array $pairs)
+    protected function processResponses(array $bodies, array $pairs)
     {
         $pairsToProcess = $pairs;
 
-        foreach ($responses as $response) {
-            $json = $response->json();
+        foreach ($bodies as $body) {
+            $json = StringUtil::jsonToArray($body);
             $base = $json['base'];
             $date = new \DateTime();
             $date->setTimestamp($json['timestamp']);

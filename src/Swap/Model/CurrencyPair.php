@@ -18,32 +18,9 @@ namespace Swap\Model;
  */
 class CurrencyPair implements CurrencyPairInterface
 {
-    /**
-     * The base currency ISO 4217 code.
-     *
-     * @var string
-     */
     private $baseCurrency;
-
-    /**
-     * The quote currency ISO 4217 code.
-     *
-     * @var string
-     */
     private $quoteCurrency;
-
-    /**
-     * The rate.
-     *
-     * @var string|null
-     */
     private $rate;
-
-    /**
-     * The date.
-     *
-     * @var \DateTime
-     */
     private $date;
 
     /**

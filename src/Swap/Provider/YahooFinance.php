@@ -12,7 +12,7 @@
 namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Guzzle\Http\Message\Response;
+use Swap\Util\StringUtil;
 
 /**
  * Yahoo Finance provider.
@@ -46,7 +46,7 @@ class YahooFinance extends AbstractSingleRequestProvider
     /**
      * {@inheritdoc}
      */
-    protected function processResponse(Response $response, array $pairs)
+    protected function processResponse($body, array $pairs)
     {
         // Prepare an array of pairs indexed by their "id"
         $hashPairs = array();
@@ -55,7 +55,7 @@ class YahooFinance extends AbstractSingleRequestProvider
         }
 
         // Process the response content
-        $json = $response->json();
+        $json = StringUtil::jsonToArray($body);
         $results = $json['query']['results']['rate'];
 
         if (1 === count($pairs)) {

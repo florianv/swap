@@ -9,23 +9,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Swap\Tests;
+namespace Swap\Tests\Adapter;
 
-use Guzzle\Http\Client;
-use Swap\Provider\OpenExchangeRates;
+use Swap\Provider\EuropeanCentralBank;
+use Swap\Provider\WebserviceX;
 use Swap\Provider\YahooFinance;
 use Swap\Provider\GoogleFinance;
 use Swap\Model\CurrencyPair;
 use Swap\Swap;
 
-class SwapTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * The client or adapter to test.
+     *
+     * @var \Guzzle\Http\ClientInterface|\Swap\AdapterInterface
+     */
+    protected $adapter;
+
     public function testQuoteOnePairWithYahooProvider()
     {
-        $client = new Client();
-        $provider = new YahooFinance($client);
         $swap = new Swap();
-        $swap->addProvider($provider);
+        $swap->addProvider(new YahooFinance($this->adapter));
 
         $pair = new CurrencyPair('EUR', 'USD');
 
@@ -37,10 +42,42 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
     public function testQuoteThreePairsWithYahooProvider()
     {
-        $client = new Client();
-        $provider = new YahooFinance($client);
         $swap = new Swap();
-        $swap->addProvider($provider);
+        $swap->addProvider(new YahooFinance($this->adapter));
+
+        $eurUsd = new CurrencyPair('EUR', 'USD');
+        $usdGbp = new CurrencyPair('USD', 'GBP');
+        $gbpJpy = new CurrencyPair('GBP', 'JPY');
+
+        $swap->quote(array($eurUsd, $usdGbp, $gbpJpy));
+
+        $this->assertTrue($eurUsd->getRate() > 0);
+        $this->assertTrue($eurUsd->getDate() <= new \DateTime());
+
+        $this->assertTrue($usdGbp->getRate() > 0);
+        $this->assertTrue($usdGbp->getDate() <= new \DateTime());
+
+        $this->assertTrue($gbpJpy->getRate() > 0);
+        $this->assertTrue($gbpJpy->getDate() <= new \DateTime());
+    }
+
+    public function testQuoteOnePairWithWebserviceXProvider()
+    {
+        $swap = new Swap();
+        $swap->addProvider(new WebserviceX($this->adapter));
+
+        $pair = new CurrencyPair('EUR', 'USD');
+
+        $swap->quote($pair);
+
+        $this->assertTrue($pair->getRate() > 0);
+        $this->assertTrue($pair->getDate() <= new \DateTime());
+    }
+
+    public function testQuoteThreePairsWithWebserviceXProvider()
+    {
+        $swap = new Swap();
+        $swap->addProvider(new WebserviceX($this->adapter));
 
         $eurUsd = new CurrencyPair('EUR', 'USD');
         $usdGbp = new CurrencyPair('USD', 'GBP');
@@ -60,10 +97,8 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
     public function testQuoteOnePairWithGoogleProvider()
     {
-        $client = new Client();
-        $provider = new GoogleFinance($client);
         $swap = new Swap();
-        $swap->addProvider($provider);
+        $swap->addProvider(new GoogleFinance($this->adapter));
 
         $pair = new CurrencyPair('EUR', 'USD');
 
@@ -75,10 +110,8 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
     public function testQuoteThreePairsWithGoogleProvider()
     {
-        $client = new Client();
-        $provider = new GoogleFinance($client);
         $swap = new Swap();
-        $swap->addProvider($provider);
+        $swap->addProvider(new GoogleFinance($this->adapter));
 
         $eurUsd = new CurrencyPair('EUR', 'USD');
         $usdGbp = new CurrencyPair('USD', 'GBP');
@@ -96,19 +129,27 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($gbpJpy->getDate() <= new \DateTime());
     }
 
-    public function testQuoteThreePairsWithFailingProvider()
+    public function testQuoteOnePairWithECBProvider()
     {
-        $client = new Client();
-        $yahoo = new YahooFinance($client);
-        $openExchange = new OpenExchangeRates($client, 'hihihi', true);
-
         $swap = new Swap();
-        $swap->addProvider($openExchange);
-        $swap->addProvider($yahoo);
+        $swap->addProvider(new EuropeanCentralBank($this->adapter));
+
+        $pair = new CurrencyPair('EUR', 'USD');
+
+        $swap->quote($pair);
+
+        $this->assertTrue($pair->getRate() > 0);
+        $this->assertTrue($pair->getDate() <= new \DateTime());
+    }
+
+    public function testQuoteThreePairsWithECBProvider()
+    {
+        $swap = new Swap();
+        $swap->addProvider(new EuropeanCentralBank($this->adapter));
 
         $eurUsd = new CurrencyPair('EUR', 'USD');
-        $usdGbp = new CurrencyPair('USD', 'GBP');
-        $gbpJpy = new CurrencyPair('GBP', 'JPY');
+        $usdGbp = new CurrencyPair('EUR', 'GBP');
+        $gbpJpy = new CurrencyPair('EUR', 'JPY');
 
         $swap->quote(array($eurUsd, $usdGbp, $gbpJpy));
 

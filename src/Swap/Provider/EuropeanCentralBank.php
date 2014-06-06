@@ -13,7 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedBaseCurrencyException;
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Guzzle\Http\Message\Response;
+use Swap\Util\StringUtil;
 
 /**
  * European Central Bank provider.
@@ -41,9 +41,9 @@ class EuropeanCentralBank extends AbstractSingleRequestProvider
     /**
      * {@inheritdoc}
      */
-    protected function processResponse(Response $response, array $pairs)
+    protected function processResponse($body, array $pairs)
     {
-        $xmlElement = $response->xml();
+        $xmlElement = StringUtil::xmlToElement($body);
         $cube = $xmlElement->Cube->Cube;
         $cubeAttributes = $cube->attributes();
         $date = new \DateTime((string) $cubeAttributes['time']);

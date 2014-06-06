@@ -18,11 +18,6 @@ namespace Swap;
  */
 class Swap implements SwapInterface
 {
-    /**
-     * The providers.
-     *
-     * @var \Swap\ProviderInterface[]
-     */
     private $providers;
 
     /**
