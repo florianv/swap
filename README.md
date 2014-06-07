@@ -31,6 +31,9 @@ $adapter = new \Swap\Adapter\Guzzle3Adapter(new \Guzzle\Http\Client());
 $adapter = new \Swap\Adapter\Guzzle4Adapter(new \GuzzleHttp\Client\Client());
 ```
 
+> For BC reasons, it is still possible to pass $adapter = new \Guzzle\Http\Client(); as adapter
+> but it will be removed in version 2.0.
+
 Then, you can create a provider and add it to Swap:
 
 ```php
