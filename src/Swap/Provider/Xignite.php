@@ -70,7 +70,7 @@ class Xignite extends AbstractSingleRequestProvider
                 $pair = $hashPairs[$row['Symbol']];
                 $dateString = $row['Date'].' '.$row['Time'];
 
-                $pair->setRate($row['Bid']);
+                $pair->setRate((string) $row['Bid']);
                 $pair->setDate(\DateTime::createFromFormat('m/d/Y H:i:s A', $dateString, new \DateTimeZone('UTC')));
             } else {
                 throw new QuotationException($row['Message']);

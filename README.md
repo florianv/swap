@@ -19,6 +19,9 @@ Add this line to your `composer.json` file:
 
 Currently Guzzle 3 and 4 are supported HTTP clients, so you will need to require one of them too.
 
+- `"guzzle/guzzle": "~3.0"`
+- `"guzzlehttp/guzzle": "~4.0"`
+
 ## Usage
 
 First, you need to create an adapter:

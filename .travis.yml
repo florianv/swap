@@ -8,8 +8,8 @@ php:
   - hhvm
 
 before_script:
+  - composer selfupdate
   - composer --prefer-source --dev install
 
 script:
-  - bin/phpspec run
   - bin/phpunit

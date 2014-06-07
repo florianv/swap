@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Swap\Tests\Adapter;
+namespace Swap\Tests\Integration;
 
 use Swap\Adapter\Guzzle4Adapter;
 use GuzzleHttp\Client;
@@ -18,6 +18,10 @@ class Guzzle4IntegrationTest extends AbstractIntegrationTestCase
 {
     protected function setUp()
     {
+        if (!class_exists('GuzzleHttp\Client')) {
+            $this->markTestSkipped('Guzzle4 needs to be installed');
+        }
+
         $this->adapter = new Guzzle4Adapter(new Client());
     }
 }

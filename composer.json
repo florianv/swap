@@ -26,10 +26,8 @@
         "php": ">=5.3.3"
     },
     "require-dev": {
-        "phpspec/phpspec": "2.0.*@dev",
         "phpunit/phpunit": "~3.7",
-        "guzzle/guzzle": "~3.0",
-        "guzzlehttp/guzzle": "~4.0"
+        "guzzle/guzzle": "~3.0"
     },
     "suggest": {
         "guzzle/guzzle": "If you want to use the Guzzle3Adapter",

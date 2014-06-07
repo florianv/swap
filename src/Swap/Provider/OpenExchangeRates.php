@@ -104,7 +104,7 @@ class OpenExchangeRates extends AbstractMultiRequestsProvider
 
             foreach ($pairsToProcess as $pair) {
                 if ($base === $pair->getBaseCurrency() && isset($json['rates'][$pair->getQuoteCurrency()])) {
-                    $pair->setRate($json['rates'][$pair->getQuoteCurrency()]);
+                    $pair->setRate((string) $json['rates'][$pair->getQuoteCurrency()]);
                     $pair->setDate($date);
                 } else {
                     $newPairsToProcess[] = $pair;

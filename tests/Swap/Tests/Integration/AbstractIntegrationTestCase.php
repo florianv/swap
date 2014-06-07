@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Swap\Tests\Adapter;
+namespace Swap\Tests\Integration;
 
 use Swap\Provider\EuropeanCentralBank;
 use Swap\Provider\WebserviceX;
@@ -27,7 +27,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $adapter;
 
-    public function testQuoteOnePairWithYahooProvider()
+    /**
+     * @test
+     */
+    function it_quotes_one_pair_with_yahoo()
     {
         $swap = new Swap();
         $swap->addProvider(new YahooFinance($this->adapter));
@@ -40,7 +43,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($pair->getDate() <= new \DateTime());
     }
 
-    public function testQuoteThreePairsWithYahooProvider()
+    /**
+     * @test
+     */
+    function it_quotes_three_pairs_with_yahoo()
     {
         $swap = new Swap();
         $swap->addProvider(new YahooFinance($this->adapter));
@@ -61,7 +67,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($gbpJpy->getDate() <= new \DateTime());
     }
 
-    public function testQuoteOnePairWithWebserviceXProvider()
+    /**
+     * @test
+     */
+    function it_quotes_one_pair_with_webservicex()
     {
         $swap = new Swap();
         $swap->addProvider(new WebserviceX($this->adapter));
@@ -74,7 +83,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($pair->getDate() <= new \DateTime());
     }
 
-    public function testQuoteThreePairsWithWebserviceXProvider()
+    /**
+     * @test
+     */
+    function it_quotes_three_pairs_with_webservicex()
     {
         $swap = new Swap();
         $swap->addProvider(new WebserviceX($this->adapter));
@@ -95,7 +107,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($gbpJpy->getDate() <= new \DateTime());
     }
 
-    public function testQuoteOnePairWithGoogleProvider()
+    /**
+     * @test
+     */
+    function it_quotes_one_pair_with_google()
     {
         $swap = new Swap();
         $swap->addProvider(new GoogleFinance($this->adapter));
@@ -108,7 +123,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($pair->getDate() <= new \DateTime());
     }
 
-    public function testQuoteThreePairsWithGoogleProvider()
+    /**
+     * @test
+     */
+    function it_quotes_three_pairs_with_google()
     {
         $swap = new Swap();
         $swap->addProvider(new GoogleFinance($this->adapter));
@@ -129,7 +147,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($gbpJpy->getDate() <= new \DateTime());
     }
 
-    public function testQuoteOnePairWithECBProvider()
+    /**
+     * @test
+     */
+    function it_quotes_one_pair_with_ecb()
     {
         $swap = new Swap();
         $swap->addProvider(new EuropeanCentralBank($this->adapter));
@@ -142,7 +163,10 @@ abstract class AbstractIntegrationTestCase extends \PHPUnit_Framework_TestCase
         $this->assertTrue($pair->getDate() <= new \DateTime());
     }
 
-    public function testQuoteThreePairsWithECBProvider()
+    /**
+     * @test
+     */
+    function it_quotes_three_pairs_with_ecb()
     {
         $swap = new Swap();
         $swap->addProvider(new EuropeanCentralBank($this->adapter));

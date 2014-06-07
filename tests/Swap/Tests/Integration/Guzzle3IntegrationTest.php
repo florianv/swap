@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Swap\Tests\Adapter;
+namespace Swap\Tests\Integration;
 
 use Swap\Adapter\Guzzle3Adapter;
 use Guzzle\Http\Client;
