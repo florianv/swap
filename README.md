@@ -31,7 +31,7 @@ First, you need to create an adapter:
 $adapter = new \Swap\Adapter\Guzzle3Adapter(new \Guzzle\Http\Client());
 
 // Creating a Guzzle 4 adapter
-$adapter = new \Swap\Adapter\Guzzle4Adapter(new \GuzzleHttp\Client\Client());
+$adapter = new \Swap\Adapter\Guzzle4Adapter(new \GuzzleHttp\Client());
 ```
 
 > For BC reasons, it is still possible to pass $adapter = new \Guzzle\Http\Client(); as adapter
