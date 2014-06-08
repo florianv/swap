@@ -54,27 +54,44 @@ at once, while simulating this behavior for those who don't support it by sendin
 <span class="p">}</span>
 </pre></div>
 
-<h2>
+<p>Currently Guzzle 3 and 4 are supported HTTP clients, so you will need to require one of them too.</p>
+
+<ul>
+<li><code>"guzzle/guzzle": "~3.0"</code></li>
+<li><code>"guzzlehttp/guzzle": "~4.0"</code></li>
+</ul><h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>First, you need to create a provider:</p>
+<p>First, you need to create an adapter:</p>
 
-<div class="highlight highlight-php"><pre><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Guzzle\Http\Client</span><span class="p">();</span>
-<span class="nv">$yahoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\YahooFinance</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
+<div class="highlight highlight-php"><pre><span class="c1">// Creating a Guzzle 3 adapter</span>
+<span class="nv">$adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Adapter\Guzzle3Adapter</span><span class="p">(</span><span class="k">new</span> <span class="nx">\Guzzle\Http\Client</span><span class="p">());</span>
+
+<span class="c1">// Creating a Guzzle 4 adapter</span>
+<span class="nv">$adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Adapter\Guzzle4Adapter</span><span class="p">(</span><span class="k">new</span> <span class="nx">\GuzzleHttp\Client</span><span class="p">());</span>
 </pre></div>
 
-<p>Then you can add it to Swap:</p>
+<blockquote>
+<p>For BC reasons, it is still possible to pass $adapter = new \Guzzle\Http\Client(); as adapter
+but it will be removed in version 2.0.</p>
+</blockquote>
 
-<div class="highlight highlight-php"><pre><span class="nv">$swap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Swap</span><span class="p">();</span>
+<p>Then, you can create a provider and add it to Swap:</p>
+
+<div class="highlight highlight-php"><pre><span class="c1">// Creating a YahooFinance provider</span>
+<span class="nv">$yahoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\YahooFinance</span><span class="p">(</span><span class="nv">$adapter</span><span class="p">);</span>
+
+<span class="c1">// Instantiating Swap and adding the provider</span>
+<span class="nv">$swap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Swap</span><span class="p">();</span>
 <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">addProvider</span><span class="p">(</span><span class="nv">$yahoo</span><span class="p">);</span>
 </pre></div>
 
-<p>Your job is to create a currency pair and Swap will set its rate:</p>
+<p>Now, your job is to create a currency pair and Swap will set its rate:</p>
 
-<div class="highlight highlight-php"><pre><span class="c1">// Create the currency pair EUR/USD</span>
+<div class="highlight highlight-php"><pre><span class="c1">// Creating the currency pair EUR/USD</span>
 <span class="nv">$pair</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Model\CurrencyPair</span><span class="p">(</span><span class="s1">'EUR'</span><span class="p">,</span> <span class="s1">'USD'</span><span class="p">);</span>
 
-<span class="c1">// Quotes the pair</span>
+<span class="c1">// Quoting the pair</span>
 <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">quote</span><span class="p">(</span><span class="nv">$pair</span><span class="p">);</span>
 
 <span class="c1">// 1.3751</span>
@@ -131,28 +148,6 @@ that were not processed.</p>
 
 <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">addProvider</span><span class="p">(</span><span class="nv">$yahoo</span><span class="p">);</span>
 <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">addProvider</span><span class="p">(</span><span class="nv">$google</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-<a name="exception-handling" class="anchor" href="#exception-handling"><span class="octicon octicon-link"></span></a>Exception Handling</h3>
-
-<p>Swap throws different types of exceptions:</p>
-
-<div class="highlight highlight-php"><pre><span class="k">try</span> <span class="p">{</span>
-    <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">quote</span><span class="p">(</span><span class="nv">$pair</span><span class="p">);</span>
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Swap\Exception\QuotationException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="c1">// Default exception when the quote operation failed</span>
-    <span class="c1">// For example when the HTTP request failed</span>
-
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Swap\Exception\UnsupportedBaseCurrencyException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="c1">// Exception thrown when a currency is not supported as base by the provider</span>
-
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Swap\Exception\UnsupportedCurrencyPairException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="c1">// Exception thrown when the currency pair is not supported</span>
-<span class="p">}</span>
 </pre></div>
 
 <h2>
