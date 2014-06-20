@@ -52,7 +52,7 @@ Now, your job is to create a currency pair and Swap will set its rate:
 
 ```php
 // Creating the currency pair EUR/USD
-$pair = new \Swap\Model\CurrencyPair('EUR', 'USD');
+$pair = \Swap\Model\CurrencyPair::createFromString('EUR/USD');
 
 // Quoting the pair
 $swap->quote($pair);
@@ -73,9 +73,9 @@ You can also quote multiple pairs at once:
 ```php
 use Swap\Model\CurrencyPair;
 
-$eurUsd = new CurrencyPair('EUR', 'USD');
-$usdGbp = new CurrencyPair('USD', 'GBP');
-$gbpJpy = new CurrencyPair('GBP', 'JPY');
+$eurUsd = CurrencyPair::createFromString('EUR/USD');
+$usdGbp = CurrencyPair::createFromString('USD/GBP');
+$gbpJpy = CurrencyPair::createFromString('GBP/JPY');
 
 $swap->quote(array($eurUsd, $usdGbp, $gbpJpy));
 

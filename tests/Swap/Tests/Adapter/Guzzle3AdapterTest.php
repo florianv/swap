@@ -23,7 +23,7 @@ class Guzzle3AdapterTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMock('Guzzle\Http\Message\RequestInterface');
 
         $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array(200))
             ->getMock();
 
         $response
@@ -81,7 +81,7 @@ class Guzzle3AdapterTest extends \PHPUnit_Framework_TestCase
     function it_gets_three_responses_bodies()
     {
         $responseOne = $this->getMockBuilder('Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array(200))
             ->getMock();
 
         $responseOne
@@ -91,7 +91,7 @@ class Guzzle3AdapterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('foo'));
 
         $responseTwo = $this->getMockBuilder('Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array(200))
             ->getMock();
 
         $responseTwo
@@ -101,7 +101,7 @@ class Guzzle3AdapterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('bar'));
 
         $responseThree = $this->getMockBuilder('Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array(200))
             ->getMock();
 
         $responseThree
