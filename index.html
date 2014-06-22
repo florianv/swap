@@ -89,10 +89,13 @@ but it will be removed in version 2.0.</p>
 <p>Now, your job is to create a currency pair and Swap will set its rate:</p>
 
 <div class="highlight highlight-php"><pre><span class="c1">// Creating the currency pair EUR/USD</span>
-<span class="nv">$pair</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Model\CurrencyPair</span><span class="p">(</span><span class="s1">'EUR'</span><span class="p">,</span> <span class="s1">'USD'</span><span class="p">);</span>
+<span class="nv">$pair</span> <span class="o">=</span> <span class="nx">\Swap\Model\CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'EUR/USD'</span><span class="p">);</span>
 
 <span class="c1">// Quoting the pair</span>
 <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">quote</span><span class="p">(</span><span class="nv">$pair</span><span class="p">);</span>
+
+<span class="c1">// 1.3751</span>
+<span class="k">echo</span> <span class="nv">$pair</span><span class="p">;</span>
 
 <span class="c1">// 1.3751</span>
 <span class="k">echo</span> <span class="nv">$pair</span><span class="o">-&gt;</span><span class="na">getRate</span><span class="p">();</span>
@@ -112,20 +115,20 @@ which means that <code>1 EUR</code> is exchanged for <code>1.3751 USD</code>.</p
 
 <div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Swap\Model\CurrencyPair</span><span class="p">;</span>
 
-<span class="nv">$eurUsd</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CurrencyPair</span><span class="p">(</span><span class="s1">'EUR'</span><span class="p">,</span> <span class="s1">'USD'</span><span class="p">);</span>
-<span class="nv">$usdGbp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CurrencyPair</span><span class="p">(</span><span class="s1">'USD'</span><span class="p">,</span> <span class="s1">'GBP'</span><span class="p">);</span>
-<span class="nv">$gbpJpy</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CurrencyPair</span><span class="p">(</span><span class="s1">'GBP'</span><span class="p">,</span> <span class="s1">'JPY'</span><span class="p">);</span>
+<span class="nv">$eurUsd</span> <span class="o">=</span> <span class="nx">CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'EUR/USD'</span><span class="p">);</span>
+<span class="nv">$usdGbp</span> <span class="o">=</span> <span class="nx">CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'USD/GBP'</span><span class="p">);</span>
+<span class="nv">$gbpJpy</span> <span class="o">=</span> <span class="nx">CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'GBP/JPY'</span><span class="p">);</span>
 
 <span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">quote</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$eurUsd</span><span class="p">,</span> <span class="nv">$usdGbp</span><span class="p">,</span> <span class="nv">$gbpJpy</span><span class="p">));</span>
 
 <span class="c1">// 1.3751</span>
-<span class="k">echo</span> <span class="nv">$eurUsd</span><span class="o">-&gt;</span><span class="na">getRate</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$eurUsd</span><span class="p">;</span>
 
 <span class="c1">// 0.5938</span>
-<span class="k">echo</span> <span class="nv">$usdGbp</span><span class="o">-&gt;</span><span class="na">getRate</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$usdGbp</span><span class="p">;</span>
 
 <span class="c1">// 171.5772</span>
-<span class="k">echo</span> <span class="nv">$gbpJpy</span><span class="o">-&gt;</span><span class="na">getRate</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$gbpJpy</span><span class="p">;</span>
 </pre></div>
 
 <h3>
