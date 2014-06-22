@@ -102,4 +102,12 @@ class CurrencyPair implements CurrencyPairInterface
     {
         return $this->date;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return (string) $this->rate;
+    }
 }

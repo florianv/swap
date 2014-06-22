@@ -58,6 +58,9 @@ $pair = \Swap\Model\CurrencyPair::createFromString('EUR/USD');
 $swap->quote($pair);
 
 // 1.3751
+echo $pair;
+
+// 1.3751
 echo $pair->getRate();
 ```
 
@@ -80,13 +83,13 @@ $gbpJpy = CurrencyPair::createFromString('GBP/JPY');
 $swap->quote(array($eurUsd, $usdGbp, $gbpJpy));
 
 // 1.3751
-echo $eurUsd->getRate();
+echo $eurUsd;
 
 // 0.5938
-echo $usdGbp->getRate();
+echo $usdGbp;
 
 // 171.5772
-echo $gbpJpy->getRate();
+echo $gbpJpy;
 ```
 
 ### Date

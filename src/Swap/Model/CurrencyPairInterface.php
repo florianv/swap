@@ -59,4 +59,11 @@ interface CurrencyPairInterface
      * @return \Datetime
      */
     public function getDate();
+
+    /**
+     * Returns the rate.
+     *
+     * @return string
+     */
+    public function __toString();
 }

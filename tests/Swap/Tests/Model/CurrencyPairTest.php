@@ -51,4 +51,16 @@ class CurrencyPairTest extends \PHPUnit_Framework_TestCase
             array('EUR'), array('EUR/'), array('EU/US'), array('EUR/US'), array('US/EUR')
         );
     }
+
+    /**
+     * @test
+     */
+    public function it_can_be_converted_to_a_string()
+    {
+        $pair = new CurrencyPair('EUR', 'USD');
+        $this->assertSame('', (string) $pair);
+
+        $pair->setRate('1.5000');
+        $this->assertEquals('1.5000', (string) $pair);
+    }
 }
