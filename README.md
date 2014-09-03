@@ -1,4 +1,4 @@
-# Swap [![Build status][travis-image]][travis-url] [![Insight][insight-image]][insight-url] [![Version][version-image]][version-url] [![License][license-image]][license-url]
+# Swap [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url] [![License][license-image]][license-url]
 
 Swap helps you to retrieve exchange rates from various providers. It leverages their ability to retrieve multiple quotes
 at once, while simulating this behavior for those who don't support it by sending parallel HTTP requests.
@@ -135,13 +135,10 @@ Supports multiple currencies as base and quote currencies.
 [MIT](https://github.com/florianv/swap/blob/master/LICENSE)
 
 [travis-url]: https://travis-ci.org/florianv/swap
-[travis-image]: https://travis-ci.org/florianv/swap.svg?branch=master
-
-[insight-url]: https://insight.sensiolabs.com/projects/825d1c3f-839b-47e6-969a-7ddefffe94b1
-[insight-image]: https://insight.sensiolabs.com/projects/825d1c3f-839b-47e6-969a-7ddefffe94b1/mini.png
+[travis-image]: http://img.shields.io/travis/florianv/swap.svg?style=flat-square
 
 [license-url]: https://packagist.org/packages/florianv/swap
-[license-image]: http://img.shields.io/packagist/l/florianv/swap.svg
+[license-image]: http://img.shields.io/packagist/l/florianv/swap.svg?style=flat-square
 
 [version-url]: https://packagist.org/packages/florianv/swap
-[version-image]: http://img.shields.io/packagist/v/florianv/swap.svg
+[version-image]: http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square
