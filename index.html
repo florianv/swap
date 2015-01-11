@@ -1,196 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Swap : Exchange rates library for PHP 5.3+" />
+        <title>Swap</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/css/highlight.dark.css">
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body>
 
-    <title>Swap</title>
-  </head>
+        <header class="navbar navbar-default navbar-fixed-top">
 
-  <body>
+            <a class="navbar-brand" href="/">
+                Swap
+                <small class="hidden-xs hidden-sm">
+                    Exchange rates library for PHP 5.4+
+                </small>
+            </a>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/florianv/swap">View on GitHub</a>
-
-          <h1 id="project_title">Swap</h1>
-          <h2 id="project_tagline">Exchange rates library for PHP 5.3+</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/florianv/swap/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/florianv/swap/tarball/master">Download this project as a tar.gz file</a>
-            </section>
+            
         </header>
-    </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a name="swap" class="anchor" href="#swap"><span class="octicon octicon-link"></span></a>Swap</h1>
+        <main class="container">
+            <div class="row">
 
-<p>Swap helps you to retrieve exchange rates from various providers. It leverages their ability to retrieve multiple quotes
-at once, while simulating this behavior for those who don't support it by sending parallel HTTP requests.</p>
-
+                
+                <section id="content" class="col-sm-12">
+                    <h1>Swap <a href="https://travis-ci.org/florianv/swap"><img alt="Build status" src="http://img.shields.io/travis/florianv/swap.svg?style=flat" /></a> <a href="https://packagist.org/packages/florianv/swap"><img alt="Version" src="http://img.shields.io/packagist/v/florianv/swap.svg?style=flat" /></a></h1>
 <blockquote>
-<p>If you want to use this library with Symfony2, you can install <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>.</p>
+<p>Exchange rates library for PHP 5.4+</p>
 </blockquote>
+<h2>Installation</h2>
+<pre><code class="language-bash">$ composer require florianv/swap</code></pre>
+<h2>Usage</h2>
+<p>In order to retrieve exchange rates, you need to get an instance of the <code>Swap</code> service and add a provider to it.
+The <code>Builder</code> class provides a fluent interface to help you building it.</p>
+<pre><code class="language-php">$swap = (new \Swap\Builder())
+    -&gt;yahooFinanceProvider()
+    -&gt;build();</code></pre>
+<h3>Quoting</h3>
+<p>To retrieve the latest exchange rate for a currency pair, you can use the <code>quote()</code> method.</p>
+<pre><code class="language-php">$rate = $swap-&gt;quote('EUR/USD');
 
-<h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+// 1.187220
+echo $rate;
 
-<p>Add this line to your <code>composer.json</code> file:</p>
+// 1.187220
+echo $rate-&gt;getValue();
 
-<div class="highlight highlight-json"><pre><span class="p">{</span>
-    <span class="nt">"require"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"florianv/swap"</span><span class="p">:</span> <span class="s2">"~1.0"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-<p>Currently Guzzle 3 and 4 are supported HTTP clients, so you will need to require one of them too.</p>
-
-<ul>
-<li><code>"guzzle/guzzle": "~3.0"</code></li>
-<li><code>"guzzlehttp/guzzle": "~4.0"</code></li>
-</ul><h2>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
-
-<p>First, you need to create an adapter:</p>
-
-<div class="highlight highlight-php"><pre><span class="c1">// Creating a Guzzle 3 adapter</span>
-<span class="nv">$adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Adapter\Guzzle3Adapter</span><span class="p">(</span><span class="k">new</span> <span class="nx">\Guzzle\Http\Client</span><span class="p">());</span>
-
-<span class="c1">// Creating a Guzzle 4 adapter</span>
-<span class="nv">$adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Adapter\Guzzle4Adapter</span><span class="p">(</span><span class="k">new</span> <span class="nx">\GuzzleHttp\Client</span><span class="p">());</span>
-</pre></div>
-
-<blockquote>
-<p>For BC reasons, it is still possible to pass $adapter = new \Guzzle\Http\Client(); as adapter
-but it will be removed in version 2.0.</p>
-</blockquote>
-
-<p>Then, you can create a provider and add it to Swap:</p>
-
-<div class="highlight highlight-php"><pre><span class="c1">// Creating a YahooFinance provider</span>
-<span class="nv">$yahoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\YahooFinance</span><span class="p">(</span><span class="nv">$adapter</span><span class="p">);</span>
-
-<span class="c1">// Instantiating Swap and adding the provider</span>
-<span class="nv">$swap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Swap</span><span class="p">();</span>
-<span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">addProvider</span><span class="p">(</span><span class="nv">$yahoo</span><span class="p">);</span>
-</pre></div>
-
-<p>Now, your job is to create a currency pair and Swap will set its rate:</p>
-
-<div class="highlight highlight-php"><pre><span class="c1">// Creating the currency pair EUR/USD</span>
-<span class="nv">$pair</span> <span class="o">=</span> <span class="nx">\Swap\Model\CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'EUR/USD'</span><span class="p">);</span>
-
-<span class="c1">// Quoting the pair</span>
-<span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">quote</span><span class="p">(</span><span class="nv">$pair</span><span class="p">);</span>
-
-<span class="c1">// 1.3751</span>
-<span class="k">echo</span> <span class="nv">$pair</span><span class="p">;</span>
-
-<span class="c1">// 1.3751</span>
-<span class="k">echo</span> <span class="nv">$pair</span><span class="o">-&gt;</span><span class="na">getRate</span><span class="p">();</span>
-</pre></div>
-
-<p>We created a currency pair <code>EUR/USD</code>, quoted it with the <code>YahooFinance</code> provider and got <code>1.3751</code> as rate
-which means that <code>1 EUR</code> is exchanged for <code>1.3751 USD</code>.</p>
-
+// 15-01-11 21:30:00
+echo $rate-&gt;getDate()-&gt;format('Y-m-d H:i:s');</code></pre>
 <blockquote>
 <p>Currencies are expressed as their <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a> code.</p>
 </blockquote>
-
-<h3>
-<a name="multiple-pairs" class="anchor" href="#multiple-pairs"><span class="octicon octicon-link"></span></a>Multiple pairs</h3>
-
-<p>You can also quote multiple pairs at once:</p>
-
-<div class="highlight highlight-php"><pre><span class="k">use</span> <span class="nx">Swap\Model\CurrencyPair</span><span class="p">;</span>
-
-<span class="nv">$eurUsd</span> <span class="o">=</span> <span class="nx">CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'EUR/USD'</span><span class="p">);</span>
-<span class="nv">$usdGbp</span> <span class="o">=</span> <span class="nx">CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'USD/GBP'</span><span class="p">);</span>
-<span class="nv">$gbpJpy</span> <span class="o">=</span> <span class="nx">CurrencyPair</span><span class="o">::</span><span class="na">createFromString</span><span class="p">(</span><span class="s1">'GBP/JPY'</span><span class="p">);</span>
-
-<span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">quote</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$eurUsd</span><span class="p">,</span> <span class="nv">$usdGbp</span><span class="p">,</span> <span class="nv">$gbpJpy</span><span class="p">));</span>
-
-<span class="c1">// 1.3751</span>
-<span class="k">echo</span> <span class="nv">$eurUsd</span><span class="p">;</span>
-
-<span class="c1">// 0.5938</span>
-<span class="k">echo</span> <span class="nv">$usdGbp</span><span class="p">;</span>
-
-<span class="c1">// 171.5772</span>
-<span class="k">echo</span> <span class="nv">$gbpJpy</span><span class="p">;</span>
-</pre></div>
-
-<h3>
-<a name="date" class="anchor" href="#date"><span class="octicon octicon-link"></span></a>Date</h3>
-
-<p>You can also retrieve the date at which the rate was calculated:</p>
-
-<div class="highlight highlight-php"><pre><span class="c1">// $date is a \DateTime instance</span>
-<span class="nv">$date</span> <span class="o">=</span> <span class="nv">$pair</span><span class="o">-&gt;</span><span class="na">getDate</span><span class="p">()</span>
-</pre></div>
-
-<h3>
-<a name="chained-providers" class="anchor" href="#chained-providers"><span class="octicon octicon-link"></span></a>Chained providers</h3>
-
-<p>Providers can be chained so when one of them fails, the next one can be used to quote the pairs
-that were not processed.</p>
-
-<div class="highlight highlight-php"><pre><span class="nv">$yahoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\YahooFinance</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
-<span class="nv">$google</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Swap\Provider\GoogleFinance</span><span class="p">(</span><span class="nv">$client</span><span class="p">);</span>
-
-<span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">addProvider</span><span class="p">(</span><span class="nv">$yahoo</span><span class="p">);</span>
-<span class="nv">$swap</span><span class="o">-&gt;</span><span class="na">addProvider</span><span class="p">(</span><span class="nv">$google</span><span class="p">);</span>
-</pre></div>
-
-<h2>
-<a name="providers" class="anchor" href="#providers"><span class="octicon octicon-link"></span></a>Providers</h2>
-
+<h3>Chaining providers</h3>
+<p>It is possible to chain providers in order to use fallbacks in case the main providers don't support the currency or are unavailable.</p>
+<pre><code class="language-php">$swap = (new \Swap\Builder())
+    -&gt;yahooFinanceProvider()
+    -&gt;googleFinanceProvider()
+    -&gt;build();</code></pre>
+<p>The rates will be first fetched using the Yahoo Finance provider and will fallback to Google Finance.</p>
+<h3>Caching</h3>
+<p>For performance reasons you might want to cache the rates during a given time. Currently Swap allows you to use the 
+<a href="https://github.com/doctrine/cache"><code>doctrine/cache</code></a> library as caching provider.</p>
+<pre><code class="language-php">$builder-&gt;doctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);</code></pre>
+<p>All rates will now be cached in APC during 3600 seconds.</p>
+<h2>Integrations</h2>
 <ul>
-<li>
-<a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a>
+<li>A Symfony2 bundle [FlorianvSwapBundle] (<a href="https://github.com/florianv/FlorianvSwapBundle">https://github.com/florianv/FlorianvSwapBundle</a>).</li>
+</ul>
+<h2>Providers</h2>
+<ul>
+<li><a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a>
 Supports only EUR as base currency.</li>
-<li>
-<a href="http://www.google.com/finance">Google Finance</a>
+<li><a href="http://www.google.com/finance">Google Finance</a>
 Supports multiple currencies as base and quote currencies.</li>
-<li>
-<a href="https://openexchangerates.org">Open Exchange Rates</a>
+<li><a href="https://openexchangerates.org">Open Exchange Rates</a>
 Supports only USD as base currency for the free version and multiple ones for the enterprise version.</li>
-<li>
-<a href="https://www.xignite.com">Xignite</a>
+<li><a href="https://www.xignite.com">Xignite</a>
 You must have access to the <code>XigniteGlobalCurrencies</code> API.
 Supports multiple currencies as base and quote currencies.</li>
-<li>
-<a href="https://finance.yahoo.com/">Yahoo Finance</a>
+<li><a href="https://finance.yahoo.com/">Yahoo Finance</a>
 Supports multiple currencies as base and quote currencies.</li>
-<li>
-<a href="http://www.webservicex.net/ws/default.aspx">WebserviceX</a>
+<li><a href="http://www.webservicex.net/ws/default.aspx">WebserviceX</a>
 Supports multiple currencies as base and quote currencies.</li>
-</ul><h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
-
+</ul>
+<h2>License</h2>
 <p><a href="https://github.com/florianv/swap/blob/master/LICENSE">MIT</a></p>
-      </section>
-    </div>
+                </section>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Swap maintained by <a href="https://github.com/florianv">florianv</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+            </div>
+        </main>
 
-    
+        <footer>
+            <div class="container">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
 
-  </body>
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
 </html>
