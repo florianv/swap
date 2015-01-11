@@ -1,0 +1,65 @@
+<?php
+
+/*
+ * This file is part of Swap.
+ *
+ * (c) Florian Voutzinos <florian@voutzinos.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Swap;
+
+use Swap\Exception\InvalidCurrencyCodeException;
+use Swap\Util\CurrencyCodeValidator;
+use Swap\Model\CurrencyPair;
+
+/**
+ * An implementation of Swap.
+ *
+ * @author Florian Voutzinos <florian@voutzinos.com>
+ */
+class Swap implements SwapInterface
+{
+    private $provider;
+    private $cache;
+
+    public function __construct(ProviderInterface $provider, CacheInterface $cache = null)
+    {
+        $this->provider = $provider;
+        $this->cache = $cache;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function quote($currencyPair)
+    {
+        if (is_string($currencyPair)) {
+            $currencyPair = CurrencyPair::createFromString($currencyPair);
+        } elseif (!$currencyPair instanceof CurrencyPair) {
+            throw new \InvalidArgumentException('The currency pair must be either a string or an instance of CurrencyPair');
+        }
+
+        if (null !== $this->cache && null !== $rate = $this->cache->fetchRate($currencyPair)) {
+            return $rate;
+        }
+
+        if (!CurrencyCodeValidator::isValid($currencyPair->getQuoteCurrency())) {
+            throw new InvalidCurrencyCodeException($currencyPair->getQuoteCurrency());
+        }
+
+        if (!CurrencyCodeValidator::isValid($currencyPair->getBaseCurrency())) {
+            throw new InvalidCurrencyCodeException($currencyPair->getBaseCurrency());
+        }
+
+        $rate = $this->provider->fetchRate($currencyPair);
+
+        if (null !== $this->cache) {
+            $this->cache->storeRate($currencyPair, $rate);
+        }
+
+        return $rate;
+    }
+}

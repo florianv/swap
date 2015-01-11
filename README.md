@@ -1,118 +1,70 @@
-# Swap [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url] [![License][license-image]][license-url]
+# Swap [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url]
 
-Swap helps you to retrieve exchange rates from various providers. It leverages their ability to retrieve multiple quotes
-at once, while simulating this behavior for those who don't support it by sending parallel HTTP requests.
-
-> If you want to use this library with Symfony2, you can install [FlorianvSwapBundle] (https://github.com/florianv/FlorianvSwapBundle).
+> Exchange rates library for PHP 5.4+
 
 ## Installation
 
-Add this line to your `composer.json` file:
-
-```json
-{
-    "require": {
-        "florianv/swap": "~1.0"
-    }
-}
+```bash
+$ composer require florianv/swap
 ```
-
-Currently Guzzle 3 and 4 are supported HTTP clients, so you will need to require one of them too.
-
-- `"guzzle/guzzle": "~3.0"`
-- `"guzzlehttp/guzzle": "~4.0"`
 
 ## Usage
 
-First, you need to create an adapter:
+In order to retrieve exchange rates, you need to get an instance of the `Swap` service and add a provider to it.
+The `Builder` class provides a fluent interface to help you building it.
 
 ```php
-// Creating a Guzzle 3 adapter
-$adapter = new \Swap\Adapter\Guzzle3Adapter(new \Guzzle\Http\Client());
-
-// Creating a Guzzle 4 adapter
-$adapter = new \Swap\Adapter\Guzzle4Adapter(new \GuzzleHttp\Client());
+$swap = (new \Swap\Builder())
+    ->yahooFinanceProvider()
+    ->build();
 ```
 
-> For BC reasons, it is still possible to pass $adapter = new \Guzzle\Http\Client(); as adapter
-> but it will be removed in version 2.0.
+### Quoting
 
-Then, you can create a provider and add it to Swap:
+To retrieve the latest exchange rate for a currency pair, you can use the `quote()` method.
 
 ```php
-// Creating a YahooFinance provider
-$yahoo = new \Swap\Provider\YahooFinance($adapter);
+$rate = $swap->quote('EUR/USD');
 
-// Instantiating Swap and adding the provider
-$swap = new \Swap\Swap();
-$swap->addProvider($yahoo);
+// 1.187220
+echo $rate;
+
+// 1.187220
+echo $rate->getValue();
+
+// 15-01-11 21:30:00
+echo $rate->getDate()->format('Y-m-d H:i:s');
 ```
-
-Now, your job is to create a currency pair and Swap will set its rate:
-
-```php
-// Creating the currency pair EUR/USD
-$pair = \Swap\Model\CurrencyPair::createFromString('EUR/USD');
-
-// Quoting the pair
-$swap->quote($pair);
-
-// 1.3751
-echo $pair;
-
-// 1.3751
-echo $pair->getRate();
-```
-
-We created a currency pair `EUR/USD`, quoted it with the `YahooFinance` provider and got `1.3751` as rate
-which means that `1 EUR` is exchanged for `1.3751 USD`.
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
 
-### Multiple pairs
+### Chaining providers
 
-You can also quote multiple pairs at once:
-
-```php
-use Swap\Model\CurrencyPair;
-
-$eurUsd = CurrencyPair::createFromString('EUR/USD');
-$usdGbp = CurrencyPair::createFromString('USD/GBP');
-$gbpJpy = CurrencyPair::createFromString('GBP/JPY');
-
-$swap->quote(array($eurUsd, $usdGbp, $gbpJpy));
-
-// 1.3751
-echo $eurUsd;
-
-// 0.5938
-echo $usdGbp;
-
-// 171.5772
-echo $gbpJpy;
-```
-
-### Date
-
-You can also retrieve the date at which the rate was calculated:
+It is possible to chain providers in order to use fallbacks in case the main providers don't support the currency or are unavailable.
 
 ```php
-// $date is a \DateTime instance
-$date = $pair->getDate()
+$swap = (new \Swap\Builder())
+    ->yahooFinanceProvider()
+    ->googleFinanceProvider()
+    ->build();
 ```
 
-### Chained providers
+The rates will be first fetched using the Yahoo Finance provider and will fallback to Google Finance.
 
-Providers can be chained so when one of them fails, the next one can be used to quote the pairs
-that were not processed.
+### Caching
+
+For performance reasons you might want to cache the rates during a given time. Currently Swap allows you to use the 
+[`doctrine/cache`](https://github.com/doctrine/cache) library as caching provider.
 
 ```php
-$yahoo = new \Swap\Provider\YahooFinance($client);
-$google = new \Swap\Provider\GoogleFinance($client);
-
-$swap->addProvider($yahoo);
-$swap->addProvider($google);
+$builder->doctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);
 ```
+
+All rates will now be cached in APC during 3600 seconds.
+
+## Integrations
+
+- A Symfony2 bundle [FlorianvSwapBundle] (https://github.com/florianv/FlorianvSwapBundle).
 
 ## Providers
 
@@ -135,10 +87,7 @@ Supports multiple currencies as base and quote currencies.
 [MIT](https://github.com/florianv/swap/blob/master/LICENSE)
 
 [travis-url]: https://travis-ci.org/florianv/swap
-[travis-image]: http://img.shields.io/travis/florianv/swap.svg?style=flat-square
-
-[license-url]: https://packagist.org/packages/florianv/swap
-[license-image]: http://img.shields.io/packagist/l/florianv/swap.svg?style=flat-square
+[travis-image]: http://img.shields.io/travis/florianv/swap.svg?style=flat
 
 [version-url]: https://packagist.org/packages/florianv/swap
-[version-image]: http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square
+[version-image]: http://img.shields.io/packagist/v/florianv/swap.svg?style=flat

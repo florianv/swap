@@ -1,7 +1,7 @@
 {
     "name": "florianv/swap",
     "type": "library",
-    "description": "Exchange rates library for PHP 5.3+",
+    "description": "Exchange rates library for PHP",
     "keywords": ["currency", "money", "rate", "conversion", "exchange rates"],
     "homepage": "https://github.com/florianv/swap",
     "license": "MIT",
@@ -13,32 +13,29 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Swap": "src/"
+        "psr-4": {
+            "Swap\\": "src/"
         }
     },
     "autoload-dev": {
-        "psr-0": {
-            "Swap\\Tests": "tests/"
+        "psr-4": {
+            "Swap\\Tests\\": "tests/"
         }
     },
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.4.0",
+        "egeloen/http-adapter": "~0.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~3.7",
-        "guzzle/guzzle": "~3.0"
-    },
-    "suggest": {
-        "guzzle/guzzle": "If you want to use the Guzzle3Adapter",
-        "guzzlehttp/guzzle": "If you want to use the Guzzle4Adapter"
+        "phpunit/phpunit": "~4.0",
+        "doctrine/cache": "~1.0"
     },
     "config": {
         "bin-dir": "bin"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.3-dev"
+            "dev-master": "2.0-dev"
         }
     }
 }
