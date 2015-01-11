@@ -63,6 +63,21 @@ $builder->doctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);
 
 All rates will now be cached in APC during 3600 seconds.
 
+### Currency Codes
+
+Swap provides an enumeration of currency codes so you can use autocompletion to avoid typos.
+
+```php
+use \Swap\Model\CurrencyPair;
+use \Swap\Util\CurrencyCodes;
+
+// Retrieving the EUR/USD rate
+$rate = $swap->quote(new CurrencyPair(
+    CurrencyCodes::ISO_EUR,
+    CurrencyCodes::ISO_USD
+));
+```
+
 ## Integrations
 
 - A Symfony2 bundle [FlorianvSwapBundle](https://github.com/florianv/FlorianvSwapBundle).
