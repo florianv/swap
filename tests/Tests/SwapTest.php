@@ -21,25 +21,6 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @dataProvider invalidPairsProvider
-     * @expectedException \Swap\Exception\InvalidCurrencyCodeException
-     */
-    public function it_throws_an_exception_if_currency_code_invalid($pair)
-    {
-        $swap = new Swap($this->getMock('Swap\ProviderInterface'));
-        $swap->quote($pair);
-    }
-
-    public function invalidPairsProvider()
-    {
-        return [
-            ['EUR/XXL'],
-            ['XXL/EUR']
-        ];
-    }
-
-    /**
-     * @test
      */
     public function it_quotes_a_pair()
     {

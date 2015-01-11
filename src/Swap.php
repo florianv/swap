@@ -11,8 +11,6 @@
 
 namespace Swap;
 
-use Swap\Exception\InvalidCurrencyCodeException;
-use Swap\Util\CurrencyCodeValidator;
 use Swap\Model\CurrencyPair;
 
 /**
@@ -44,14 +42,6 @@ class Swap implements SwapInterface
 
         if (null !== $this->cache && null !== $rate = $this->cache->fetchRate($currencyPair)) {
             return $rate;
-        }
-
-        if (!CurrencyCodeValidator::isValid($currencyPair->getQuoteCurrency())) {
-            throw new InvalidCurrencyCodeException($currencyPair->getQuoteCurrency());
-        }
-
-        if (!CurrencyCodeValidator::isValid($currencyPair->getBaseCurrency())) {
-            throw new InvalidCurrencyCodeException($currencyPair->getBaseCurrency());
         }
 
         $rate = $this->provider->fetchRate($currencyPair);
