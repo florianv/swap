@@ -25,6 +25,7 @@ To retrieve the latest exchange rate for a currency pair, you can use the `quote
 
 ```php
 $rate = $swap->quote('EUR/USD');
+// or $swap->quote(new \Swap\Model\CurrencyPair('EUR', 'USD')));
 
 // 1.187220
 echo $rate;
