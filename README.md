@@ -64,7 +64,7 @@ All rates will now be cached in APC during 3600 seconds.
 
 ## Integrations
 
-- A Symfony2 bundle [FlorianvSwapBundle] (https://github.com/florianv/FlorianvSwapBundle).
+- A Symfony2 bundle [FlorianvSwapBundle](https://github.com/florianv/FlorianvSwapBundle).
 
 ## Providers
 
