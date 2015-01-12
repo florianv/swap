@@ -109,6 +109,8 @@ Supports multiple currencies as base and quote currencies.
 Supports multiple currencies as base and quote currencies.
 - [WebserviceX](http://www.webservicex.net/ws/default.aspx)
 Supports multiple currencies as base and quote currencies.
+- [NationalBankOfRomania](http://www.bnr.ro)
+Supports only RON as base currency.
 
 ## License
 
