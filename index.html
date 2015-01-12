@@ -37,14 +37,19 @@
 <h2>Installation</h2>
 <pre><code class="language-bash">$ composer require florianv/swap</code></pre>
 <h2>Usage</h2>
-<p>In order to retrieve exchange rates, you need to get an instance of the <code>Swap</code> service and add a provider to it.
-The <code>Builder</code> class provides a fluent interface to help you building it.</p>
-<pre><code class="language-php">$swap = (new \Swap\Builder())
-    -&gt;yahooFinanceProvider()
-    -&gt;build();</code></pre>
+<p>First, you need to create an HTTP adapter provided by the <a href="https://github.com/egeloen/ivory-http-adapter">egeloen/ivory-http-adapter</a>
+library.</p>
+<pre><code class="language-php">$httpAdapter = new \Ivory\HttpAdapter\FileGetContentsHttpAdapter();</code></pre>
+<p>Then, you can create a provider and add it to Swap:</p>
+<pre><code class="language-php">// Create the Yahoo Finance provider
+$yahooProvider = new \Swap\Provider\YahooFinanceProvider($httpAdapter);
+
+// Create Swap with the provider
+$swap = new \Swap\Swap($yahooProvider);</code></pre>
 <h3>Quoting</h3>
-<p>To retrieve the latest exchange rate for a currency pair, you can use the <code>quote()</code> method.</p>
+<p>To retrieve the latest exchange rate for a currency pair, you need to use the <code>quote()</code> method.</p>
 <pre><code class="language-php">$rate = $swap-&gt;quote('EUR/USD');
+// or $swap-&gt;quote(new \Swap\Model\CurrencyPair('EUR', 'USD')));
 
 // 1.187220
 echo $rate;
@@ -58,17 +63,31 @@ echo $rate-&gt;getDate()-&gt;format('Y-m-d H:i:s');</code></pre>
 <p>Currencies are expressed as their <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a> code.</p>
 </blockquote>
 <h3>Chaining providers</h3>
-<p>It is possible to chain providers in order to use fallbacks in case the main providers don't support the currency or are unavailable.</p>
-<pre><code class="language-php">$swap = (new \Swap\Builder())
-    -&gt;yahooFinanceProvider()
-    -&gt;googleFinanceProvider()
-    -&gt;build();</code></pre>
+<p>It is possible to chain providers in order to use fallbacks in case the main providers don't support the currency or are unavailable.
+Simply create a <code>ChainProvider</code> wrapping the providers you want to chain.</p>
+<pre><code class="language-php">$chainProvider = new \Swap\Provider\ChainProvider([
+    new \Swap\Provider\YahooFinanceProvider($httpAdapter),
+    new \Swap\Provider\GoogleFinanceProvider($httpAdapter)
+]);</code></pre>
 <p>The rates will be first fetched using the Yahoo Finance provider and will fallback to Google Finance.</p>
 <h3>Caching</h3>
 <p>For performance reasons you might want to cache the rates during a given time. Currently Swap allows you to use the 
-<a href="https://github.com/doctrine/cache"><code>doctrine/cache</code></a> library as caching provider.</p>
-<pre><code class="language-php">$builder-&gt;doctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);</code></pre>
+<a href="https://github.com/doctrine/cache">doctrine/cache</a> library as caching provider.</p>
+<pre><code class="language-php">// Create the cache adapter
+$cache = new \Swap\Cache\DoctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);
+
+// Pass the cache to Swap
+$swap = new \Swap\Swap($provider, $cache);</code></pre>
 <p>All rates will now be cached in APC during 3600 seconds.</p>
+<h3>Currency Codes</h3>
+<p>Swap provides an enumeration of currency codes so you can use autocompletion to avoid typos.</p>
+<pre><code class="language-php">use \Swap\Util\CurrencyCodes;
+
+// Retrieving the EUR/USD rate
+$rate = $swap-&gt;quote(new \Swap\Model\CurrencyPair(
+    CurrencyCodes::ISO_EUR,
+    CurrencyCodes::ISO_USD
+));</code></pre>
 <h2>Integrations</h2>
 <ul>
 <li>A Symfony2 bundle <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>.</li>
