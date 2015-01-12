@@ -10,18 +10,26 @@ $ composer require florianv/swap
 
 ## Usage
 
-In order to retrieve exchange rates, you need to get an instance of the `Swap` service and add a provider to it.
-The `Builder` class provides a fluent interface to help you building it.
+First, you need to create an HTTP adapter provided by the [egeloen/ivory-http-adapter](https://github.com/egeloen/ivory-http-adapter)
+library.
 
 ```php
-$swap = (new \Swap\Builder())
-    ->yahooFinanceProvider()
-    ->build();
+$httpAdapter = new \Ivory\HttpAdapter\FileGetContentsHttpAdapter();
+```
+
+Then, you can create a provider and add it to Swap:
+
+```php
+// Create the Yahoo Finance provider
+$yahooProvider = new \Swap\Provider\YahooFinanceProvider($httpAdapter);
+
+// Create Swap with the provider
+$swap = new \Swap\Swap($yahooProvider);
 ```
 
 ### Quoting
 
-To retrieve the latest exchange rate for a currency pair, you can use the `quote()` method.
+To retrieve the latest exchange rate for a currency pair, you need to use the `quote()` method.
 
 ```php
 $rate = $swap->quote('EUR/USD');
@@ -42,12 +50,13 @@ echo $rate->getDate()->format('Y-m-d H:i:s');
 ### Chaining providers
 
 It is possible to chain providers in order to use fallbacks in case the main providers don't support the currency or are unavailable.
+Simply create a `ChainProvider` wrapping the providers you want to chain.
 
 ```php
-$swap = (new \Swap\Builder())
-    ->yahooFinanceProvider()
-    ->googleFinanceProvider()
-    ->build();
+$chainProvider = new \Swap\Provider\ChainProvider([
+    new \Swap\Provider\YahooFinanceProvider($httpAdapter),
+    new \Swap\Provider\GoogleFinanceProvider($httpAdapter)
+]);
 ```
 
 The rates will be first fetched using the Yahoo Finance provider and will fallback to Google Finance.
@@ -55,10 +64,14 @@ The rates will be first fetched using the Yahoo Finance provider and will fallba
 ### Caching
 
 For performance reasons you might want to cache the rates during a given time. Currently Swap allows you to use the 
-[`doctrine/cache`](https://github.com/doctrine/cache) library as caching provider.
+[doctrine/cache](https://github.com/doctrine/cache) library as caching provider.
 
 ```php
-$builder->doctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);
+// Create the cache adapter
+$cache = new \Swap\Cache\DoctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);
+
+// Pass the cache to Swap
+$swap = new \Swap\Swap($provider, $cache);
 ```
 
 All rates will now be cached in APC during 3600 seconds.
@@ -68,11 +81,10 @@ All rates will now be cached in APC during 3600 seconds.
 Swap provides an enumeration of currency codes so you can use autocompletion to avoid typos.
 
 ```php
-use \Swap\Model\CurrencyPair;
 use \Swap\Util\CurrencyCodes;
 
 // Retrieving the EUR/USD rate
-$rate = $swap->quote(new CurrencyPair(
+$rate = $swap->quote(new \Swap\Model\CurrencyPair(
     CurrencyCodes::ISO_EUR,
     CurrencyCodes::ISO_USD
 ));
