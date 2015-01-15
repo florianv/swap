@@ -33,7 +33,6 @@ To retrieve the latest exchange rate for a currency pair, you need to use the `q
 
 ```php
 $rate = $swap->quote('EUR/USD');
-// or $swap->quote(new \Swap\Model\CurrencyPair('EUR', 'USD')));
 
 // 1.187220
 echo $rate;
@@ -90,10 +89,6 @@ $rate = $swap->quote(new \Swap\Model\CurrencyPair(
 ));
 ```
 
-## Integrations
-
-- A Symfony2 bundle [FlorianvSwapBundle](https://github.com/florianv/FlorianvSwapBundle).
-
 ## Providers
 
 - [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html)
@@ -111,6 +106,10 @@ Supports multiple currencies as base and quote currencies.
 Supports multiple currencies as base and quote currencies.
 - [NationalBankOfRomania](http://www.bnr.ro)
 Supports only RON as base currency.
+
+## Integrations
+
+- A Symfony2 bundle [FlorianvSwapBundle](https://github.com/florianv/FlorianvSwapBundle).
 
 ## License
 
