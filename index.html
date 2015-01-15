@@ -49,7 +49,6 @@ $swap = new \Swap\Swap($yahooProvider);</code></pre>
 <h3>Quoting</h3>
 <p>To retrieve the latest exchange rate for a currency pair, you need to use the <code>quote()</code> method.</p>
 <pre><code class="language-php">$rate = $swap-&gt;quote('EUR/USD');
-// or $swap-&gt;quote(new \Swap\Model\CurrencyPair('EUR', 'USD')));
 
 // 1.187220
 echo $rate;
@@ -88,10 +87,6 @@ $rate = $swap-&gt;quote(new \Swap\Model\CurrencyPair(
     CurrencyCodes::ISO_EUR,
     CurrencyCodes::ISO_USD
 ));</code></pre>
-<h2>Integrations</h2>
-<ul>
-<li>A Symfony2 bundle <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>.</li>
-</ul>
 <h2>Providers</h2>
 <ul>
 <li><a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a>
@@ -109,6 +104,10 @@ Supports multiple currencies as base and quote currencies.</li>
 Supports multiple currencies as base and quote currencies.</li>
 <li><a href="http://www.bnr.ro">NationalBankOfRomania</a>
 Supports only RON as base currency.</li>
+</ul>
+<h2>Integrations</h2>
+<ul>
+<li>A Symfony2 bundle <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>.</li>
 </ul>
 <h2>License</h2>
 <p><a href="https://github.com/florianv/swap/blob/master/LICENSE">MIT</a></p>
