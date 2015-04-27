@@ -28,7 +28,7 @@ class GoogleFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $body = $this->getMock('Psr\Http\Message\StreamableInterface');
         $body
             ->expects($this->once())
-            ->method('getContents')
+            ->method('__toString')
             ->will($this->returnValue($content));
 
         $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
@@ -60,7 +60,7 @@ class GoogleFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $body = $this->getMock('Psr\Http\Message\StreamableInterface');
         $body
             ->expects($this->once())
-            ->method('getContents')
+            ->method('__toString')
             ->will($this->returnValue($content));
 
         $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');

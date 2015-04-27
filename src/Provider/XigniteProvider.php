@@ -44,7 +44,7 @@ class XigniteProvider extends AbstractProvider
     public function fetchRate(CurrencyPair $currencyPair)
     {
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->token);
-        $content = $this->httpAdapter->get($url)->getBody()->getContents();
+        $content = $this->fetchContent($url);
 
         $json = StringUtil::jsonToArray($content);
         $data = $json[0];

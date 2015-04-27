@@ -30,7 +30,7 @@ class GoogleFinanceProvider extends AbstractProvider
     public function fetchRate(CurrencyPair $currencyPair)
     {
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
-        $content = $this->httpAdapter->get($url)->getBody()->getContents();
+        $content = $this->fetchContent($url);
 
         $document = new \DOMDocument();
         @$document->loadHTML($content);

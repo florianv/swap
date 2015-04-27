@@ -34,7 +34,7 @@ class YahooFinanceProvider extends AbstractProvider
         $query = sprintf('select * from yahoo.finance.xchange where pair in (%s)', $queryPairs);
         $url = sprintf(self::URL, urlencode($query));
 
-        $content = $this->httpAdapter->get($url)->getBody()->getContents();
+        $content = $this->fetchContent($url);
 
         $json = StringUtil::jsonToArray($content);
         $data = $json['query']['results']['rate'];

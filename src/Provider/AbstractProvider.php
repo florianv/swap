@@ -27,4 +27,16 @@ abstract class AbstractProvider implements ProviderInterface
     {
         $this->httpAdapter = $httpAdapter;
     }
+
+    /**
+     * Fetches the content of the given url.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function fetchContent($url)
+    {
+        return (string) $this->httpAdapter->get($url)->getBody();
+    }
 }

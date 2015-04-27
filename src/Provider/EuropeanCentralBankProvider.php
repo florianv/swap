@@ -34,7 +34,7 @@ class EuropeanCentralBankProvider extends AbstractProvider
             throw new UnsupportedCurrencyPairException($currencyPair);
         }
 
-        $content = $this->httpAdapter->get(self::URL)->getBody()->getContents();
+        $content = $this->fetchContent(self::URL);
 
         $xmlElement = StringUtil::xmlToElement($content);
         $cube = $xmlElement->Cube->Cube;

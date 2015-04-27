@@ -30,7 +30,7 @@ class NationalBankOfRomaniaProvider extends AbstractProvider
      */
     public function fetchRate(CurrencyPair $currencyPair)
     {
-        $content = $this->httpAdapter->get(self::URL)->getBody()->getContents();
+        $content = $this->fetchContent(self::URL);
 
         $xmlElement = StringUtil::xmlToElement($content);
 

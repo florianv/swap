@@ -61,7 +61,7 @@ class OpenExchangeRatesProvider extends AbstractProvider
             $url = sprintf(self::FREE_URL, $this->appId);
         }
 
-        $content = $this->httpAdapter->get($url)->getBody()->getContents();
+        $content = $this->fetchContent($url);
         $data = StringUtil::jsonToArray($content);
 
         if (isset($data['error'])) {
