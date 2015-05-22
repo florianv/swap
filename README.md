@@ -1,4 +1,4 @@
-# Swap [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url]
+# Swap [![Build status][travis-image]][travis-url] [![Total Downloads][downloads-image]][downloads-url] [![Version][version-image]][version-url]
 
 > Exchange rates library for PHP 5.4+
 
@@ -117,6 +117,9 @@ Supports only RON as base currency.
 
 [travis-url]: https://travis-ci.org/florianv/swap
 [travis-image]: http://img.shields.io/travis/florianv/swap.svg?style=flat
+
+[downloads-url]: https://packagist.org/packages/florianv/swap
+[downloads-image]: https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat
 
 [version-url]: https://packagist.org/packages/florianv/swap
 [version-image]: http://img.shields.io/packagist/v/florianv/swap.svg?style=flat
