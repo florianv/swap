@@ -1,6 +1,6 @@
-# Swap [![Build status][travis-image]][travis-url] [![Total Downloads][downloads-image]][downloads-url] [![Version][version-image]][version-url]
+# Swap [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url] [![PHP Version][php-version-image]][php-version-url] [![Total Downloads][downloads-image]][downloads-url] 
 
-> Exchange rates library for PHP 5.4+
+> Exchange rates library for PHP
 
 ## Installation
 
@@ -123,3 +123,6 @@ Supports only RON as base currency.
 
 [version-url]: https://packagist.org/packages/florianv/swap
 [version-image]: http://img.shields.io/packagist/v/florianv/swap.svg?style=flat
+
+[php-version-url]: https://packagist.org/packages/florianv/swap
+[php-version-image]: http://img.shields.io/badge/php-5.4+-ff69b4.svg
