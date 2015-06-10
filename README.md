@@ -140,6 +140,7 @@ Supports only RON as base currency.
 ## Integrations
 
 - A Symfony2 bundle [FlorianvSwapBundle](https://github.com/florianv/FlorianvSwapBundle).
+- A Laravel 5 package [florianv/laravel-swap](https://github.com/florianv/laravel-swap).
 
 ## License
 
