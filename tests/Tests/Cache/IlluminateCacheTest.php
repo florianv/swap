@@ -11,11 +11,11 @@
 
 namespace Swap\Tests\Cache;
 
-use Swap\Cache\DoctrineCache;
+use Swap\Cache\IlluminateCache;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 
-class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
+class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -23,17 +23,17 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
     public function it_returns_null_if_rate_absent()
     {
         $pair = new CurrencyPair('EUR', 'USD');
-        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
+        $store = $this->getMock('Illuminate\Contracts\Cache\Store');
 
-        $cache
+        $store
             ->expects($this->once())
-            ->method('fetch')
+            ->method('get')
             ->with($pair)
-            ->will($this->returnValue(false))
+            ->will($this->returnValue(null))
         ;
 
-        $doctrineCache = new DoctrineCache($cache);
-        $this->assertNull($doctrineCache->fetchRate($pair));
+        $cache = new IlluminateCache($store);
+        $this->assertNull($cache->fetchRate($pair));
     }
 
     /**
@@ -43,17 +43,17 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
     {
         $pair = new CurrencyPair('EUR', 'USD');
         $rate = new Rate('1', new \DateTime());
-        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
+        $store = $this->getMock('Illuminate\Contracts\Cache\Store');
 
-        $cache
+        $store
             ->expects($this->once())
-            ->method('fetch')
+            ->method('get')
             ->with($pair)
             ->will($this->returnValue($rate))
         ;
 
-        $doctrineCache = new DoctrineCache($cache);
-        $this->assertSame($rate, $doctrineCache->fetchRate($pair));
+        $cache = new IlluminateCache($store);
+        $this->assertSame($rate, $cache->fetchRate($pair));
     }
 
     /**
@@ -63,16 +63,15 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
     {
         $pair = new CurrencyPair('EUR', 'USD');
         $rate = new Rate('1', new \DateTime());
-        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
+        $store = $this->getMock('Illuminate\Contracts\Cache\Store');
 
-        $cache
+        $store
             ->expects($this->once())
-            ->method('save')
-            ->with('EUR/USD', $rate, 3600)
-            ->will($this->returnValue($rate))
+            ->method('put')
+            ->with('EUR/USD', $rate, 60)
         ;
 
-        $doctrineCache = new DoctrineCache($cache, 3600);
-        $doctrineCache->storeRate($pair, $rate);
+        $cache = new IlluminateCache($store, 60);
+        $cache->storeRate($pair, $rate);
     }
 }

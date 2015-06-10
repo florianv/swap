@@ -28,7 +28,12 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
-        "doctrine/cache": "~1.0"
+        "doctrine/cache": "~1.0",
+        "illuminate/cache": "~5.0"
+    },
+    "suggest": {
+        "doctrine/cache": "Required to cache rates with Doctrine cache",
+        "illuminate/cache": "Required to cache rates with Illuminate cache"
     },
     "config": {
         "bin-dir": "bin"

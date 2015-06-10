@@ -62,8 +62,17 @@ The rates will be first fetched using the Yahoo Finance provider and will fallba
 
 ### Caching
 
-For performance reasons you might want to cache the rates during a given time. Currently Swap allows you to use the 
-[doctrine/cache](https://github.com/doctrine/cache) library as caching provider.
+For performance reasons you might want to cache the rates during a given time.
+ 
+#### Doctrine Cache
+
+##### Installation
+
+```bash
+$ composer require doctrine/cache
+```
+
+##### Usage
 
 ```php
 // Create the cache adapter
@@ -74,6 +83,27 @@ $swap = new \Swap\Swap($provider, $cache);
 ```
 
 All rates will now be cached in APC during 3600 seconds.
+
+#### Illuminate Cache
+
+##### Installation
+
+```bash
+$ composer require illuminate/cache
+```
+
+##### Usage
+
+```php
+// Create the cache adapter
+$store = new \Illuminate\Cache\ApcStore(new \Illuminate\Cache\ApcWrapper());
+$cache = new \Swap\Cache\IlluminateCache($store, 60);
+
+// Pass the cache to Swap
+$swap = new \Swap\Swap($provider, $cache);
+```
+
+All rates will now be cached in APC during 60 minutes.
 
 ### Currency Codes
 
