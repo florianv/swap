@@ -24,13 +24,13 @@ final class Rate
     /**
      * Creates a new rate.
      *
-     * @param string    $value The rate value
-     * @param \DateTime $date  The date at which this rate was calculated
+     * @param string         $value The rate value
+     * @param \DateTime|null $date  The date at which this rate was calculated
      */
-    public function __construct($value, \DateTime $date)
+    public function __construct($value, \DateTime $date = null)
     {
-        $this->value = $value;
-        $this->date = $date;
+        $this->value = (string) $value;
+        $this->date = $date ?: new \DateTime();
     }
 
     /**

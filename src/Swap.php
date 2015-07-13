@@ -37,7 +37,9 @@ class Swap implements SwapInterface
         if (is_string($currencyPair)) {
             $currencyPair = CurrencyPair::createFromString($currencyPair);
         } elseif (!$currencyPair instanceof CurrencyPair) {
-            throw new \InvalidArgumentException('The currency pair must be either a string or an instance of CurrencyPair');
+            throw new \InvalidArgumentException(
+                'The currency pair must be either a string or an instance of CurrencyPair'
+            );
         }
 
         if (null !== $this->cache && null !== $rate = $this->cache->fetchRate($currencyPair)) {
