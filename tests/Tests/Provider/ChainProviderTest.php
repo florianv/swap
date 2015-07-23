@@ -13,6 +13,7 @@ namespace Swap\Tests\Provider;
 
 use Swap\Exception\ChainProviderException;
 use Swap\Exception\Exception;
+use Swap\Exception\InternalException;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 use Swap\Provider\ChainProvider;
@@ -33,7 +34,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('fetchRate')
             ->with($pair)
-            ->will($this->throwException(new Exception()));
+            ->will($this->throwException(new Exception()))
         ;
 
         $providerTwo = $this->getMock('Swap\ProviderInterface');
@@ -42,7 +43,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('fetchRate')
             ->with($pair)
-            ->will($this->returnValue($rate));
+            ->will($this->returnValue($rate))
         ;
 
         $providerThree = $this->getMock('Swap\ProviderInterface');
@@ -69,7 +70,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
         $providerOne
             ->expects($this->once())
             ->method('fetchRate')
-            ->will($this->throwException($exception));
+            ->will($this->throwException($exception))
         ;
 
         $providerTwo = $this->getMock('Swap\ProviderInterface');
@@ -77,7 +78,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
         $providerTwo
             ->expects($this->once())
             ->method('fetchRate')
-            ->will($this->throwException($exception));
+            ->will($this->throwException($exception))
         ;
 
         $chain = new ChainProvider([$providerOne, $providerTwo]);
@@ -91,5 +92,31 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($caught);
+    }
+
+    /**
+     * @test
+     * @expectedException \Swap\Exception\InternalException
+     */
+    public function it_throws_an_exception_when_an_internal_exception_is_thrown()
+    {
+        $internalException = new InternalException();
+
+        $providerOne = $this->getMock('Swap\ProviderInterface');
+        $providerOne
+            ->expects($this->once())
+            ->method('fetchRate')
+            ->will($this->throwException($internalException))
+        ;
+
+        $providerTwo = $this->getMock('Swap\ProviderInterface');
+
+        $providerTwo
+            ->expects($this->never())
+            ->method('fetchRate')
+        ;
+
+        $chain = new ChainProvider([$providerOne, $providerTwo]);
+        $chain->fetchRate(new CurrencyPair('EUR', 'USD'));
     }
 }

@@ -1,4 +1,4 @@
-# Swap [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url] [![PHP Version][php-version-image]][php-version-url] [![Total Downloads][downloads-image]][downloads-url] 
+# Swap [![Build status][travis-image]][travis-url] [![Version][version-image]][version-url] [![PHP Version][php-version-image]][php-version-url] [![Total Downloads][downloads-image]][downloads-url]
 
 > Exchange rates library for PHP
 
@@ -63,7 +63,7 @@ The rates will be first fetched using the Yahoo Finance provider and will fallba
 ### Caching
 
 For performance reasons you might want to cache the rates during a given time.
- 
+
 #### Doctrine Cache
 
 ##### Installation
@@ -136,6 +136,8 @@ Supports multiple currencies as base and quote currencies.
 Supports multiple currencies as base and quote currencies.
 - [National Bank of Romania](http://www.bnr.ro)
 Supports only RON as base currency.
+- `Array`
+Retrieves rates from a PHP array
 
 ## Integrations
 
