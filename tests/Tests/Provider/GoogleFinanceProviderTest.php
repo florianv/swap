@@ -25,7 +25,7 @@ class GoogleFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'http://www.google.com/finance/converter?a=1&from=EUR&to=XXL';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/unsupported.html');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -57,7 +57,7 @@ class GoogleFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/success.html');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')

@@ -24,7 +24,7 @@ class YahooFinanceProviderTest extends \PHPUnit_Framework_TestCase
     {
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/unsupported.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -55,7 +55,7 @@ class YahooFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURUSD%22%29&env=store://datatables.org/alltableswithkeys&format=json';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
