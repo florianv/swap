@@ -35,7 +35,7 @@ class OpenExchangeRatesProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/OpenExchangeRates/error.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -69,7 +69,7 @@ class OpenExchangeRatesProviderTest extends \PHPUnit_Framework_TestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -106,7 +106,7 @@ class OpenExchangeRatesProviderTest extends \PHPUnit_Framework_TestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')

@@ -25,7 +25,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -58,7 +58,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -90,7 +90,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -125,7 +125,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')

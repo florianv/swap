@@ -25,7 +25,7 @@ class XigniteProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/Xignite/error.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -66,7 +66,7 @@ class XigniteProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/Xignite/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')

@@ -24,7 +24,7 @@ class WebserviceXProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/WebserviceX/success.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')

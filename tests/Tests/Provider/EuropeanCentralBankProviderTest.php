@@ -35,7 +35,7 @@ class EuropeanCentralBankProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
@@ -67,7 +67,7 @@ class EuropeanCentralBankProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamableInterface');
+        $body = $this->getMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
