@@ -11,6 +11,7 @@
 
 namespace Swap\Provider;
 
+use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
@@ -37,6 +38,11 @@ class YahooFinanceProvider extends AbstractProvider
         $content = $this->fetchContent($url);
 
         $json = StringUtil::jsonToArray($content);
+
+        if (isset($json['error'])) {
+            throw new Exception($json['error']['description']);
+        }
+
         $data = $json['query']['results']['rate'];
 
         if ('0.00' === $data['Rate'] || 'N/A' === $data['Date']) {

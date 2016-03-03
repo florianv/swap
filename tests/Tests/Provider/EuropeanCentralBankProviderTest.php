@@ -14,7 +14,7 @@ namespace Swap\Tests\Provider;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\EuropeanCentralBankProvider;
 
-class EuropeanCentralBankProviderTest extends \PHPUnit_Framework_TestCase
+class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
@@ -35,27 +35,7 @@ class EuropeanCentralBankProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new EuropeanCentralBankProvider($adapter);
+        $provider = new EuropeanCentralBankProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
     }
 
@@ -67,27 +47,7 @@ class EuropeanCentralBankProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new EuropeanCentralBankProvider($adapter);
+        $provider = new EuropeanCentralBankProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'BGN'));
 
         $this->assertSame('1.9558', $rate->getValue());

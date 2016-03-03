@@ -15,7 +15,7 @@ use Swap\Exception\Exception;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\XigniteProvider;
 
-class XigniteProviderTest extends \PHPUnit_Framework_TestCase
+class XigniteProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
@@ -25,27 +25,7 @@ class XigniteProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/Xignite/error.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($uri)
-            ->will($this->returnValue($response));
-
-        $provider = new XigniteProvider($adapter, 'token');
+        $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), 'token');
         $caught = false;
 
         try {
@@ -66,27 +46,7 @@ class XigniteProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/Xignite/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($uri)
-            ->will($this->returnValue($response));
-
-        $provider = new XigniteProvider($adapter, 'token');
+        $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), 'token');
         $rate = $provider->fetchRate(new CurrencyPair('GBP', 'AWG'));
 
         $this->assertEquals('2.982308', $rate->getValue());
