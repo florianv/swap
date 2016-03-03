@@ -12,14 +12,14 @@
 namespace Swap\Provider;
 
 use Ivory\HttpAdapter\HttpAdapterInterface;
-use Swap\ProviderInterface;
+use Swap\Provider;
 
 /**
  * Base class for providers.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-abstract class AbstractProvider implements ProviderInterface
+abstract class AbstractProvider implements Provider
 {
     protected $httpAdapter;
 

@@ -18,12 +18,12 @@ use Swap\Model\CurrencyPair;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Swap implements SwapInterface
+class Swap implements Exchanger
 {
     private $provider;
     private $cache;
 
-    public function __construct(ProviderInterface $provider, CacheInterface $cache = null)
+    public function __construct(Provider $provider, Cache $cache = null)
     {
         $this->provider = $provider;
         $this->cache = $cache;

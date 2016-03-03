@@ -14,21 +14,21 @@ namespace Swap\Provider;
 use Swap\Exception\ChainProviderException;
 use Swap\Exception\InternalException;
 use Swap\Model\CurrencyPair;
-use Swap\ProviderInterface;
+use Swap\Provider;
 
 /**
  * A provider using other providers in a chain.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class ChainProvider implements ProviderInterface
+class ChainProvider implements Provider
 {
     private $providers;
 
     /**
      * Creates a new chain provider.
      *
-     * @param ProviderInterface[] $providers
+     * @param Provider[] $providers
      */
     public function __construct(array $providers)
     {
