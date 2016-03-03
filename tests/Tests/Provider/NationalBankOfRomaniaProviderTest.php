@@ -14,7 +14,7 @@ namespace Swap\Tests\Provider;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\NationalBankOfRomaniaProvider;
 
-class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
+class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
@@ -25,27 +25,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new NationalBankOfRomaniaProvider($adapter);
+        $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'RON'));
     }
 
@@ -58,27 +38,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new NationalBankOfRomaniaProvider($adapter);
+        $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('RON', 'XXX'));
     }
 
@@ -90,27 +50,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new NationalBankOfRomaniaProvider($adapter);
+        $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('RON', 'EUR'));
 
         $this->assertSame('4.4856', $rate->getValue());
@@ -125,27 +65,7 @@ class NationalBankOfRomaniaProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new NationalBankOfRomaniaProvider($adapter);
+        $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('RON', 'HUF'));
 
         $this->assertSame('0.014092', $rate->getValue());

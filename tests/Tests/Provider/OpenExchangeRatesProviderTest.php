@@ -14,7 +14,7 @@ namespace Swap\Tests\Provider;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\OpenExchangeRatesProvider;
 
-class OpenExchangeRatesProviderTest extends \PHPUnit_Framework_TestCase
+class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
@@ -35,27 +35,7 @@ class OpenExchangeRatesProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/OpenExchangeRates/error.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($uri)
-            ->will($this->returnValue($response));
-
-        $provider = new OpenExchangeRatesProvider($adapter, 'secret');
+        $provider = new OpenExchangeRatesProvider($this->getHttpAdapterMock($uri, $content), 'secret');
         $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
     }
 
@@ -69,27 +49,7 @@ class OpenExchangeRatesProviderTest extends \PHPUnit_Framework_TestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($uri)
-            ->will($this->returnValue($response));
-
-        $provider = new OpenExchangeRatesProvider($adapter, 'secret');
+        $provider = new OpenExchangeRatesProvider($this->getHttpAdapterMock($uri, $content), 'secret');
         $rate = $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
 
         $this->assertEquals('0.726804', $rate->getValue());
@@ -106,27 +66,7 @@ class OpenExchangeRatesProviderTest extends \PHPUnit_Framework_TestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($uri)
-            ->will($this->returnValue($response));
-
-        $provider = new OpenExchangeRatesProvider($adapter, 'secret', true);
+        $provider = new OpenExchangeRatesProvider($this->getHttpAdapterMock($uri, $content), 'secret', true);
         $rate = $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
 
         $this->assertEquals('0.726804', $rate->getValue());

@@ -14,7 +14,7 @@ namespace Swap\Tests\Provider;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\YahooFinanceProvider;
 
-class YahooFinanceProviderTest extends \PHPUnit_Framework_TestCase
+class YahooFinanceProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
@@ -22,28 +22,10 @@ class YahooFinanceProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
+        $url = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURXXL%22%29&env=store://datatables.org/alltableswithkeys&format=json';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/unsupported.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($response));
-
-        $provider = new YahooFinanceProvider($adapter);
+        $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
     }
 
@@ -55,30 +37,23 @@ class YahooFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURUSD%22%29&env=store://datatables.org/alltableswithkeys&format=json';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/success.json');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new YahooFinanceProvider($adapter);
+        $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
 
         $this->assertSame('1.3758', $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-10 07:23:00'), $rate->getDate());
+    }
+
+    /**
+     * @test
+     * @expectedException \Swap\Exception\Exception
+     */
+    public function it_throws_the_error_as_exception()
+    {
+        $url = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURUSD%22%29&env=store://datatables.org/alltableswithkeys&format=json';
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/error.json');
+
+        $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
+        $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
     }
 }

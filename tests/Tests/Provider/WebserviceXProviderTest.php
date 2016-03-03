@@ -14,7 +14,7 @@ namespace Swap\Tests\Provider;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\WebserviceXProvider;
 
-class WebserviceXProviderTest extends \PHPUnit_Framework_TestCase
+class WebserviceXProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
@@ -24,27 +24,7 @@ class WebserviceXProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/WebserviceX/success.xml');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($uri)
-            ->will($this->returnValue($response));
-
-        $provider = new WebserviceXProvider($adapter);
+        $provider = new WebserviceXProvider($this->getHttpAdapterMock($uri, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
 
         $this->assertEquals('1.3608', $rate->getValue());

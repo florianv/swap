@@ -14,7 +14,7 @@ namespace Swap\Tests\Provider;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\GoogleFinanceProvider;
 
-class GoogleFinanceProviderTest extends \PHPUnit_Framework_TestCase
+class GoogleFinanceProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
@@ -25,27 +25,7 @@ class GoogleFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $uri = 'http://www.google.com/finance/converter?a=1&from=EUR&to=XXL';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/unsupported.html');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($uri)
-            ->will($this->returnValue($response));
-
-        $provider = new GoogleFinanceProvider($adapter);
+        $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($uri, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
     }
 
@@ -57,27 +37,7 @@ class GoogleFinanceProviderTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/success.html');
 
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
-        $body
-            ->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue($content));
-
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
-        $response
-            ->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
-
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
-
-        $adapter
-            ->expects($this->once())
-            ->method('get')
-            ->with($url)
-            ->will($this->returnValue($response));
-
-        $provider = new GoogleFinanceProvider($adapter);
+        $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
 
         $this->assertSame('1.1825', $rate->getValue());
