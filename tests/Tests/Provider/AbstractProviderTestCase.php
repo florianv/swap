@@ -19,7 +19,7 @@ abstract class AbstractProviderTestCase extends \PHPUnit_Framework_TestCase
      * @param string $url     The url
      * @param string $content The body content
      *
-     * @return \Ivory\HttpAdapter\HttpAdapterInterface
+     * @return \Http\Client\HttpClient
      */
     protected function getHttpAdapterMock($url, $content)
     {
@@ -29,18 +29,20 @@ abstract class AbstractProviderTestCase extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->will($this->returnValue($content));
 
-        $response = $this->getMock('\Ivory\HttpAdapter\Message\ResponseInterface');
+        $response = $this->getMock('Psr\Http\Message\ResponseInterface');
         $response
             ->expects($this->once())
             ->method('getBody')
             ->will($this->returnValue($body));
 
-        $adapter = $this->getMock('Ivory\HttpAdapter\HttpAdapterInterface');
+        $adapter = $this->getMock('Http\Client\HttpClient');
 
         $adapter
             ->expects($this->once())
-            ->method('get')
-            ->with($url)
+            ->method('sendRequest')
+            ->with($this->callback(function ($arg) use ($url) {
+                return $arg->getUri()->__toString() === $url;
+            }))
             ->will($this->returnValue($response));
 
         return $adapter;

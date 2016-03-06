@@ -11,7 +11,7 @@
 
 namespace Swap\Provider;
 
-use Ivory\HttpAdapter\HttpAdapterInterface;
+use Http\Client\HttpClient;
 use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPair;
@@ -34,13 +34,13 @@ class CurrencyLayerProvider extends AbstractProvider
     /**
      * Creates a new provider.
      *
-     * @param HttpAdapterInterface $httpAdapter The HTTP client
-     * @param string               $accessKey   The access key
-     * @param bool                 $enterprise  A flag to tell if it is in enterprise mode
+     * @param string     $accessKey  The access key
+     * @param bool       $enterprise A flag to tell if it is in enterprise mode
+     * @param HttpClient $httpClient
      */
-    public function __construct(HttpAdapterInterface $httpAdapter, $accessKey, $enterprise = false)
+    public function __construct($accessKey, $enterprise = false, HttpClient $httpClient = null)
     {
-        parent::__construct($httpAdapter);
+        parent::__construct($httpClient);
 
         $this->accessKey = $accessKey;
         $this->enterprise = $enterprise;

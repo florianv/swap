@@ -35,7 +35,7 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
     public function it_throws_an_exception_when_fetching_invalid_rate()
     {
         $arrayProvider = new ArrayProvider([
-            'EUR/USD' => array(),
+            'EUR/USD' => [],
         ]);
 
         $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD'));

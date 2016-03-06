@@ -29,8 +29,7 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('fetch')
             ->with($pair)
-            ->will($this->returnValue(false))
-        ;
+            ->will($this->returnValue(false));
 
         $doctrineCache = new DoctrineCache($cache);
         $this->assertNull($doctrineCache->fetchRate($pair));
@@ -49,8 +48,7 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('fetch')
             ->with($pair)
-            ->will($this->returnValue($rate))
-        ;
+            ->will($this->returnValue($rate));
 
         $doctrineCache = new DoctrineCache($cache);
         $this->assertSame($rate, $doctrineCache->fetchRate($pair));
@@ -69,8 +67,7 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('save')
             ->with('EUR/USD', $rate, 3600)
-            ->will($this->returnValue($rate))
-        ;
+            ->will($this->returnValue($rate));
 
         $doctrineCache = new DoctrineCache($cache, 3600);
         $doctrineCache->storeRate($pair, $rate);
