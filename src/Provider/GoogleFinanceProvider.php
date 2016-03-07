@@ -31,7 +31,10 @@ class GoogleFinanceProvider extends AbstractProvider
     {
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         $content = $this->fetchContent($url);
-
+		
+		// To suppress errors on $document->loadHTML($content);
+		libxml_use_internal_errors(TRUE);
+		
         $document = new \DOMDocument();
         @$document->loadHTML($content);
 
