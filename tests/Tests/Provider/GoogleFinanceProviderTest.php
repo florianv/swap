@@ -44,17 +44,17 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 
-	/**
-	 * @test
-	 */
-	public function it_has_no_php_errors()
-	{
-		$url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
-		$content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/success.html');
+    /**
+     * @test
+     */
+    public function it_has_no_php_errors()
+    {
+        $url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/success.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
 
-		$this->assertNull(error_get_last());
-	}
+        $this->assertNull(error_get_last());
+    }
 }
