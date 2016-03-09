@@ -51,6 +51,9 @@ class GoogleFinanceProvider extends AbstractProvider
         if (!is_numeric($bid)) {
             throw new Exception('The currency is not supported or Google changed the response format');
         }
+		
+		// unsupress the errors to avoid unintended consequences elsewhere
+		libxml_use_internal_errors(FALSE);
 
         return new Rate($bid, new \DateTime());
     }
