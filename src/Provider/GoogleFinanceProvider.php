@@ -31,10 +31,10 @@ class GoogleFinanceProvider extends AbstractProvider
     {
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         $content = $this->fetchContent($url);
-		
-		// To suppress errors on $document->loadHTML($content);
-		libxml_use_internal_errors(TRUE);
-		
+
+        $internalErrors = libxml_use_internal_errors(true);
+        $disableEntities = libxml_disable_entity_loader(true);
+
         $document = new \DOMDocument();
         @$document->loadHTML($content);
 
@@ -51,9 +51,9 @@ class GoogleFinanceProvider extends AbstractProvider
         if (!is_numeric($bid)) {
             throw new Exception('The currency is not supported or Google changed the response format');
         }
-		
-		// unsupress the errors to avoid unintended consequences elsewhere
-		libxml_use_internal_errors(FALSE);
+
+        libxml_use_internal_errors($internalErrors);
+        libxml_disable_entity_loader($disableEntities);
 
         return new Rate($bid, new \DateTime());
     }
