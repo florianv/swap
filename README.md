@@ -136,6 +136,8 @@ Supports multiple currencies as base and quote currencies.
 Supports multiple currencies as base and quote currencies.
 - [National Bank of Romania](http://www.bnr.ro)
 Supports only RON as base currency.
+- [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr)
+Supports only TRY as quote currency.
 - `Array`
 Retrieves rates from a PHP array
 
