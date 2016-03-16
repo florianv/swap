@@ -46,10 +46,9 @@ class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
         foreach ($xmlElement->Currency as $currency) {
             $currencyAttributes = $currency->attributes();
 
-            if((string) $currencyAttributes['CurrencyCode'] === $currencyPair->getBaseCurrency())
+            if ((string) $currencyAttributes['CurrencyCode'] === $currencyPair->getBaseCurrency())
             {
-                $rateValue = (float) $currency->ForexSelling;
-                return new Rate((string) $rateValue, $date);
+                return new Rate((string) $currency->ForexSelling, $date);
             }
         }
 

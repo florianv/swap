@@ -56,6 +56,4 @@ class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
         $this->assertSame('3.2083', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-03-15'), $rate->getDate());
     }
-
 }
-
