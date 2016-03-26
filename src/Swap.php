@@ -12,6 +12,7 @@
 namespace Swap;
 
 use Swap\Model\CurrencyPair;
+use Swap\Model\Rate;
 
 /**
  * An implementation of Swap.
@@ -46,7 +47,11 @@ class Swap implements SwapInterface
             return $rate;
         }
 
-        $rate = $this->provider->fetchRate($currencyPair);
+        if ($currencyPair->isIdentical()) {
+            $rate = new Rate(1);
+        } else {
+            $rate = $this->provider->fetchRate($currencyPair);
+        }
 
         if (null !== $this->cache) {
             $this->cache->storeRate($currencyPair, $rate);
