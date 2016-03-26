@@ -60,4 +60,19 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($rate1, $rate2);
         $this->assertSame($rate2, $rate3);
     }
+
+    /**
+     * @test
+     */
+    public function it_quotes_an_identical_pair()
+    {
+        $provider = $this->getMock('Swap\ProviderInterface');
+        $pair = new CurrencyPair('EUR', 'EUR');
+
+        $swap = new Swap($provider);
+        $rate = $swap->quote($pair);
+
+        $this->assertSame('1', $rate->getValue());
+        $this->assertInstanceOf('\DateTime', $rate->getDate());
+    }
 }
