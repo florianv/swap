@@ -74,6 +74,16 @@ final class CurrencyPair
     }
 
     /**
+     * Check if the pair is identical.
+     *
+     * @return bool
+     */
+    public function isIdentical()
+    {
+        return $this->baseCurrency === $this->quoteCurrency;
+    }
+
+    /**
      * Returns a string representation of the pair.
      *
      * @return string
