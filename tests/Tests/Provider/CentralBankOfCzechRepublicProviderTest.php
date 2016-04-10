@@ -15,33 +15,41 @@ use Swap\Provider\CentralBankOfCzechRepublicProvider;
 
 class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
 {
+    /**
+     * @var string URL of CNB exchange rates
+     */
+    protected static $url;
 
-	/** @var string URL of CNB exchange rates */
-	protected static $url;
-	/** @var string content of CNB exchange rates */
-	protected static $content;
+    /**
+     * @var string content of CNB exchange rates
+     */
+    protected static $content;
 
-	/**
-	 * Set up variables before TestCase is being initialized
-	 */
-	public static function setUpBeforeClass() {
-		self::$url = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
-		self::$content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/CentralBankOfCzechRepublic/cnb_today.txt');
-	}
+    /**
+     * Set up variables before TestCase is being initialized
+     */
+    public static function setUpBeforeClass()
+    {
+        $fixture_path = __DIR__ . '/../../Fixtures/Provider/CentralBankOfCzechRepublic/cnb_today.txt'
 
-	/**
-	 * Clean variables after TestCase finish
-	 */
-	public static function tearDownAfterClass() {
-		self::$url = NULL;
-		self::$content = NULL;
-	}
+        self::$url = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
+        self::$content = file_get_contents($fixture_path);
+    }
+
+    /**
+     * Clean variables after TestCase finish
+     */
+    public static function tearDownAfterClass()
+    {
+        self::$url = null;
+        self::$content = null;
+    }
 
     /**
      * @test
      * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
      */
-    public function it_throws_an_exception_when_quote_is_not_czk()
+    public function itThrowsAnExceptionWhenQuotesIsNotCzk()
     {
         $provider = $this->createProvider();
         $provider->fetchRate(new CurrencyPair('CZK', 'EUR'));
@@ -51,7 +59,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
      * @test
      * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
      */
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function itThrowsAnExceptionWhenThePairIsNotSupported()
     {
         $provider = $this->createProvider();
         $provider->fetchRate(new CurrencyPair('XXX', 'TRY'));
@@ -60,7 +68,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     /**
      * @test
      */
-    public function it_fetches_a_eur_rate()
+    public function itFetchesAEurRate()
     {
         $provider = $this->createProvider();
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'CZK'));
@@ -69,24 +77,31 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
         $this->assertEquals(new \DateTime('2016-04-05'), $rate->getDate());
     }
 
-	/**
-	 * @test
-	 */
-	public function it_fetches_a_php_rate() 
-	{
-		$rate = $this->createProvider()->fetchRate(new CurrencyPair('PHP', 'CZK'));
-		$this->assertSame('0.51384', $rate->getValue());
-	}
+    /**
+     * @test
+     */
+    public function itFetchesAPhpRate()
+    {
+        $rate = $this->createProvider()->fetchRate(new CurrencyPair('PHP', 'CZK'));
+        $this->assertSame('0.51384', $rate->getValue());
+    }
 
-	/**
-	 * @test
-	 */
-	public function it_fetches_a_idr_rate() {
-		$rate = $this->createProvider()->fetchRate(new CurrencyPair('IDR', 'CZK'));
-		$this->assertSame('0.001798', $rate->getValue());
-	}
+    /**
+     * @test
+     */
+    public function itFetchesAIdrRate()
+    {
+        $rate = $this->createProvider()->fetchRate(new CurrencyPair('IDR', 'CZK'));
+        $this->assertSame('0.001798', $rate->getValue());
+    }
 
-	protected function createProvider() {
-		return new CentralBankOfCzechRepublicProvider($this->getHttpAdapterMock(self::$url, self::$content));
-	}
+    /**
+     * Create bank provider
+     *
+     * @return CentralBankOfCzechRepublicProvider
+     */
+    protected function createProvider()
+    {
+        return new CentralBankOfCzechRepublicProvider($this->getHttpAdapterMock(self::$url, self::$content));
+    }
 }

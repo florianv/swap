@@ -42,9 +42,10 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
         $lines = explode("\n", $content);
 
         $date = \DateTime::createFromFormat(self::DATE_FORMAT, $this->parseDate($lines[0]));
-        $date->setTime(0, 0, 0); // set hours, minutes, seconds to midnight
-
-        foreach (array_slice($lines, 2) as $currency) { // skip first two lines (date and headers)
+        $date->setTime(0, 0, 0);
+        
+        // skip first two lines (date and headers)
+        foreach (array_slice($lines, 2) as $currency) {
             list(,, $count, $code, $rate) = explode('|', $currency);
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
