@@ -19,7 +19,6 @@ use Swap\Util\CurrencyCodes;
 /**
  * Central Bank of Czech Republic (CNB) provider.
  *
- * @link http://tcmb.gov.tr
  * @author Petr Kramar <petr.kramar@perlur.cz>
  */
 class CentralBankOfCzechRepublicProvider extends AbstractProvider

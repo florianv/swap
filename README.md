@@ -138,6 +138,8 @@ Supports multiple currencies as base and quote currencies.
 Supports only RON as base currency.
 - [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr)
 Supports only TRY as quote currency.
+- [Central Bank of the Czech Republic](http://www.cnb.cz)
+Supports only CZK as quote currency.
 - `Array`
 Retrieves rates from a PHP array
 
