@@ -1,0 +1,34 @@
+05.04.2016 #65
+země|měna|množství|kód|kurz
+Austrálie|dolar|1|AUD|17,918
+Brazílie|real|1|BRL|6,525
+Bulharsko|lev|1|BGN|13,822
+Čína|renminbi|1|CNY|3,673
+Dánsko|koruna|1|DKK|3,632
+EMU|euro|1|EUR|27,035
+Filipíny|peso|100|PHP|51,384
+Hongkong|dolar|1|HKD|3,065
+Chorvatsko|kuna|1|HRK|3,600
+Indie|rupie|100|INR|35,773
+Indonesie|rupie|1000|IDR|1,798
+Izrael|šekel|1|ILS|6,251
+Japonsko|jen|100|JPY|21,487
+Jihoafrická rep.|rand|1|ZAR|1,588
+Jižní Korea|won|100|KRW|2,052
+Kanada|dolar|1|CAD|18,055
+Maďarsko|forint|100|HUF|8,648
+Malajsie|ringgit|1|MYR|6,057
+Mexiko|peso|1|MXN|1,352
+MMF|SDR|1|XDR|33,470
+Norsko|koruna|1|NOK|2,845
+Nový Zéland|dolar|1|NZD|16,105
+Polsko|zlotý|1|PLN|6,369
+Rumunsko|nové leu|1|RON|6,054
+Rusko|rubl|100|RUB|34,436
+Singapur|dolar|1|SGD|17,524
+Švédsko|koruna|1|SEK|2,921
+Švýcarsko|frank|1|CHF|24,821
+Thajsko|baht|100|THB|67,359
+Turecko|lira|1|TRY|8,404
+USA|dolar|1|USD|23,774
+Velká Británie|libra|1|GBP|33,724
