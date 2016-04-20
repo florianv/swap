@@ -15,7 +15,6 @@ use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 use Swap\Util\CurrencyCodes;
-use Swap\Util\StringUtil;
 
 /**
  * Central Bank of Czech Republic (CNB) provider.
@@ -43,12 +42,14 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
 
         $date = \DateTime::createFromFormat(self::DATE_FORMAT, $this->parseDate($lines[0]));
         $date->setTime(0, 0, 0);
-        
-        // skip first two lines (date and headers)
+
+        // Skip first two lines (date and headers)
         foreach (array_slice($lines, 2) as $currency) {
             list(,, $count, $code, $rate) = explode('|', $currency);
+
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
+
                 return new Rate((string) ($rate / (int) $count), $date);
             }
         }
@@ -57,14 +58,16 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
     }
 
     /**
-     * Parse date from export
+     * Parses the date.
      *
-     * @param string first line of fetched response
-     * @return string date
+     * @param string $line First line of fetched response
+     *
+     * @return string The date
      */
     private function parseDate($line)
     {
         $words = preg_split('/[\s]+/', $line);
+
         return $words[0];
     }
 }
