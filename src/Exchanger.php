@@ -11,21 +11,19 @@
 
 namespace Swap;
 
-use Swap\Model\CurrencyPair;
-
 /**
- * Contract for providers.
+ * Contract for the Swap service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-interface ProviderInterface
+interface Exchanger
 {
     /**
-     * Fetches the rate for the currency pair.
+     * Quotes the currency pair.
      *
-     * @param CurrencyPair $currencyPair
+     * @param \Swap\Model\CurrencyPair|string
      *
      * @return \Swap\Model\Rate
      */
-    public function fetchRate(CurrencyPair $currencyPair);
+    public function quote($currencyPair);
 }

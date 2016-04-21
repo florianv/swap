@@ -15,14 +15,14 @@ use Swap\Exception\InternalException;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
-use Swap\ProviderInterface;
+use Swap\Provider;
 
 /**
  * Provides rates from an array.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class ArrayProvider implements ProviderInterface
+final class ArrayProvider implements Provider
 {
     private $rates;
 

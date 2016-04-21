@@ -12,7 +12,7 @@
 namespace Swap\Cache;
 
 use Illuminate\Contracts\Cache\Store;
-use Swap\CacheInterface;
+use Swap\Cache;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 
@@ -21,7 +21,7 @@ use Swap\Model\Rate;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class IlluminateCache implements CacheInterface
+final class IlluminateCache implements Cache
 {
     private $store;
     private $ttl;

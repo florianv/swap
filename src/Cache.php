@@ -19,7 +19,7 @@ use Swap\Model\Rate;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-interface CacheInterface
+interface Cache
 {
     /**
      * Fetches the rate.

@@ -11,8 +11,8 @@
 
 namespace Swap\Cache;
 
-use Doctrine\Common\Cache\Cache;
-use Swap\CacheInterface;
+use Doctrine\Common\Cache\Cache as DoctrineCommonCache;
+use Swap\Cache;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 
@@ -21,7 +21,7 @@ use Swap\Model\Rate;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class DoctrineCache implements CacheInterface
+class DoctrineCache implements Cache
 {
     private $cache;
     private $ttl;
@@ -29,10 +29,10 @@ class DoctrineCache implements CacheInterface
     /**
      * Creates a new cache.
      *
-     * @param Cache   $cache The cache
-     * @param integer $ttl   The ttl in seconds
+     * @param DoctrineCommonCache $cache The cache
+     * @param integer             $ttl   The ttl in seconds
      */
-    public function __construct(Cache $cache, $ttl = 0)
+    public function __construct(DoctrineCommonCache $cache, $ttl = 0)
     {
         $this->cache = $cache;
         $this->ttl = $ttl;
