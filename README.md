@@ -140,6 +140,8 @@ Supports only RON as base currency.
 Supports only TRY as quote currency.
 - [Central Bank of the Czech Republic](http://www.cnb.cz)
 Supports only CZK as quote currency.
+- [currencylayer](https://currencylayer.com)
+Supports only USD as base currency for the free version and multiple ones for the enterprise version. HTTP-only for free version.
 - `Array`
 Retrieves rates from a PHP array
 
