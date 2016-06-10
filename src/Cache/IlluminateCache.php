@@ -29,8 +29,8 @@ final class IlluminateCache implements CacheInterface
     /**
      * Creates a new Illuminate cache.
      *
-     * @param Store   $store The cache store
-     * @param integer $ttl   The ttl in minutes
+     * @param Store $store The cache store
+     * @param int   $ttl   The ttl in minutes
      */
     public function __construct(Store $store, $ttl = 0)
     {

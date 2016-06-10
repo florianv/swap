@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Swap\Tests\Provider;
 
 use Swap\Exception\Exception;
@@ -23,7 +22,7 @@ class XigniteProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_on_response_error()
     {
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/Xignite/error.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/error.json');
 
         $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), 'token');
         $caught = false;
@@ -44,7 +43,7 @@ class XigniteProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_rate()
     {
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/Xignite/success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/success.json');
 
         $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), 'token');
         $rate = $provider->fetchRate(new CurrencyPair('GBP', 'AWG'));
