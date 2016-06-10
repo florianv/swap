@@ -1,8 +1,9 @@
 <?php
-/**
+
+/*
  * This file is part of Swap.
  *
- * (c) Petr Kramar <petr.kramar@perlur.cz>
+ * (c) Florian Voutzinos <florian@voutzinos.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,6 +14,9 @@ namespace Swap\Tests\Provider;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\CentralBankOfCzechRepublicProvider;
 
+/**
+ * @author Petr Kramar <petr.kramar@perlur.cz>
+ */
 class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
 {
     /**

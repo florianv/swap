@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of Swap.
  *
  * (c) Florian Voutzinos <florian@voutzinos.com>
