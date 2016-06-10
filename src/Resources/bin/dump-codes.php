@@ -1,6 +1,7 @@
 <?php
 
-function fetchCodes($url) {
+function fetchCodes($url)
+{
     $xml = new SimpleXMLElement(file_get_contents($url));
     $codes = [];
 
@@ -18,7 +19,7 @@ $codes = array_unique(array_merge(
 sort($codes, SORT_ASC);
 
 $codesLines = '';
-for ($i = 0; $i < count($codes); $i++) {
+for ($i = 0; $i < count($codes); ++$i) {
     $codesLines .= sprintf("    const ISO_%s = '%1\$s';\n", $codes[$i]);
 }
 

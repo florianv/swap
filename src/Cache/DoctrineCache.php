@@ -29,8 +29,8 @@ class DoctrineCache implements CacheInterface
     /**
      * Creates a new cache.
      *
-     * @param Cache   $cache The cache
-     * @param integer $ttl   The ttl in seconds
+     * @param Cache $cache The cache
+     * @param int   $ttl   The ttl in seconds
      */
     public function __construct(Cache $cache, $ttl = 0)
     {

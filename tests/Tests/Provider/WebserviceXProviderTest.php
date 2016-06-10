@@ -22,7 +22,7 @@ class WebserviceXProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_rate()
     {
         $uri = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/WebserviceX/success.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/WebserviceX/success.xml');
 
         $provider = new WebserviceXProvider($this->getHttpAdapterMock($uri, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));

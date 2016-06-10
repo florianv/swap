@@ -30,18 +30,18 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     protected static $content;
 
     /**
-     * Set up variables before TestCase is being initialized
+     * Set up variables before TestCase is being initialized.
      */
     public static function setUpBeforeClass()
     {
-        $fixture_path = __DIR__ . '/../../Fixtures/Provider/CentralBankOfCzechRepublic/cnb_today.txt';
+        $fixture_path = __DIR__.'/../../Fixtures/Provider/CentralBankOfCzechRepublic/cnb_today.txt';
 
         self::$url = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
         self::$content = file_get_contents($fixture_path);
     }
 
     /**
-     * Clean variables after TestCase finish
+     * Clean variables after TestCase finish.
      */
     public static function tearDownAfterClass()
     {
@@ -100,7 +100,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     }
 
     /**
-     * Create bank provider
+     * Create bank provider.
      *
      * @return CentralBankOfCzechRepublicProvider
      */
