@@ -35,7 +35,7 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
     public function it_throws_an_exception_when_fetching_invalid_rate()
     {
         $arrayProvider = new ArrayProvider([
-            'EUR/USD' => array()
+            'EUR/USD' => array(),
         ]);
 
         $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD'));
@@ -47,7 +47,7 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
     public function it_fetches_a_rate_from_rates()
     {
         $arrayProvider = new ArrayProvider([
-            'EUR/USD' => $rate = new Rate('1.50')
+            'EUR/USD' => $rate = new Rate('1.50'),
         ]);
 
         $this->assertSame($rate, $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD')));
@@ -60,8 +60,8 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
     {
         $arrayProvider = new ArrayProvider([
             'EUR/USD' => 1.50,
-            'USD/GBP'=> '1.25',
-            'JPY/GBP' => 1
+            'USD/GBP' => '1.25',
+            'JPY/GBP' => 1,
         ]);
 
         $eurUsd = $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD'));

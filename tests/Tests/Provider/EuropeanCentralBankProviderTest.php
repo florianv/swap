@@ -33,7 +33,7 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
         $provider = new EuropeanCentralBankProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
@@ -45,7 +45,7 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_rate()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
         $provider = new EuropeanCentralBankProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'BGN'));

@@ -23,7 +23,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $uri = 'http://www.google.com/finance/converter?a=1&from=EUR&to=XXL';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/unsupported.html');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/unsupported.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($uri, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
@@ -35,7 +35,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_rate()
     {
         $url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/success.html');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/success.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
@@ -50,7 +50,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
     public function it_has_no_php_errors()
     {
         $url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/GoogleFinance/success.html');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/success.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'USD'));

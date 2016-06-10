@@ -23,7 +23,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_when_base_is_not_ron()
     {
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'RON'));
@@ -36,7 +36,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('RON', 'XXX'));
@@ -48,7 +48,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_rate()
     {
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('RON', 'EUR'));
@@ -63,7 +63,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_multiplier_rate()
     {
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('RON', 'HUF'));
@@ -72,4 +72,3 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
         $this->assertEquals(new \DateTime('2015-01-12'), $rate->getDate());
     }
 }
-

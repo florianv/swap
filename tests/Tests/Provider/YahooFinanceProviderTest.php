@@ -23,7 +23,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $url = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURXXL%22%29&env=store://datatables.org/alltableswithkeys&format=json';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/unsupported.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/unsupported.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
@@ -35,7 +35,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_rate()
     {
         $url = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURUSD%22%29&env=store://datatables.org/alltableswithkeys&format=json';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/success.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
@@ -51,7 +51,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
     public function it_throws_the_error_as_exception()
     {
         $url = 'https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+yahoo.finance.xchange+where+pair+in+%28%22EURUSD%22%29&env=store://datatables.org/alltableswithkeys&format=json';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/YahooFinance/error.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/error.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('EUR', 'USD'));

@@ -23,7 +23,7 @@ class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_when_quote_is_not_try()
     {
         $url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkeyProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('TRY', 'EUR'));
@@ -36,7 +36,7 @@ class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkeyProvider($this->getHttpAdapterMock($url, $content));
         $provider->fetchRate(new CurrencyPair('XXX', 'TRY'));
@@ -48,7 +48,7 @@ class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
     public function it_fetches_a_rate()
     {
         $url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkeyProvider($this->getHttpAdapterMock($url, $content));
         $rate = $provider->fetchRate(new CurrencyPair('EUR', 'TRY'));

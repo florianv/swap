@@ -49,6 +49,7 @@ class NationalBankOfRomaniaProvider extends AbstractProvider
 
             if ($rateQuoteCurrency === $currencyPair->getQuoteCurrency()) {
                 $rateValue = (!empty($rateAttributes['multiplier'])) ? (float) $rate / (int) $rateAttributes['multiplier'] : (float) $rate;
+
                 return new Rate((string) $rateValue, $date);
             }
         }
