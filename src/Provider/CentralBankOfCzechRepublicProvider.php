@@ -44,7 +44,7 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
 
         // Skip first two lines (date and headers)
         foreach (array_slice($lines, 2) as $currency) {
-            list(,, $count, $code, $rate) = explode('|', $currency);
+            list(, , $count, $code, $rate) = explode('|', $currency);
 
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
