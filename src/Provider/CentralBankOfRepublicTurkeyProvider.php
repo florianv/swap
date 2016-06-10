@@ -21,6 +21,7 @@ use Swap\Util\StringUtil;
  * Central Bank of Republic of Turkey (CBRT) provider.
  *
  * @link http://tcmb.gov.tr
+ *
  * @author Uğur Erkan <mail@ugurerkan.com>
  */
 class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
@@ -46,8 +47,7 @@ class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
         foreach ($xmlElement->Currency as $currency) {
             $currencyAttributes = $currency->attributes();
 
-            if ((string) $currencyAttributes['CurrencyCode'] === $currencyPair->getBaseCurrency())
-            {
+            if ((string) $currencyAttributes['CurrencyCode'] === $currencyPair->getBaseCurrency()) {
                 return new Rate((string) $currency->ForexSelling, $date);
             }
         }

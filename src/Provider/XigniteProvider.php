@@ -30,7 +30,7 @@ class XigniteProvider extends AbstractProvider
      * Creates a new provider.
      *
      * @param HttpAdapterInterface $httpAdapter The HTTP adapter
-     * @param string               $token  The application token
+     * @param string               $token       The application token
      */
     public function __construct(HttpAdapterInterface $httpAdapter, $token)
     {
