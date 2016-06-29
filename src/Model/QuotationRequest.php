@@ -59,4 +59,26 @@ final class QuotationRequest
     {
         return $this->dateTime;
     }
+
+    /**
+     * Factory to instantiate QuotationRequest
+     *
+     * @param string|CurrencyPair $currencyPair
+     * @param \DateTime|null $dateTime
+     * @return QuotationRequest
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function create(CurrencyPair $currencyPair, \DateTime $dateTime = NULL)
+    {
+        if (is_string($currencyPair)) {
+            $currencyPair = CurrencyPair::createFromString($currencyPair);
+        } elseif (!($currencyPair instanceof CurrencyPair)) {
+            throw new \InvalidArgumentException(
+                'The currency pair must be either a string or an instance of CurrencyPair'
+            );
+        }
+
+        return new QuotationRequest($currencyPair, $dateTime);
+    }
 }

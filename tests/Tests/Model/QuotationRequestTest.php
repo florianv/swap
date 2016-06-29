@@ -27,11 +27,22 @@ class QuotationRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($r->getDateTime(), $dateTime);
     }
 
+    /**
+     * @test
+     */
+    public function createQuotationRequestByFactory()
+    {
+        $pair = CurrencyPair::createFromString('USD/CZK');
+        $dateTime = new \DateTime('2016-01-01');
+        $request = QuotationRequest::create($pair, $dateTime);
+        $this->assertInstanceOf(QuotationRequest::class, $request);
+    }
+
     public function validCurrencyPairsAndDateTimes()
     {
         return [
-            [ new CurrencyPair('USD', 'GBP'), new \DateTime('2016-02-28') ],
-            [ new CurrencyPair('EUR', 'USD'), null ] // latest
+            [ CurrencyPair::createFromString('USD/GBP'), new \DateTime('2016-02-28') ],
+            [ CurrencyPair::createFromString('EUR/USD'), null ] // latest
         ];
     }
 }
