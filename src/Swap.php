@@ -11,6 +11,7 @@
 
 namespace Swap;
 
+use Swap\Model\QuotationRequest;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 
@@ -33,28 +34,43 @@ class Swap implements SwapInterface
     /**
      * {@inheritdoc}
      */
-    public function quote($currencyPair)
+    public function quote($request)
     {
-        if (is_string($currencyPair)) {
-            $currencyPair = CurrencyPair::createFromString($currencyPair);
-        } elseif (!$currencyPair instanceof CurrencyPair) {
+        if (is_string($request)) {
+            $currencyPair = CurrencyPair::createFromString($request);
+            $request = QuotationRequest::create($currencyPair);
+        } elseif ($request instanceof CurrencyPair) {
+            $request = QuotationRequest::create($request);
+        } elseif (!($request instanceof QuotationRequest)) {
             throw new \InvalidArgumentException(
-                'The currency pair must be either a string or an instance of CurrencyPair'
+                'The request must be either a string, instance of CurrencyPair or QuotationRequest'
             );
         }
 
-        if (null !== $this->cache && null !== $rate = $this->cache->fetchRate($currencyPair)) {
+        $currencyPair = null;
+
+        if (null !== $this->cache && null !== $rate = $this->cache->fetchRate($request)) {
             return $rate;
         }
 
-        if ($currencyPair->isIdentical()) {
+        if ($request->getCurrencyPair()->isIdentical()) {
             $rate = new Rate(1);
         } else {
-            $rate = $this->provider->fetchRate($currencyPair);
+            if ($request->getDateTime() instanceof \DateTime) {
+                if (!($this->provider instanceof HistoryProviderInterface)) {
+                    throw new \InvalidArgumentException(
+                        'The provider does not support history requests, must implement Swap\HistoryProviderInterface'
+                    );
+                }
+
+                $rate = $this->provider->fetchHistoryRate($request->getCurrencyPair(), $request->getDateTime());
+            } else {
+                $rate = $this->provider->fetchRate($request->getCurrencyPair());
+            }
         }
 
         if (null !== $this->cache) {
-            $this->cache->storeRate($currencyPair, $rate);
+            $this->cache->storeRate($request, $rate);
         }
 
         return $rate;
