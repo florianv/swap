@@ -61,6 +61,31 @@ final class QuotationRequest
     }
 
     /**
+     * Returns string representation of request
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        $date = '';
+        if ($this->getDateTime() instanceof \DateTime) {
+            $date = $this->getDateTime()->format('Y/m/d');
+        }
+
+        return $this->getCurrencyPair()->toString() . $date;
+    }
+
+    /**
+     * Returns string representation of request
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toString();
+    }
+
+    /**
      * Factory to instantiate QuotationRequest
      *
      * @param string|CurrencyPair $currencyPair
@@ -69,7 +94,7 @@ final class QuotationRequest
      *
      * @throws \InvalidArgumentException
      */
-    public static function create(CurrencyPair $currencyPair, \DateTime $dateTime = NULL)
+    public static function create($currencyPair, \DateTime $dateTime = null)
     {
         if (is_string($currencyPair)) {
             $currencyPair = CurrencyPair::createFromString($currencyPair);
