@@ -13,6 +13,7 @@ namespace Swap\Tests\Cache;
 
 use Swap\Cache\DoctrineCache;
 use Swap\Model\CurrencyPair;
+use Swap\Model\QuotationRequest;
 use Swap\Model\Rate;
 
 class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
@@ -23,17 +24,18 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
     public function it_returns_null_if_rate_absent()
     {
         $pair = new CurrencyPair('EUR', 'USD');
+        $request = QuotationRequest::create($pair);
         $cache = $this->getMock('Doctrine\Common\Cache\Cache');
 
         $cache
             ->expects($this->once())
             ->method('fetch')
-            ->with($pair)
+            ->with($request)
             ->will($this->returnValue(false))
         ;
 
         $doctrineCache = new DoctrineCache($cache);
-        $this->assertNull($doctrineCache->fetchRate($pair));
+        $this->assertNull($doctrineCache->fetchRate($request));
     }
 
     /**
@@ -42,18 +44,19 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
     public function it_fetches_a_rate()
     {
         $pair = new CurrencyPair('EUR', 'USD');
+        $request = QuotationRequest::create($pair);
         $rate = new Rate('1', new \DateTime());
         $cache = $this->getMock('Doctrine\Common\Cache\Cache');
 
         $cache
             ->expects($this->once())
             ->method('fetch')
-            ->with($pair)
+            ->with($request)
             ->will($this->returnValue($rate))
         ;
 
         $doctrineCache = new DoctrineCache($cache);
-        $this->assertSame($rate, $doctrineCache->fetchRate($pair));
+        $this->assertSame($rate, $doctrineCache->fetchRate($request));
     }
 
     /**
@@ -62,6 +65,7 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
     public function it_stores_a_rate()
     {
         $pair = new CurrencyPair('EUR', 'USD');
+        $request = QuotationRequest::create($pair);
         $rate = new Rate('1', new \DateTime());
         $cache = $this->getMock('Doctrine\Common\Cache\Cache');
 
@@ -73,6 +77,6 @@ class DoctrineCacheTest extends \PHPUnit_Framework_TestCase
         ;
 
         $doctrineCache = new DoctrineCache($cache, 3600);
-        $doctrineCache->storeRate($pair, $rate);
+        $doctrineCache->storeRate($request, $rate);
     }
 }

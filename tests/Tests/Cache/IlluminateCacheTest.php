@@ -13,6 +13,7 @@ namespace Swap\Tests\Cache;
 
 use Swap\Cache\IlluminateCache;
 use Swap\Model\CurrencyPair;
+use Swap\Model\QuotationRequest;
 use Swap\Model\Rate;
 
 class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
@@ -23,17 +24,18 @@ class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
     public function it_returns_null_if_rate_absent()
     {
         $pair = new CurrencyPair('EUR', 'USD');
+        $request = QuotationRequest::create($pair);
         $store = $this->getMock('Illuminate\Contracts\Cache\Store');
 
         $store
             ->expects($this->once())
             ->method('get')
-            ->with($pair)
+            ->with($request)
             ->will($this->returnValue(null))
         ;
 
         $cache = new IlluminateCache($store);
-        $this->assertNull($cache->fetchRate($pair));
+        $this->assertNull($cache->fetchRate($request));
     }
 
     /**
@@ -42,18 +44,19 @@ class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
     public function it_fetches_a_rate()
     {
         $pair = new CurrencyPair('EUR', 'USD');
+        $request = QuotationRequest::create($pair);
         $rate = new Rate('1', new \DateTime());
         $store = $this->getMock('Illuminate\Contracts\Cache\Store');
 
         $store
             ->expects($this->once())
             ->method('get')
-            ->with($pair)
+            ->with($request)
             ->will($this->returnValue($rate))
         ;
 
         $cache = new IlluminateCache($store);
-        $this->assertSame($rate, $cache->fetchRate($pair));
+        $this->assertSame($rate, $cache->fetchRate($request));
     }
 
     /**
@@ -62,6 +65,7 @@ class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
     public function it_stores_a_rate()
     {
         $pair = new CurrencyPair('EUR', 'USD');
+        $request = QuotationRequest::create($pair);
         $rate = new Rate('1', new \DateTime());
         $store = $this->getMock('Illuminate\Contracts\Cache\Store');
 
@@ -72,6 +76,6 @@ class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
         ;
 
         $cache = new IlluminateCache($store, 60);
-        $cache->storeRate($pair, $rate);
+        $cache->storeRate($request, $rate);
     }
 }
