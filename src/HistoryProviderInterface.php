@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Swap.
  *
@@ -11,22 +10,17 @@
 
 namespace Swap;
 
-use Swap\Model\QuotationRequest;
-
 /**
  * Contract for providers retrieving historical data.
  *
  * @author Petr Kramar <petr.kramar@perlur.cz>
  */
-interface HistoryProviderInterface
+interface HistoryProviderInterface extends ProviderInterface
 {
     /**
-     * Fetches the historical rate for the currency pair.
+     * Set date.
      *
-     * @param CurrencyPair $currencyPair
-     * @param \DateTime    $date
-     *
-     * @return \Swap\Model\Rate|null
+     * @param \DateTime $date
      */
-    public function fetchHistoryRate(CurrencyPair $currencyPair, \DateTime $date);
+    public function setDate(\DateTime $date);
 }

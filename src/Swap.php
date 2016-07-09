@@ -63,10 +63,10 @@ class Swap implements SwapInterface
                     );
                 }
 
-                $rate = $this->provider->fetchHistoryRate($request->getCurrencyPair(), $request->getDateTime());
-            } else {
-                $rate = $this->provider->fetchRate($request->getCurrencyPair());
+                $this->provider->setDate($request->getDateTime());
             }
+
+            $rate = $this->provider->fetchRate($request->getCurrencyPair());
         }
 
         if (null !== $this->cache) {

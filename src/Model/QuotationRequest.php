@@ -31,8 +31,8 @@ final class QuotationRequest
     /**
      * Creates a new currency pair.
      *
-     * @param CurrencyPair $currencyPair  Currency pair to be retrieved.
-     * @param \DateTime|null $dateTime    Used to get historical data, null means latest.
+     * @param CurrencyPair   $currencyPair Currency pair to be retrieved.
+     * @param \DateTime|null $dateTime     Used to get historical data, null means latest.
      */
     public function __construct(CurrencyPair $pair, \DateTime $dateTime = null)
     {
@@ -41,7 +41,7 @@ final class QuotationRequest
     }
 
     /**
-     * Gets currency pair
+     * Gets currency pair.
      *
      * @return CurrencyPair
      */
@@ -51,7 +51,7 @@ final class QuotationRequest
     }
 
     /**
-     * Gets date time
+     * Gets date time.
      *
      * @return \DateTime|null
      */
@@ -61,7 +61,7 @@ final class QuotationRequest
     }
 
     /**
-     * Returns string representation of request
+     * Returns string representation of request.
      *
      * @return string
      */
@@ -72,11 +72,11 @@ final class QuotationRequest
             $date = $this->getDateTime()->format('Y/m/d');
         }
 
-        return $this->getCurrencyPair()->toString() . $date;
+        return $this->getCurrencyPair()->toString().$date;
     }
 
     /**
-     * Returns string representation of request
+     * Returns string representation of request.
      *
      * @return string
      */
@@ -86,10 +86,11 @@ final class QuotationRequest
     }
 
     /**
-     * Factory to instantiate QuotationRequest
+     * Factory to instantiate QuotationRequest.
      *
      * @param string|CurrencyPair $currencyPair
-     * @param \DateTime|null $dateTime
+     * @param \DateTime|null      $dateTime
+     *
      * @return QuotationRequest
      *
      * @throws \InvalidArgumentException
@@ -104,6 +105,6 @@ final class QuotationRequest
             );
         }
 
-        return new QuotationRequest($currencyPair, $dateTime);
+        return new self($currencyPair, $dateTime);
     }
 }

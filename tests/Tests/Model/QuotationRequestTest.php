@@ -41,8 +41,8 @@ class QuotationRequestTest extends \PHPUnit_Framework_TestCase
     public function validCurrencyPairsAndDateTimes()
     {
         return [
-            [ CurrencyPair::createFromString('USD/GBP'), new \DateTime('2016-02-28') ],
-            [ CurrencyPair::createFromString('EUR/USD'), null ] // latest
+            [CurrencyPair::createFromString('USD/GBP'), new \DateTime('2016-02-28')],
+            [CurrencyPair::createFromString('EUR/USD'), null], // latest
         ];
     }
 }
