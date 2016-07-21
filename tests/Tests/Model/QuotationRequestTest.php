@@ -35,7 +35,7 @@ class QuotationRequestTest extends \PHPUnit_Framework_TestCase
         $pair = CurrencyPair::createFromString('USD/CZK');
         $dateTime = new \DateTime('2016-01-01');
         $request = QuotationRequest::create($pair, $dateTime);
-        $this->assertInstanceOf(QuotationRequest::class, $request);
+        $this->assertInstanceOf('Swap\Model\QuotationRequest', $request);
     }
 
     public function validCurrencyPairsAndDateTimes()
