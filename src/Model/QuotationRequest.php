@@ -31,8 +31,8 @@ final class QuotationRequest
     /**
      * Creates a new currency pair.
      *
-     * @param CurrencyPair   $currencyPair Currency pair to be retrieved.
-     * @param \DateTime|null $dateTime     Used to get historical data, null means latest.
+     * @param CurrencyPair   $currencyPair Currency pair to be retrieved
+     * @param \DateTime|null $dateTime     Used to get historical data, null means latest
      */
     public function __construct(CurrencyPair $pair, \DateTime $dateTime = null)
     {
