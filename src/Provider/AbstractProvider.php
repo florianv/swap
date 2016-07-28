@@ -14,7 +14,7 @@ namespace Swap\Provider;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\MessageFactory;
+use Http\Message\RequestFactory;
 use Swap\ProviderInterface;
 
 /**
@@ -30,7 +30,7 @@ abstract class AbstractProvider implements ProviderInterface
     private $httpClient;
 
     /**
-     * @var MessageFactory
+     * @var RequestFactory
      */
     private $httpMessageFactory;
 
@@ -57,7 +57,7 @@ abstract class AbstractProvider implements ProviderInterface
     }
 
     /**
-     * @return MessageFactory
+     * @return RequestFactory
      */
     private function getHttpMessageFactory()
     {
@@ -69,11 +69,11 @@ abstract class AbstractProvider implements ProviderInterface
     }
 
     /**
-     * @param MessageFactory $httpMessageFactory
+     * @param RequestFactory $httpMessageFactory
      *
      * @return AbstractProvider
      */
-    public function setHttpMessageFactory($httpMessageFactory)
+    public function setHttpMessageFactory(RequestFactory $httpMessageFactory)
     {
         $this->httpMessageFactory = $httpMessageFactory;
 
