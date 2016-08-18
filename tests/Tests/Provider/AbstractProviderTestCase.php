@@ -11,6 +11,8 @@
 
 namespace Swap\Tests\Provider;
 
+use Swap\Http\IvoryAdapter;
+
 abstract class AbstractProviderTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,7 +21,7 @@ abstract class AbstractProviderTestCase extends \PHPUnit_Framework_TestCase
      * @param string $url     The url
      * @param string $content The body content
      *
-     * @return \Http\Client\HttpClient
+     * @return IvoryAdapter
      */
     protected function getHttpAdapterMock($url, $content)
     {
@@ -35,7 +37,7 @@ abstract class AbstractProviderTestCase extends \PHPUnit_Framework_TestCase
             ->method('getBody')
             ->will($this->returnValue($body));
 
-        $adapter = $this->getMock('Http\Client\HttpClient');
+        $adapter = $this->getMock(IvoryAdapter::class);
 
         $adapter
             ->expects($this->once())

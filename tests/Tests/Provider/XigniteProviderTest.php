@@ -25,7 +25,7 @@ class XigniteProviderTest extends AbstractProviderTestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/error.json');
 
-        $provider = new XigniteProvider('token', $this->getHttpAdapterMock($uri, $content));
+        $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), 'token');
         $caught = false;
 
         try {
@@ -46,7 +46,7 @@ class XigniteProviderTest extends AbstractProviderTestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/success.json');
 
-        $provider = new XigniteProvider('token', $this->getHttpAdapterMock($uri, $content));
+        $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), 'token');
         $rate = $provider->fetchRate(new CurrencyPair('GBP', 'AWG'));
 
         $this->assertEquals('2.982308', $rate->getValue());

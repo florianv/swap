@@ -15,6 +15,7 @@ use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
+use Ivory\HttpAdapter\HttpAdapterInterface;
 use Swap\ProviderInterface;
 
 /**
@@ -25,7 +26,7 @@ use Swap\ProviderInterface;
 abstract class AbstractProvider implements ProviderInterface
 {
     /**
-     * @var HttpClient
+     * @var HttpAdapterInterface
      */
     private $httpClient;
 
@@ -35,11 +36,11 @@ abstract class AbstractProvider implements ProviderInterface
     private $httpMessageFactory;
 
     /**
-     * @param HttpClient $httpClient
+     * @param HttpAdapterInterface $httpClient
      */
-    public function __construct(HttpClient $httpClient = null)
+    public function __construct(HttpAdapterInterface $httpAdapter)
     {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->httpClient = $httpAdapter;
     }
 
     /**
