@@ -1,8 +1,11 @@
-# [![Swap](doc/logo.png)](https://github.com/florianv/swap)
+[![Swap](doc/logo.png)](https://github.com/florianv/swap)
 
 > The exchange rates library for PHP
 
-[![Build status][travis-image]][travis-url] [![Total Downloads][downloads-image]][downloads-url] [![Version][version-image]][version-url]
+[![Build status](http://img.shields.io/travis/florianv/swap.svg?style=flat-square)](https://travis-ci.org/florianv/swap)
+[![Total Downloads](https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap])
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/florianv/swap.svg?maxAge=2592000?style=flat-square)]()
+[![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 
 Swap allows you to retrieve currency exchange rates from various providers such as Google or Yahoo and optionally cache the results.
 It is integrated to other libraries such as [`moneyphp/money`](https://github.com/moneyphp/money) and provides
@@ -46,12 +49,3 @@ The documentation can be found [here](https://github.com/florianv/swap/tree/read
 ## License
 
 The MIT License (MIT). Please see [LICENSE](https://github.com/florianv/swap/blob/master/LICENSE) for more information.
-
-[travis-url]: https://travis-ci.org/florianv/swap
-[travis-image]: http://img.shields.io/travis/florianv/swap.svg?style=flat-square
-
-[downloads-url]: https://packagist.org/packages/florianv/swap
-[downloads-image]: https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat-square
-
-[version-url]: https://packagist.org/packages/florianv/swap
-[version-image]: http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square
