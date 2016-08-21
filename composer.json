@@ -38,6 +38,9 @@
     "config": {
         "bin-dir": "bin"
     },
+    "scripts": {
+        "test": "phpunit"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "3.0-dev"
