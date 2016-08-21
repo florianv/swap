@@ -4,7 +4,7 @@
 
 [![Build status](http://img.shields.io/travis/florianv/swap.svg?style=flat-square)](https://travis-ci.org/florianv/swap)
 [![Total Downloads](https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap])
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/florianv/swap.svg?maxAge=2592000?style=flat-square)]()
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/florianv/swap.svg?style=flat-square)]()
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 
 Swap allows you to retrieve currency exchange rates from various providers such as Google or Yahoo and optionally cache the results.
