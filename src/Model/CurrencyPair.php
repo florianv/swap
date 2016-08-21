@@ -24,8 +24,8 @@ final class CurrencyPair
     /**
      * Creates a new currency pair.
      *
-     * @param string $baseCurrency  The base currency ISO 4217 code.
-     * @param string $quoteCurrency The quote currency ISO 4217 code.
+     * @param string $baseCurrency  The base currency ISO 4217 code
+     * @param string $quoteCurrency The quote currency ISO 4217 code
      */
     public function __construct($baseCurrency, $quoteCurrency)
     {

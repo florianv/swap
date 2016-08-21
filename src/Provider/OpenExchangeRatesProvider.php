@@ -35,7 +35,7 @@ class OpenExchangeRatesProvider extends AbstractProvider
      * Creates a new provider.
      *
      * @param HttpAdapterInterface $httpAdapter The HTTP client
-     * @param string               $appId       The application id.
+     * @param string               $appId       The application id
      * @param bool                 $enterprise  A flag to tell if it is in enterprise mode
      */
     public function __construct(HttpAdapterInterface $httpAdapter, $appId, $enterprise = false)

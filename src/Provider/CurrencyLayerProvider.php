@@ -35,7 +35,7 @@ class CurrencyLayerProvider extends AbstractProvider
      * Creates a new provider.
      *
      * @param HttpAdapterInterface $httpAdapter The HTTP client
-     * @param string               $accessKey   The access key.
+     * @param string               $accessKey   The access key
      * @param bool                 $enterprise  A flag to tell if it is in enterprise mode
      */
     public function __construct(HttpAdapterInterface $httpAdapter, $accessKey, $enterprise = false)
