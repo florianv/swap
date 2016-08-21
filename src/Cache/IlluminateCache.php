@@ -13,7 +13,7 @@ namespace Swap\Cache;
 
 use Illuminate\Contracts\Cache\Store;
 use Swap\CacheInterface;
-use Swap\Model\CurrencyPair;
+use Swap\Model\QuotationRequest;
 use Swap\Model\Rate;
 
 /**
@@ -41,16 +41,16 @@ final class IlluminateCache implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(QuotationRequest $request)
     {
-        return $this->store->get($currencyPair->toString());
+        return $this->store->get($request->toString());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function storeRate(CurrencyPair $currencyPair, Rate $rate)
+    public function storeRate(QuotationRequest $request, Rate $rate)
     {
-        $this->store->put($currencyPair->toString(), $rate, $this->ttl);
+        $this->store->put($request->toString(), $rate, $this->ttl);
     }
 }

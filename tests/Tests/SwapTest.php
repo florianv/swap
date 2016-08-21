@@ -14,6 +14,7 @@ namespace Swap\Tests;
 use Doctrine\Common\Cache\ArrayCache;
 use Swap\Cache\DoctrineCache;
 use Swap\Model\CurrencyPair;
+use Swap\Model\QuotationRequest;
 use Swap\Model\Rate;
 use Swap\Swap;
 
@@ -35,6 +36,27 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $swap = new Swap($provider);
 
         $this->assertSame($rate, $swap->quote('EUR/USD'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_quotes_a_quotation_request()
+    {
+        $dateTime = new \DateTime('2016-01-01');
+        $provider = $this->getMock('Swap\HistoryProviderInterface');
+        $rate = new Rate('1', $dateTime);
+
+        $quotationRequest = QuotationRequest::create('EUR/USD', $dateTime);
+
+        $provider
+            ->expects($this->once())
+            ->method('fetchRate')
+            ->will($this->returnValue($rate));
+
+        $swap = new Swap($provider);
+
+        $this->assertSame($rate, $swap->quote($quotationRequest));
     }
 
     /**

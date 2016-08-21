@@ -13,7 +13,7 @@ namespace Swap\Cache;
 
 use Doctrine\Common\Cache\Cache;
 use Swap\CacheInterface;
-use Swap\Model\CurrencyPair;
+use Swap\Model\QuotationRequest;
 use Swap\Model\Rate;
 
 /**
@@ -41,9 +41,9 @@ class DoctrineCache implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(QuotationRequest $request)
     {
-        $rate = $this->cache->fetch($currencyPair->toString());
+        $rate = $this->cache->fetch($request->toString());
 
         return false === $rate ? null : $rate;
     }
@@ -51,8 +51,8 @@ class DoctrineCache implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function storeRate(CurrencyPair $currencyPair, Rate $rate)
+    public function storeRate(QuotationRequest $request, Rate $rate)
     {
-        $this->cache->save($currencyPair->toString(), $rate, $this->ttl);
+        $this->cache->save($request->toString(), $rate, $this->ttl);
     }
 }

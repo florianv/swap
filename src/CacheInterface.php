@@ -11,7 +11,7 @@
 
 namespace Swap;
 
-use Swap\Model\CurrencyPair;
+use Swap\Model\QuotationRequest;
 use Swap\Model\Rate;
 
 /**
@@ -24,17 +24,17 @@ interface CacheInterface
     /**
      * Fetches the rate.
      *
-     * @param CurrencyPair $currencyPair
+     * @param QuotationRequest $request
      *
      * @return Rate|null
      */
-    public function fetchRate(CurrencyPair $currencyPair);
+    public function fetchRate(QuotationRequest $request);
 
     /**
      * Stores the rate.
      *
-     * @param CurrencyPair $currencyPair
-     * @param Rate         $rate
+     * @param QuotationRequest $request
+     * @param Rate             $rate
      */
-    public function storeRate(CurrencyPair $currencyPair, Rate $rate);
+    public function storeRate(QuotationRequest $request, Rate $rate);
 }
