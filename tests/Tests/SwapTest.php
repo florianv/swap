@@ -91,7 +91,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $pool
             ->expects($this->once())
             ->method('getItem')
-            ->with($pair->toString())
+            ->with($pair->toHash())
             ->will($this->returnValue($item));
 
         $swap = new Swap($provider, $pool);
@@ -125,7 +125,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $pool
             ->expects($this->once())
             ->method('getItem')
-            ->with($pair->toString())
+            ->with($pair->toHash())
             ->will($this->returnValue($item));
 
         $swap = new Swap($provider, $pool);
@@ -170,7 +170,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $pool
             ->expects($this->once())
             ->method('getItem')
-            ->with($pair->toString())
+            ->with($pair->toHash())
             ->will($this->returnValue($item));
 
         $pool

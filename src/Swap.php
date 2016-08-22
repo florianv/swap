@@ -51,7 +51,7 @@ class Swap implements SwapInterface
         }
 
         if (null !== $this->cacheItemPool) {
-            $item = $this->cacheItemPool->getItem($currencyPair->toString());
+            $item = $this->cacheItemPool->getItem($currencyPair->toHash());
 
             if ($item->isHit()) {
                 return $item->get();
