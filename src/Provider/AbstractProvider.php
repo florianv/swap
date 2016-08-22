@@ -12,6 +12,7 @@
 namespace Swap\Provider;
 
 use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use Ivory\HttpAdapter\HttpAdapterInterface;

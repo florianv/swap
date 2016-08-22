@@ -11,6 +11,7 @@
 
 namespace Swap\Provider;
 
+use Http\Client\HttpClient;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Swap\Exception\Exception;
 use Swap\Model\CurrencyPair;
@@ -35,7 +36,7 @@ class XigniteProvider extends AbstractProvider
      * Creates a new provider.
      *
      * @param HttpAdapterInterface $httpAdapter
-     * @param string               $token       The application token
+     * @param string               $token      The application token
      */
     public function __construct(HttpAdapterInterface $httpAdapter, $token)
     {
