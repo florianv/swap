@@ -69,48 +69,21 @@ The rates will be first fetched using the Yahoo Finance provider and will fallba
 
 ### Caching
 
-For performance reasons you might want to cache the rates during a given time.
+Swap provides a [PSR-6 Caching Interface](http://www.php-fig.org/psr/psr-6) integration allowing you to cache rates during a given time using the adapter of your choice.
 
-#### Doctrine Cache
+#### Example
 
-##### Installation
-
-```bash
-$ composer require doctrine/cache
-```
-
-##### Usage
+The following example uses the [`cache/cache`](https://github.com/php-cache/cache) PSR-6 implementation installable using `composer require cache/cache`.
 
 ```php
-// Create the cache adapter
-$cache = new \Swap\Cache\DoctrineCache(new \Doctrine\Common\Cache\ApcCache(), 3600);
+$cachePool = new Cache\Adapter\Doctrine\DoctrineCachePool(new \Doctrine\Common\Cache\ApcuCache());
 
-// Pass the cache to Swap
-$swap = new \Swap\Swap($provider, $cache);
+$yahooProvider = new \Swap\Provider\YahooFinanceProvider($httpAdapter);
+
+$swap = new \Swap\Swap($yahooProvider, $cachePool, 3600);
 ```
 
 All rates will now be cached in APC during 3600 seconds.
-
-#### Illuminate Cache
-
-##### Installation
-
-```bash
-$ composer require illuminate/cache
-```
-
-##### Usage
-
-```php
-// Create the cache adapter
-$store = new \Illuminate\Cache\ApcStore(new \Illuminate\Cache\ApcWrapper());
-$cache = new \Swap\Cache\IlluminateCache($store, 60);
-
-// Pass the cache to Swap
-$swap = new \Swap\Swap($provider, $cache);
-```
-
-All rates will now be cached in APC during 60 minutes.
 
 ### Currency Codes
 
