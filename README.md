@@ -11,12 +11,6 @@ Swap allows you to retrieve currency exchange rates from various providers such 
 It is integrated to other libraries such as [`moneyphp/money`](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
-## Installation
-
-```bash
-$ composer require florianv/swap
-```
-
 ## Documentation
 
 The documentation can be found [here](https://github.com/florianv/swap/tree/readme/doc/doc.md).

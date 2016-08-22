@@ -2,7 +2,10 @@
 
 ## Installation
 
-First you need to install an HTTP Adapter and the [HTTP Message](https://github.com/php-http/message) package.
+Swap makes use of different third party libraries like [HTTPlug](https://github.com/php-http/httplug) which provides
+the http layer used to send requests to exchange rate services.
+
+In order to use it, you need to install an HTTP Adapter and the [HTTP Message](https://github.com/php-http/message) package.
 
 For example, if you want to use [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html) as adapter, your `composer.json` must contain:
 
@@ -18,10 +21,14 @@ For example, if you want to use [Guzzle 6](http://docs.guzzlephp.org/en/latest/i
 
 ## Usage
 
-First, you need to instantiate your Http Adapter:
+First, you need to instantiate your Http Adapter (Guzzle is used in the example):
 
 ```php
 $httpAdapter = new \Http\Adapter\Guzzle6\Client();
+
+// You might have to disable SSL verification in Guzzle or provide a path to your cert
+// See Guzzle's documentation http://docs.guzzlephp.org/en/latest/request-options.html#verify
+// $httpAdapter = \Http\Adapter\Guzzle6\Client::createWithConfig(['verify' => false]);
 ```
 
 Then, you can create a provider and add it to Swap:
@@ -76,14 +83,12 @@ Swap provides a [PSR-6 Caching Interface](http://www.php-fig.org/psr/psr-6) inte
 The following example uses the [`cache/cache`](https://github.com/php-cache/cache) PSR-6 implementation installable using `composer require cache/cache`.
 
 ```php
-$cachePool = new Cache\Adapter\Doctrine\DoctrineCachePool(new \Doctrine\Common\Cache\ApcuCache());
-
-$yahooProvider = new \Swap\Provider\YahooFinanceProvider($httpAdapter);
+$cachePool = new \Cache\Adapter\Apcu\ApcuCachePool();
 
 $swap = new \Swap\Swap($yahooProvider, $cachePool, 3600);
 ```
 
-All rates will now be cached in APC during 3600 seconds.
+All rates will now be cached in Apcu during 3600 seconds.
 
 ### Currency Codes
 
