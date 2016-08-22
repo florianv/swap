@@ -11,7 +11,6 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Http\IvoryAdapter;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\OpenExchangeRatesProvider;
 
@@ -23,7 +22,7 @@ class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
      */
     public function it_throws_an_exception_if_base_is_not_usd_and_non_enterprise_mode()
     {
-        $provider = new OpenExchangeRatesProvider($this->getMock(IvoryAdapter::class), 'secret', false);
+        $provider = new OpenExchangeRatesProvider('secret', false, $this->getMock('Http\Client\HttpClient'));
         $provider->fetchRate(new CurrencyPair('EUR', 'EUR'));
     }
 
@@ -36,7 +35,7 @@ class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/error.json');
 
-        $provider = new OpenExchangeRatesProvider($this->getHttpAdapterMock($uri, $content), 'secret', false);
+        $provider = new OpenExchangeRatesProvider('secret', false, $this->getHttpAdapterMock($uri, $content));
         $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
     }
 
@@ -50,7 +49,7 @@ class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
-        $provider = new OpenExchangeRatesProvider($this->getHttpAdapterMock($uri, $content), 'secret', false);
+        $provider = new OpenExchangeRatesProvider('secret', false, $this->getHttpAdapterMock($uri, $content));
         $rate = $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
 
         $this->assertEquals('0.726804', $rate->getValue());
@@ -67,7 +66,7 @@ class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
-        $provider = new OpenExchangeRatesProvider($this->getHttpAdapterMock($uri, $content), 'secret', true);
+        $provider = new OpenExchangeRatesProvider('secret', true, $this->getHttpAdapterMock($uri, $content));
         $rate = $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
 
         $this->assertEquals('0.726804', $rate->getValue());

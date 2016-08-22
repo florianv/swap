@@ -11,7 +11,6 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Http\IvoryAdapter;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\EuropeanCentralBankProvider;
 
@@ -23,7 +22,7 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
      */
     public function it_throws_an_exception_when_base_is_not_euro()
     {
-        $provider = new EuropeanCentralBankProvider($this->getMock(IvoryAdapter::class));
+        $provider = new EuropeanCentralBankProvider($this->getMock('Http\Client\HttpClient'));
         $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
     }
 

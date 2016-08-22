@@ -9,7 +9,6 @@
  */
 namespace Swap\Tests\Provider;
 
-use Swap\Http\IvoryAdapter;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\CurrencyLayerProvider;
 
@@ -21,7 +20,7 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
      */
     public function it_throws_an_exception_if_base_is_not_usd_and_non_enterprise_mode()
     {
-        $provider = new CurrencyLayerProvider($this->getMock(IvoryAdapter::class), 'secret', false);
+        $provider = new CurrencyLayerProvider('secret', false, $this->getMock('Http\Client\HttpClient'));
         $provider->fetchRate(new CurrencyPair('EUR', 'EUR'));
     }
 
@@ -34,7 +33,7 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
         $uri = 'http://www.apilayer.net/api/live?access_key=secret&currencies=EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/error.json');
 
-        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), 'secret', false);
+        $provider = new CurrencyLayerProvider('secret', false, $this->getHttpAdapterMock($uri, $content));
         $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
     }
 
@@ -48,7 +47,7 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/success.json');
 
-        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), 'secret', false);
+        $provider = new CurrencyLayerProvider('secret', false, $this->getHttpAdapterMock($uri, $content));
         $rate = $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
 
         $this->assertEquals('0.726804', $rate->getValue());
@@ -65,7 +64,7 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/success.json');
 
-        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), 'secret', true);
+        $provider = new CurrencyLayerProvider('secret', true, $this->getHttpAdapterMock($uri, $content));
         $rate = $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
 
         $this->assertEquals('0.726804', $rate->getValue());
