@@ -14,7 +14,6 @@ namespace Swap\Provider;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
-use Swap\Util\CurrencyCodes;
 
 /**
  * Central Bank of Czech Republic (CNB) provider.
