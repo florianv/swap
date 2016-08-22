@@ -94,6 +94,16 @@ final class CurrencyPair
     }
 
     /**
+     * Returns the hashed representation of the pair.
+     *
+     * @return string
+     */
+    public function toHash()
+    {
+        return md5($this->toString());
+    }
+
+    /**
      * Returns a string representation of the pair.
      *
      * @return string
