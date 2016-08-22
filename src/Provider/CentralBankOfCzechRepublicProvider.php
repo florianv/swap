@@ -33,7 +33,7 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
     {
         $content = $this->fetchContent(self::URL);
 
-        if (CurrencyCodes::ISO_CZK !== $currencyPair->getQuoteCurrency()) {
+        if ('CZK' !== $currencyPair->getQuoteCurrency()) {
             throw new UnsupportedCurrencyPairException($currencyPair);
         }
 

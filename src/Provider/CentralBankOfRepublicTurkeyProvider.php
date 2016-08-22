@@ -37,7 +37,7 @@ class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
 
         $xmlElement = StringUtil::xmlToElement($content);
 
-        if (CurrencyCodes::ISO_TRY !== $currencyPair->getQuoteCurrency()) {
+        if ('TRY' !== $currencyPair->getQuoteCurrency()) {
             throw new UnsupportedCurrencyPairException($currencyPair);
         }
 
