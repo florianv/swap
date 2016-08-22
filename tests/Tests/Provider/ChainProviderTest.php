@@ -34,8 +34,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('fetchRate')
             ->with($pair)
-            ->will($this->throwException(new Exception()))
-        ;
+            ->will($this->throwException(new Exception()));
 
         $providerTwo = $this->getMock('Swap\ProviderInterface');
 
@@ -43,15 +42,13 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('fetchRate')
             ->with($pair)
-            ->will($this->returnValue($rate))
-        ;
+            ->will($this->returnValue($rate));
 
         $providerThree = $this->getMock('Swap\ProviderInterface');
 
         $providerThree
             ->expects($this->never())
-            ->method('fetchRate')
-        ;
+            ->method('fetchRate');
 
         $chain = new ChainProvider([$providerOne, $providerTwo, $providerThree]);
         $fetchedRate = $chain->fetchRate($pair);
@@ -70,16 +67,14 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
         $providerOne
             ->expects($this->once())
             ->method('fetchRate')
-            ->will($this->throwException($exception))
-        ;
+            ->will($this->throwException($exception));
 
         $providerTwo = $this->getMock('Swap\ProviderInterface');
 
         $providerTwo
             ->expects($this->once())
             ->method('fetchRate')
-            ->will($this->throwException($exception))
-        ;
+            ->will($this->throwException($exception));
 
         $chain = new ChainProvider([$providerOne, $providerTwo]);
         $caught = false;
@@ -106,15 +101,13 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
         $providerOne
             ->expects($this->once())
             ->method('fetchRate')
-            ->will($this->throwException($internalException))
-        ;
+            ->will($this->throwException($internalException));
 
         $providerTwo = $this->getMock('Swap\ProviderInterface');
 
         $providerTwo
             ->expects($this->never())
-            ->method('fetchRate')
-        ;
+            ->method('fetchRate');
 
         $chain = new ChainProvider([$providerOne, $providerTwo]);
         $chain->fetchRate(new CurrencyPair('EUR', 'USD'));

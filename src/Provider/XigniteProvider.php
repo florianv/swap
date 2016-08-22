@@ -11,7 +11,8 @@
 
 namespace Swap\Provider;
 
-use Ivory\HttpAdapter\HttpAdapterInterface;
+use Http\Client\HttpClient;
+use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
@@ -27,14 +28,20 @@ class XigniteProvider extends AbstractProvider
     const URL = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
 
     /**
+     * @var string
+     */
+    private $token;
+
+    /**
      * Creates a new provider.
      *
-     * @param HttpAdapterInterface $httpAdapter The HTTP adapter
-     * @param string               $token       The application token
+     * @param string         $token          The application token
+     * @param HttpClient     $httpClient
+     * @param RequestFactory $requestFactory
      */
-    public function __construct(HttpAdapterInterface $httpAdapter, $token)
+    public function __construct($token, HttpClient $httpClient = null, RequestFactory $requestFactory = null)
     {
-        parent::__construct($httpAdapter);
+        parent::__construct($httpClient, $requestFactory);
         $this->token = $token;
     }
 

@@ -23,9 +23,9 @@ final class StringUtil
      *
      * @param string $string
      *
-     * @return \SimpleXMLElement
-     *
      * @throws \RuntimeException
+     *
+     * @return \SimpleXMLElement
      */
     public static function xmlToElement($string)
     {
@@ -53,9 +53,9 @@ final class StringUtil
      *
      * @param string $string
      *
-     * @return array
-     *
      * @throws \RuntimeException
+     *
+     * @return array
      */
     public static function jsonToArray($string)
     {

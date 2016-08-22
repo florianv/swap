@@ -22,7 +22,7 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
      */
     public function it_throws_an_exception_when_base_is_not_euro()
     {
-        $provider = new EuropeanCentralBankProvider($this->getMock('Ivory\HttpAdapter\HttpAdapterInterface'));
+        $provider = new EuropeanCentralBankProvider($this->getMock('Http\Client\HttpClient'));
         $provider->fetchRate(new CurrencyPair('USD', 'EUR'));
     }
 

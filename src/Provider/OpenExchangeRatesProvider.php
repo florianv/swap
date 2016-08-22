@@ -11,7 +11,8 @@
 
 namespace Swap\Provider;
 
-use Ivory\HttpAdapter\HttpAdapterInterface;
+use Http\Client\HttpClient;
+use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPair;
@@ -34,13 +35,18 @@ class OpenExchangeRatesProvider extends AbstractProvider
     /**
      * Creates a new provider.
      *
-     * @param HttpAdapterInterface $httpAdapter The HTTP client
-     * @param string               $appId       The application id
-     * @param bool                 $enterprise  A flag to tell if it is in enterprise mode
+     * @param string         $appId          The application id
+     * @param bool           $enterprise     A flag to tell if it is in enterprise mode
+     * @param HttpClient     $httpClient
+     * @param RequestFactory $requestFactory
      */
-    public function __construct(HttpAdapterInterface $httpAdapter, $appId, $enterprise = false)
-    {
-        parent::__construct($httpAdapter);
+    public function __construct(
+        $appId,
+        $enterprise = false,
+        HttpClient $httpClient = null,
+        RequestFactory $requestFactory = null
+    ) {
+        parent::__construct($httpClient, $requestFactory);
 
         $this->appId = $appId;
         $this->enterprise = $enterprise;

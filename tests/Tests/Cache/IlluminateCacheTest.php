@@ -29,8 +29,7 @@ class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with($pair)
-            ->will($this->returnValue(null))
-        ;
+            ->will($this->returnValue(null));
 
         $cache = new IlluminateCache($store);
         $this->assertNull($cache->fetchRate($pair));
@@ -49,8 +48,7 @@ class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with($pair)
-            ->will($this->returnValue($rate))
-        ;
+            ->will($this->returnValue($rate));
 
         $cache = new IlluminateCache($store);
         $this->assertSame($rate, $cache->fetchRate($pair));
@@ -68,8 +66,7 @@ class IlluminateCacheTest extends \PHPUnit_Framework_TestCase
         $store
             ->expects($this->once())
             ->method('put')
-            ->with('EUR/USD', $rate, 60)
-        ;
+            ->with('EUR/USD', $rate, 60);
 
         $cache = new IlluminateCache($store, 60);
         $cache->storeRate($pair, $rate);

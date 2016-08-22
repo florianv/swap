@@ -38,9 +38,9 @@ final class CurrencyPair
      *
      * @param string $string A string in the form EUR/USD
      *
-     * @return CurrencyPair
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return CurrencyPair
      */
     public static function createFromString($string)
     {

@@ -11,7 +11,10 @@
 
 namespace Swap\Provider;
 
-use Ivory\HttpAdapter\HttpAdapterInterface;
+use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\RequestFactory;
 use Swap\ProviderInterface;
 
 /**
@@ -21,11 +24,24 @@ use Swap\ProviderInterface;
  */
 abstract class AbstractProvider implements ProviderInterface
 {
-    protected $httpAdapter;
+    /**
+     * @var HttpClient
+     */
+    private $httpClient;
 
-    public function __construct(HttpAdapterInterface $httpAdapter)
+    /**
+     * @var RequestFactory
+     */
+    private $requestFactory;
+
+    /**
+     * @param HttpClient|null     $httpClient
+     * @param RequestFactory|null $requestFactory
+     */
+    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
     {
-        $this->httpAdapter = $httpAdapter;
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -37,6 +53,8 @@ abstract class AbstractProvider implements ProviderInterface
      */
     protected function fetchContent($url)
     {
-        return (string) $this->httpAdapter->get($url)->getBody();
+        $request = $this->requestFactory->createRequest('GET', $url);
+
+        return $this->httpClient->sendRequest($request)->getBody()->__toString();
     }
 }
