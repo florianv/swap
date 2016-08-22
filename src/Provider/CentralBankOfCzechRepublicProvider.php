@@ -14,7 +14,6 @@ namespace Swap\Provider;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
-use Swap\Util\CurrencyCodes;
 
 /**
  * Central Bank of Czech Republic (CNB) provider.
@@ -33,7 +32,7 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
     {
         $content = $this->fetchContent(self::URL);
 
-        if (CurrencyCodes::ISO_CZK !== $currencyPair->getQuoteCurrency()) {
+        if ('CZK' !== $currencyPair->getQuoteCurrency()) {
             throw new UnsupportedCurrencyPairException($currencyPair);
         }
 

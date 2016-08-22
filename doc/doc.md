@@ -89,17 +89,3 @@ $swap = new \Swap\Swap($yahooProvider, $cachePool, 3600);
 ```
 
 All rates will now be cached in Apcu during 3600 seconds.
-
-### Currency Codes
-
-Swap provides an enumeration of currency codes so you can use autocompletion to avoid typos.
-
-```php
-use \Swap\Util\CurrencyCodes;
-
-// Retrieving the EUR/USD rate
-$rate = $swap->quote(new \Swap\Model\CurrencyPair(
-    CurrencyCodes::ISO_EUR,
-    CurrencyCodes::ISO_USD
-));
-```
