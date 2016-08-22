@@ -11,6 +11,7 @@
 
 namespace Swap;
 
+use Psr\Cache\CacheItemPoolInterface;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 
@@ -22,12 +23,14 @@ use Swap\Model\Rate;
 class Swap implements SwapInterface
 {
     private $provider;
-    private $cache;
+    private $cacheItemPool;
+    private $cacheTtl;
 
-    public function __construct(ProviderInterface $provider, CacheInterface $cache = null)
+    public function __construct(ProviderInterface $provider, CacheItemPoolInterface $cacheItemPool = null, $cacheTtl = 0)
     {
         $this->provider = $provider;
-        $this->cache = $cache;
+        $this->cacheItemPool = $cacheItemPool;
+        $this->cacheTtl = $cacheTtl;
     }
 
     /**
@@ -43,18 +46,25 @@ class Swap implements SwapInterface
             );
         }
 
-        if (null !== $this->cache && null !== $rate = $this->cache->fetchRate($currencyPair)) {
-            return $rate;
-        }
-
         if ($currencyPair->isIdentical()) {
-            $rate = new Rate(1);
-        } else {
-            $rate = $this->provider->fetchRate($currencyPair);
+            return new Rate(1);
         }
 
-        if (null !== $this->cache) {
-            $this->cache->storeRate($currencyPair, $rate);
+        if (null !== $this->cacheItemPool) {
+            $item = $this->cacheItemPool->getItem($currencyPair->toString());
+
+            if ($item->isHit()) {
+                return $item->get();
+            }
+        }
+
+        $rate = $this->provider->fetchRate($currencyPair);
+
+        if (null !== $this->cacheItemPool) {
+            $item->set($rate);
+            $item->expiresAfter($this->cacheTtl);
+
+            $this->cacheItemPool->save($item);
         }
 
         return $rate;
