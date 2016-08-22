@@ -35,7 +35,7 @@ abstract class AbstractProvider implements ProviderInterface
     private $requestFactory;
 
     /**
-     * @param HttpClient|null $httpClient
+     * @param HttpClient|null     $httpClient
      * @param RequestFactory|null $requestFactory
      */
     public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
