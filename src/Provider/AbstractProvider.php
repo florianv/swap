@@ -32,14 +32,16 @@ abstract class AbstractProvider implements ProviderInterface
     /**
      * @var RequestFactory
      */
-    private $httpMessageFactory;
+    private $requestFactory;
 
     /**
-     * @param HttpClient $httpClient
+     * @param HttpClient|null $httpClient
+     * @param RequestFactory|null $requestFactory
      */
-    public function __construct(HttpClient $httpClient = null)
+    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
     {
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -51,32 +53,8 @@ abstract class AbstractProvider implements ProviderInterface
      */
     protected function fetchContent($url)
     {
-        $request = $this->getHttpMessageFactory()->createRequest('GET', $url);
+        $request = $this->requestFactory->createRequest('GET', $url);
 
         return $this->httpClient->sendRequest($request)->getBody()->__toString();
-    }
-
-    /**
-     * @return RequestFactory
-     */
-    private function getHttpMessageFactory()
-    {
-        if ($this->httpMessageFactory === null) {
-            $this->httpMessageFactory = MessageFactoryDiscovery::find();
-        }
-
-        return $this->httpMessageFactory;
-    }
-
-    /**
-     * @param RequestFactory $httpMessageFactory
-     *
-     * @return AbstractProvider
-     */
-    public function setHttpMessageFactory(RequestFactory $httpMessageFactory)
-    {
-        $this->httpMessageFactory = $httpMessageFactory;
-
-        return $this;
     }
 }
