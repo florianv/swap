@@ -1,12 +1,27 @@
 # Documentation
 
+## Installation
+
+First you need to install an HTTP Adapter and the [HTTP Message](https://github.com/php-http/message) package.
+
+For example, if you want to use [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html) as adapter, your `composer.json` must contain:
+
+```json
+{
+    "require": {
+        "php-http/message": "^1.0",
+        "php-http/guzzle6-adapter": "^1.0",
+        "florianv/swap": "~3.0"
+    }
+}
+```
+
 ## Usage
 
-First, you need to create an HTTP adapter provided by the [egeloen/ivory-http-adapter](https://github.com/egeloen/ivory-http-adapter)
-library.
+First, you need to instantiate your Http Adapter:
 
 ```php
-$httpAdapter = new \Ivory\HttpAdapter\FileGetContentsHttpAdapter();
+$httpAdapter = new \Http\Adapter\Guzzle6\Client();
 ```
 
 Then, you can create a provider and add it to Swap:
