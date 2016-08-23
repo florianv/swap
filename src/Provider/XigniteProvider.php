@@ -14,7 +14,7 @@ namespace Swap\Provider;
 use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -48,8 +48,10 @@ class XigniteProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(ExchangeQueryInterface $exchangeQuery)
     {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->token);
         $content = $this->fetchContent($url);
 

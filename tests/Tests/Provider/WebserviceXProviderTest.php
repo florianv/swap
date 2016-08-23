@@ -11,7 +11,7 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQuery;
 use Swap\Provider\WebserviceXProvider;
 
 class WebserviceXProviderTest extends AbstractProviderTestCase
@@ -25,7 +25,7 @@ class WebserviceXProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/WebserviceX/success.xml');
 
         $provider = new WebserviceXProvider($this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
 
         $this->assertEquals('1.3608', $rate->getValue());
         $this->assertEquals(new \DateTime(), $rate->getDate());

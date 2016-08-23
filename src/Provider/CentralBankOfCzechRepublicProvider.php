@@ -12,7 +12,7 @@
 namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQueryInterface;
 use Swap\Model\Rate;
 
 /**
@@ -28,8 +28,9 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(ExchangeQueryInterface $exchangeQuery)
     {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->fetchContent(self::URL);
 
         if ('CZK' !== $currencyPair->getQuoteCurrency()) {

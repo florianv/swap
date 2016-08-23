@@ -11,7 +11,7 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQuery;
 use Swap\Provider\CentralBankOfRepublicTurkeyProvider;
 
 class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
@@ -26,7 +26,7 @@ class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkeyProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(new CurrencyPair('TRY', 'EUR'));
+        $provider->fetchRate(ExchangeQuery::createFromString('TRY/EUR'));
     }
 
     /**
@@ -39,7 +39,7 @@ class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkeyProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(new CurrencyPair('XXX', 'TRY'));
+        $provider->fetchRate(ExchangeQuery::createFromString('XXX/TRY'));
     }
 
     /**
@@ -51,7 +51,7 @@ class CentralBankOfRepublicTurkeyProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkeyProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(new CurrencyPair('EUR', 'TRY'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/TRY'));
 
         $this->assertSame('3.2083', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-03-15'), $rate->getDate());

@@ -12,8 +12,8 @@
 namespace Swap\Tests\Provider;
 
 use Swap\Exception\Exception;
-use Swap\Model\CurrencyPair;
 use Swap\Provider\XigniteProvider;
+use Swap\ExchangeQuery;
 
 class XigniteProviderTest extends AbstractProviderTestCase
 {
@@ -29,7 +29,7 @@ class XigniteProviderTest extends AbstractProviderTestCase
         $caught = false;
 
         try {
-            $provider->fetchRate(new CurrencyPair('GBP', 'AWG'));
+            $provider->fetchRate(ExchangeQuery::createFromString('GBP/AWG'));
         } catch (Exception $e) {
             $caught = true;
             $this->assertEquals('Error message', $e->getMessage());
@@ -47,7 +47,7 @@ class XigniteProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/success.json');
 
         $provider = new XigniteProvider('token', $this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->fetchRate(new CurrencyPair('GBP', 'AWG'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('GBP/AWG'));
 
         $this->assertEquals('2.982308', $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-11 21:22:00', new \DateTimeZone('UTC')), $rate->getDate());

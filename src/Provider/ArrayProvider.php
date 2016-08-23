@@ -13,6 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\InternalException;
 use Swap\Exception\UnsupportedCurrencyPairException;
+use Swap\ExchangeQueryInterface;
 use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 use Swap\ProviderInterface;
@@ -39,8 +40,10 @@ final class ArrayProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(ExchangeQueryInterface $exchangeQuery)
     {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+
         if (!isset($this->rates[$currencyPair->toString()])) {
             throw new UnsupportedCurrencyPairException($currencyPair);
         }

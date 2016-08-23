@@ -11,8 +11,8 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Model\CurrencyPair;
 use Swap\Provider\YahooFinanceProvider;
+use Swap\ExchangeQuery;
 
 class YahooFinanceProviderTest extends AbstractProviderTestCase
 {
@@ -26,7 +26,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/unsupported.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
+        $provider->fetchRate(ExchangeQuery::createFromString('EUR/XXL'));
     }
 
     /**
@@ -38,7 +38,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/success.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
 
         $this->assertSame('1.3758', $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-10 07:23:00'), $rate->getDate());
@@ -54,6 +54,6 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/error.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
+        $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
     }
 }

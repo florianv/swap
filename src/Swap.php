@@ -44,7 +44,7 @@ class Swap implements SwapInterface
         }
 
         if (null === $this->cacheItemPool) {
-            return $this->provider->fetchRate($currencyPair);
+            return $this->provider->fetchRate($exchangeQuery);
         }
 
         $item = $this->cacheItemPool->getItem($currencyPair->toHash());
@@ -53,7 +53,7 @@ class Swap implements SwapInterface
             return $item->get();
         }
 
-        $rate = $this->provider->fetchRate($currencyPair);
+        $rate = $this->provider->fetchRate($exchangeQuery);
 
         $item->set($rate);
         $item->expiresAfter($this->cacheTtl);

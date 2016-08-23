@@ -11,7 +11,7 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQuery;
 use Swap\Provider\CentralBankOfCzechRepublicProvider;
 
 /**
@@ -56,7 +56,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     public function itThrowsAnExceptionWhenQuotesIsNotCzk()
     {
         $provider = $this->createProvider();
-        $provider->fetchRate(new CurrencyPair('CZK', 'EUR'));
+        $provider->fetchRate(ExchangeQuery::createFromString('CZK/EUR'));
     }
 
     /**
@@ -66,7 +66,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     public function itThrowsAnExceptionWhenThePairIsNotSupported()
     {
         $provider = $this->createProvider();
-        $provider->fetchRate(new CurrencyPair('XXX', 'TRY'));
+        $provider->fetchRate(ExchangeQuery::createFromString('XXX/TRY'));
     }
 
     /**
@@ -75,7 +75,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     public function itFetchesAEurRate()
     {
         $provider = $this->createProvider();
-        $rate = $provider->fetchRate(new CurrencyPair('EUR', 'CZK'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/CZK'));
 
         $this->assertSame('27.035', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-04-05'), $rate->getDate());
@@ -86,7 +86,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
      */
     public function itFetchesAPhpRate()
     {
-        $rate = $this->createProvider()->fetchRate(new CurrencyPair('PHP', 'CZK'));
+        $rate = $this->createProvider()->fetchRate(ExchangeQuery::createFromString('PHP/CZK'));
         $this->assertSame('0.51384', $rate->getValue());
     }
 
@@ -95,7 +95,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
      */
     public function itFetchesAIdrRate()
     {
-        $rate = $this->createProvider()->fetchRate(new CurrencyPair('IDR', 'CZK'));
+        $rate = $this->createProvider()->fetchRate(ExchangeQuery::createFromString('IDR/CZK'));
         $this->assertSame('0.001798', $rate->getValue());
     }
 

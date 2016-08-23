@@ -11,7 +11,7 @@
 
 namespace Swap\Provider;
 
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -27,8 +27,10 @@ class WebserviceXProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(ExchangeQueryInterface $exchangeQuery)
     {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         $content = $this->fetchContent($url);
 

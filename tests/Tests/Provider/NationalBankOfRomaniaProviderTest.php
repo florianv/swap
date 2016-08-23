@@ -11,7 +11,7 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQuery;
 use Swap\Provider\NationalBankOfRomaniaProvider;
 
 class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
@@ -26,7 +26,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(new CurrencyPair('EUR', 'RON'));
+        $provider->fetchRate(ExchangeQuery::createFromString('EUR/RON'));
     }
 
     /**
@@ -39,7 +39,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(new CurrencyPair('RON', 'XXX'));
+        $provider->fetchRate(ExchangeQuery::createFromString('RON/XXX'));
     }
 
     /**
@@ -51,7 +51,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(new CurrencyPair('RON', 'EUR'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('RON/EUR'));
 
         $this->assertSame('4.4856', $rate->getValue());
         $this->assertEquals(new \DateTime('2015-01-12'), $rate->getDate());
@@ -66,7 +66,7 @@ class NationalBankOfRomaniaProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/NationalBankOfRomania/nbrfxrates.xml');
 
         $provider = new NationalBankOfRomaniaProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(new CurrencyPair('RON', 'HUF'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('RON/HUF'));
 
         $this->assertSame('0.014092', $rate->getValue());
         $this->assertEquals(new \DateTime('2015-01-12'), $rate->getDate());

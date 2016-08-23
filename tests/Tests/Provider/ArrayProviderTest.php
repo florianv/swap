@@ -11,7 +11,7 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Model\CurrencyPair;
+use Swap\ExchangeQuery;
 use Swap\Model\Rate;
 use Swap\Provider\ArrayProvider;
 
@@ -24,7 +24,7 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $arrayProvider = new ArrayProvider([]);
-        $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD'));
+        $arrayProvider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
     }
 
     /**
@@ -38,7 +38,7 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
             'EUR/USD' => [],
         ]);
 
-        $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD'));
+        $arrayProvider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
     }
 
     /**
@@ -50,7 +50,7 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
             'EUR/USD' => $rate = new Rate('1.50'),
         ]);
 
-        $this->assertSame($rate, $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD')));
+        $this->assertSame($rate, $arrayProvider->fetchRate(ExchangeQuery::createFromString('EUR/USD')));
     }
 
     /**
@@ -64,9 +64,9 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
             'JPY/GBP' => 1,
         ]);
 
-        $eurUsd = $arrayProvider->fetchRate(CurrencyPair::createFromString('EUR/USD'));
-        $usdGbp = $arrayProvider->fetchRate(CurrencyPair::createFromString('USD/GBP'));
-        $jpyGbp = $arrayProvider->fetchRate(CurrencyPair::createFromString('JPY/GBP'));
+        $eurUsd = $arrayProvider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $usdGbp = $arrayProvider->fetchRate(ExchangeQuery::createFromString('USD/GBP'));
+        $jpyGbp = $arrayProvider->fetchRate(ExchangeQuery::createFromString('JPY/GBP'));
 
         $this->assertEquals('1.50', $eurUsd->getValue());
         $this->assertEquals('1.25', $usdGbp->getValue());

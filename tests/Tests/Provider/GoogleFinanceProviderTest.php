@@ -13,6 +13,7 @@ namespace Swap\Tests\Provider;
 
 use Swap\Model\CurrencyPair;
 use Swap\Provider\GoogleFinanceProvider;
+use Swap\ExchangeQuery;
 
 class GoogleFinanceProviderTest extends AbstractProviderTestCase
 {
@@ -26,7 +27,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/unsupported.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($uri, $content));
-        $provider->fetchRate(new CurrencyPair('EUR', 'XXL'));
+        $provider->fetchRate(ExchangeQuery::createFromString('EUR/XXL'));
     }
 
     /**
@@ -38,7 +39,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/success.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
+        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
 
         $this->assertSame('1.1825', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
@@ -53,7 +54,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/success.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(new CurrencyPair('EUR', 'USD'));
+        $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
 
         $this->assertNull(error_get_last());
     }
