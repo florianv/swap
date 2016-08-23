@@ -1,7 +1,5 @@
 # Documentation
 
-
-
 ## Installation
 
 Swap makes use of different third party libraries like [HTTPlug](https://github.com/php-http/httplug) which provides
@@ -23,19 +21,10 @@ For example, if you want to use [Guzzle 6](http://docs.guzzlephp.org/en/latest/i
 
 ## Usage
 
-First, you need to instantiate your Http Adapter (Guzzle is used in the example):
-
 ```php
+// Instantiate your Http Adapter
 $httpAdapter = new \Http\Adapter\Guzzle6\Client();
 
-// You might have to disable SSL verification in Guzzle or provide a path to your cert
-// See Guzzle's documentation http://docs.guzzlephp.org/en/latest/request-options.html#verify
-// $httpAdapter = \Http\Adapter\Guzzle6\Client::createWithConfig(['verify' => false]);
-```
-
-Then, you can create a provider and add it to Swap:
-
-```php
 // Create the Yahoo Finance provider
 $yahooProvider = new \Swap\Provider\YahooFinanceProvider($httpAdapter);
 
