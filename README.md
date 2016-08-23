@@ -13,7 +13,7 @@ a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Larave
 
 ## Documentation
 
-The documentation can be found [here](https://github.com/florianv/swap/tree/readme/doc/doc.md).
+The documentation can be found [here](https://github.com/florianv/swap/blob/master/doc/doc.md).
 
 ## Providers
 

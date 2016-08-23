@@ -1,5 +1,7 @@
 # Documentation
 
+
+
 ## Installation
 
 Swap makes use of different third party libraries like [HTTPlug](https://github.com/php-http/httplug) which provides
