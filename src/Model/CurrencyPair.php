@@ -54,9 +54,7 @@ final class CurrencyPair implements CurrencyPairInterface
     }
 
     /**
-     * Gets the base currency.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getBaseCurrency()
     {
@@ -64,9 +62,7 @@ final class CurrencyPair implements CurrencyPairInterface
     }
 
     /**
-     * Gets the quote currency.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getQuoteCurrency()
     {
@@ -74,9 +70,7 @@ final class CurrencyPair implements CurrencyPairInterface
     }
 
     /**
-     * Check if the pair is identical.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isIdentical()
     {
@@ -84,9 +78,7 @@ final class CurrencyPair implements CurrencyPairInterface
     }
 
     /**
-     * Returns a string representation of the pair.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {
@@ -94,9 +86,7 @@ final class CurrencyPair implements CurrencyPairInterface
     }
 
     /**
-     * Returns the hashed representation of the pair.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function toHash()
     {
