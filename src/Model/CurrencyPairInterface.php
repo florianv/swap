@@ -1,6 +1,6 @@
 <?php
-namespace Swap\Model;
 
+namespace Swap\Model;
 
 /**
  * Represents a currency pair.
