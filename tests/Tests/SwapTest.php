@@ -185,4 +185,84 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $swap = new Swap($provider, $pool, $ttl);
         $swap->getExchangeRate($exchangeQuery);
     }
+
+    /**
+     * @test
+     */
+    public function it_does_not_use_cache_if_refresh()
+    {
+        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD', ['refresh' => true]);
+
+        $pair = $exchangeQuery->getCurrencyPair();
+
+        $provider = $this->getMock('Swap\ProviderInterface');
+
+        $item = $this->getMock('Psr\Cache\CacheItemInterface');
+
+        $item
+            ->expects($this->never())
+            ->method('get');
+
+        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+
+        $pool
+            ->expects($this->once())
+            ->method('getItem')
+            ->with($pair->toHash())
+            ->will($this->returnValue($item));
+
+        $swap = new Swap($provider, $pool);
+        $swap->getExchangeRate($exchangeQuery);
+    }
+
+    /**
+     * @test
+     */
+    public function it_supports_overrding_ttl_per_query()
+    {
+        $ttl = 3600;
+        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD', ['cache_ttl' => $ttl]);
+        $pair = $exchangeQuery->getCurrencyPair();
+        $rate = new Rate('1', new \DateTime());
+
+        $provider = $this->getMock('Swap\ProviderInterface');
+
+        $provider
+            ->expects($this->once())
+            ->method('fetchRate')
+            ->will($this->returnValue($rate));
+
+        $item = $this->getMock('Psr\Cache\CacheItemInterface');
+
+        $item
+            ->expects($this->once())
+            ->method('isHit')
+            ->will($this->returnValue(false));
+
+        $item
+            ->expects($this->once())
+            ->method('set')
+            ->with($rate);
+
+        $item
+            ->expects($this->once())
+            ->method('expiresAfter')
+            ->with($ttl);
+
+        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+
+        $pool
+            ->expects($this->once())
+            ->method('getItem')
+            ->with($pair->toHash())
+            ->will($this->returnValue($item));
+
+        $pool
+            ->expects($this->once())
+            ->method('save')
+            ->with($item);
+
+        $swap = new Swap($provider, $pool);
+        $swap->getExchangeRate($exchangeQuery);
+    }
 }

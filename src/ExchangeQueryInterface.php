@@ -26,4 +26,14 @@ interface ExchangeQueryInterface
      * @return CurrencyPair
      */
     public function getCurrencyPair();
+
+    /**
+     * Gets an option by name.
+     *
+     * @param string $name The option name
+     * @param mixed $default The default value if not found
+     *
+     * @return mixed
+     */
+    public function getOption($name, $default = null);
 }

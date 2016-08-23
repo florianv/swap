@@ -28,25 +28,39 @@ final class ExchangeQuery implements ExchangeQueryInterface
     private $currencyPair;
 
     /**
+     * An array of options:
+     *
+     * - cache_ttl: The cache TTL for the Exchange Result (overrides global).
+     * - refresh:   Whether to refresh the Exchange Result even if not expired in cache.
+     *              This will also clear the runtime cache that comes with some providers.
+     *
+     * @var array
+     */
+    private $options;
+
+    /**
      * Creates a new request.
      *
      * @param CurrencyPair $currencyPair
+     * @param array        $options
      */
-    public function __construct(CurrencyPair $currencyPair)
+    public function __construct(CurrencyPair $currencyPair, array $options = [])
     {
         $this->currencyPair = $currencyPair;
+        $this->options = $options;
     }
 
     /**
      * Creates a new request from a string.
      *
      * @param string $currencyPair
+     * @param array  $options
      *
      * @return ExchangeQueryInterface
      */
-    public static function createFromString($currencyPair)
+    public static function createFromString($currencyPair, array $options = [])
     {
-        return new static(CurrencyPair::createFromString($currencyPair));
+        return new static(CurrencyPair::createFromString($currencyPair), $options);
     }
 
     /**
@@ -55,5 +69,17 @@ final class ExchangeQuery implements ExchangeQueryInterface
     public function getCurrencyPair()
     {
         return $this->currencyPair;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOption($name, $default = null)
+    {
+       if (array_key_exists($name, $this->options)) {
+           return $this->options[$name];
+       }
+
+        return $default;
     }
 }

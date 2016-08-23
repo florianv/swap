@@ -49,14 +49,14 @@ class Swap implements SwapInterface
 
         $item = $this->cacheItemPool->getItem($currencyPair->toHash());
 
-        if ($item->isHit()) {
+        if (!$exchangeQuery->getOption('refresh') && $item->isHit()) {
             return $item->get();
         }
 
         $rate = $this->provider->fetchRate($exchangeQuery);
 
         $item->set($rate);
-        $item->expiresAfter($this->cacheTtl);
+        $item->expiresAfter($exchangeQuery->getOption('cache_ttl', $this->cacheTtl));
 
         $this->cacheItemPool->save($item);
 
