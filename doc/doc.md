@@ -71,7 +71,7 @@ Swap provides a [PSR-6 Caching Interface](http://www.php-fig.org/psr/psr-6) inte
 
 #### Example
 
-The following example uses the [`cache/cache`](https://github.com/php-cache/cache) PSR-6 implementation installable using `composer require cache/cache`.
+The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/apcu-adapter`.
 
 ```php
 $cachePool = new \Cache\Adapter\Apcu\ApcuCachePool();
