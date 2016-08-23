@@ -76,9 +76,9 @@ final class ExchangeQuery implements ExchangeQueryInterface
      */
     public function getOption($name, $default = null)
     {
-       if (array_key_exists($name, $this->options)) {
-           return $this->options[$name];
-       }
+        if (array_key_exists($name, $this->options)) {
+            return $this->options[$name];
+        }
 
         return $default;
     }
