@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of Swap.
  *
  * (c) Pascal Hofmann <mail@pascalhofmann.de>

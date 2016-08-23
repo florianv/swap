@@ -11,7 +11,6 @@
 
 namespace Swap\Tests\Provider;
 
-use Swap\Model\CurrencyPair;
 use Swap\Provider\GoogleFinanceProvider;
 use Swap\ExchangeQuery;
 

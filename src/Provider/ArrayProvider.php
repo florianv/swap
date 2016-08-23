@@ -14,7 +14,6 @@ namespace Swap\Provider;
 use Swap\Exception\InternalException;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
-use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 use Swap\ProviderInterface;
 
