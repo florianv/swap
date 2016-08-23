@@ -100,7 +100,7 @@ final class CurrencyPair
      */
     public function toHash()
     {
-        return md5($this->toString());
+        return sha1($this->toString());
     }
 
     /**
