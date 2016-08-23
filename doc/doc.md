@@ -2,21 +2,12 @@
 
 ## Installation
 
-Swap makes use of different third party libraries like [HTTPlug](https://github.com/php-http/httplug) which provides
-the http layer used to send requests to exchange rate services.
+Swap is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) which provides the http layer used to send requests to exchange rate services. This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use. 
 
-In order to use it, you need to install an HTTP Adapter and the [HTTP Message](https://github.com/php-http/message) package.
+Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). Below is an example using Guzzle6:
 
-For example, if you want to use [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html) as adapter, your `composer.json` must contain:
-
-```json
-{
-    "require": {
-        "php-http/message": "^1.0",
-        "php-http/guzzle6-adapter": "^1.0",
-        "florianv/swap": "~3.0"
-    }
-}
+```bash
+composer require florianv/swap php-http/message php-http/guzzle6-adapter
 ```
 
 ## Usage
