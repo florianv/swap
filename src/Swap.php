@@ -12,7 +12,6 @@
 namespace Swap;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 
 /**
@@ -36,15 +35,9 @@ class Swap implements SwapInterface
     /**
      * {@inheritdoc}
      */
-    public function quote($currencyPair)
+    public function getExchangeRate(ExchangeQueryInterface $exchangeQuery)
     {
-        if (is_string($currencyPair)) {
-            $currencyPair = CurrencyPair::createFromString($currencyPair);
-        } elseif (!$currencyPair instanceof CurrencyPair) {
-            throw new \InvalidArgumentException(
-                'The currency pair must be either a string or an instance of CurrencyPair'
-            );
-        }
+        $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($currencyPair->isIdentical()) {
             return new Rate(1);

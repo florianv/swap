@@ -11,19 +11,19 @@
 
 namespace Swap;
 
+use Swap\Model\CurrencyPair;
+
 /**
- * Contract for the Swap service.
+ * Contract for exchange queries.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-interface SwapInterface
+interface ExchangeQueryInterface
 {
     /**
-     * Gets the exchange rate.
+     * Gets the currency pair.
      *
-     * @param ExchangeQueryInterface $exchangeQuery
-     *
-     * @return \Swap\Model\Rate
+     * @return CurrencyPair
      */
-    public function getExchangeRate(ExchangeQueryInterface $exchangeQuery);
+    public function getCurrencyPair();
 }
