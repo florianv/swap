@@ -1,5 +1,4 @@
-[![Swap](doc/logo.png)](https://github.com/florianv/swap)
-
+<img src="doc/logo.png" width="200px" align="left"/>
 > The exchange rates library for PHP
 
 [![Build status](http://img.shields.io/travis/florianv/swap.svg?style=flat-square)](https://travis-ci.org/florianv/swap)
