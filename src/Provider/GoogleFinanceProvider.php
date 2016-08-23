@@ -36,7 +36,10 @@ class GoogleFinanceProvider extends AbstractProvider
         $disableEntities = libxml_disable_entity_loader(true);
 
         $document = new \DOMDocument();
-        @$document->loadHTML($content);
+
+        if (false === @$document->loadHTML($content)) {
+            throw new Exception('The page content is not loadable');
+        }
 
         $xpath = new \DOMXPath($document);
         $nodes = $xpath->query('//span[@class="bld"]');
