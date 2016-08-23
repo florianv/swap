@@ -90,6 +90,6 @@ final class CurrencyPair implements CurrencyPairInterface
      */
     public function toHash()
     {
-        return sha1($this->toString());
+        return sha1($this->__toString());
     }
 }
