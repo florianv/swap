@@ -13,7 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -29,7 +29,7 @@ class YahooFinanceProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(CurrencyPairInterface $currencyPair)
     {
         $queryPairs = sprintf('"%s%s"', $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         $query = sprintf('select * from yahoo.finance.xchange where pair in (%s)', $queryPairs);

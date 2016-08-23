@@ -12,7 +12,7 @@
 namespace Swap\Provider;
 
 use Swap\Exception\Exception;
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 
 /**
@@ -27,7 +27,7 @@ class GoogleFinanceProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(CurrencyPairInterface $currencyPair)
     {
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         $content = $this->fetchContent($url);

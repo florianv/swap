@@ -11,6 +11,8 @@
 
 namespace Swap;
 
+use Swap\Model\RateInterface;
+
 /**
  * Contract for the Swap service.
  *
@@ -23,7 +25,7 @@ interface SwapInterface
      *
      * @param \Swap\Model\CurrencyPair|string
      *
-     * @return \Swap\Model\Rate
+     * @return RateInterface
      */
     public function quote($currencyPair);
 }

@@ -16,7 +16,7 @@ namespace Swap\Model;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Rate
+final class Rate implements RateInterface
 {
     private $value;
     private $date;

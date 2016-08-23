@@ -11,7 +11,7 @@
 
 namespace Swap\Exception;
 
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 
 /**
  * Exception thrown when a currency pair is not supported by a provider.
@@ -22,16 +22,16 @@ class UnsupportedCurrencyPairException extends Exception
 {
     private $currencyPair;
 
-    public function __construct(CurrencyPair $currencyPair)
+    public function __construct(CurrencyPairInterface $currencyPair)
     {
-        parent::__construct(sprintf('The currency pair "%s" is not supported.', $currencyPair->toString()));
+        parent::__construct(sprintf('The currency pair "%s" is not supported.', $currencyPair->__toString()));
         $this->currencyPair = $currencyPair;
     }
 
     /**
      * Gets the unsupported currency pair.
      *
-     * @return \Swap\Model\CurrencyPair
+     * @return CurrencyPairInterface
      */
     public function getCurrencyPair()
     {

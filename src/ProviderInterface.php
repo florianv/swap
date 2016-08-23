@@ -11,7 +11,8 @@
 
 namespace Swap;
 
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
+use Swap\Model\RateInterface;
 
 /**
  * Contract for providers.
@@ -23,9 +24,9 @@ interface ProviderInterface
     /**
      * Fetches the rate for the currency pair.
      *
-     * @param CurrencyPair $currencyPair
+     * @param CurrencyPairInterface $currencyPair
      *
-     * @return \Swap\Model\Rate
+     * @return RateInterface
      */
-    public function fetchRate(CurrencyPair $currencyPair);
+    public function fetchRate(CurrencyPairInterface $currencyPair);
 }

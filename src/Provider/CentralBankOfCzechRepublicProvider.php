@@ -12,7 +12,7 @@
 namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 
 /**
@@ -28,7 +28,7 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(CurrencyPairInterface $currencyPair)
     {
         $content = $this->fetchContent(self::URL);
 

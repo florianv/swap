@@ -15,7 +15,7 @@ use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -55,7 +55,7 @@ class OpenExchangeRatesProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(CurrencyPairInterface $currencyPair)
     {
         if (!$this->enterprise && 'USD' !== $currencyPair->getBaseCurrency()) {
             throw new UnsupportedCurrencyPairException($currencyPair);

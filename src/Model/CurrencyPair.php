@@ -16,7 +16,7 @@ namespace Swap\Model;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class CurrencyPair
+final class CurrencyPair implements CurrencyPairInterface
 {
     private $baseCurrency;
     private $quoteCurrency;
@@ -40,7 +40,7 @@ final class CurrencyPair
      *
      * @throws \InvalidArgumentException
      *
-     * @return CurrencyPair
+     * @return CurrencyPairInterface
      */
     public static function createFromString($string)
     {
@@ -88,7 +88,7 @@ final class CurrencyPair
      *
      * @return string
      */
-    public function toString()
+    public function __toString()
     {
         return sprintf('%s/%s', $this->baseCurrency, $this->quoteCurrency);
     }
@@ -101,15 +101,5 @@ final class CurrencyPair
     public function toHash()
     {
         return sha1($this->toString());
-    }
-
-    /**
-     * Returns a string representation of the pair.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toString();
     }
 }
