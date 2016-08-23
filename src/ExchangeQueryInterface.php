@@ -30,8 +30,8 @@ interface ExchangeQueryInterface
     /**
      * Gets an option by name.
      *
-     * @param string $name The option name
-     * @param mixed $default The default value if not found
+     * @param string $name    The option name
+     * @param mixed  $default The default value if not found
      *
      * @return mixed
      */

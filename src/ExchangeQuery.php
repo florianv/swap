@@ -28,7 +28,7 @@ final class ExchangeQuery implements ExchangeQueryInterface
     private $currencyPair;
 
     /**
-     * An array of options:
+     * An array of option.
      *
      * - cache_ttl: The cache TTL for the Exchange Result (overrides global).
      * - refresh:   Whether to refresh the Exchange Result even if not expired in cache.
