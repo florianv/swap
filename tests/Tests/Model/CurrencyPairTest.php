@@ -58,6 +58,6 @@ class CurrencyPairTest extends \PHPUnit_Framework_TestCase
     {
         $pair = new CurrencyPair('EUR', 'USD');
         $this->assertEquals('EUR/USD', (string) $pair);
-        $this->assertEquals('EUR/USD', $pair->toString());
+        $this->assertEquals('EUR/USD', $pair->__toString());
     }
 }

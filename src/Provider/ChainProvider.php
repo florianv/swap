@@ -13,7 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\ChainProviderException;
 use Swap\Exception\InternalException;
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 use Swap\ProviderInterface;
 
 /**
@@ -38,7 +38,7 @@ class ChainProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(CurrencyPairInterface $currencyPair)
     {
         $exceptions = [];
 

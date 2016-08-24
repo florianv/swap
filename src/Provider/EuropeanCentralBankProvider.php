@@ -12,7 +12,7 @@
 namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedCurrencyPairException;
-use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -28,7 +28,7 @@ class EuropeanCentralBankProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(CurrencyPair $currencyPair)
+    public function fetchRate(CurrencyPairInterface $currencyPair)
     {
         if ('EUR' !== $currencyPair->getBaseCurrency()) {
             throw new UnsupportedCurrencyPairException($currencyPair);
