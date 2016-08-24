@@ -16,7 +16,7 @@ namespace Swap\Model;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class CurrencyPair
+final class CurrencyPair implements CurrencyPairInterface
 {
     private $baseCurrency;
     private $quoteCurrency;
@@ -40,7 +40,7 @@ final class CurrencyPair
      *
      * @throws \InvalidArgumentException
      *
-     * @return CurrencyPair
+     * @return CurrencyPairInterface
      */
     public static function createFromString($string)
     {
@@ -54,9 +54,7 @@ final class CurrencyPair
     }
 
     /**
-     * Gets the base currency.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getBaseCurrency()
     {
@@ -64,9 +62,7 @@ final class CurrencyPair
     }
 
     /**
-     * Gets the quote currency.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getQuoteCurrency()
     {
@@ -74,9 +70,7 @@ final class CurrencyPair
     }
 
     /**
-     * Check if the pair is identical.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isIdentical()
     {
@@ -84,32 +78,18 @@ final class CurrencyPair
     }
 
     /**
-     * Returns a string representation of the pair.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function toString()
+    public function __toString()
     {
         return sprintf('%s/%s', $this->baseCurrency, $this->quoteCurrency);
     }
 
     /**
-     * Returns the hashed representation of the pair.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function toHash()
     {
-        return sha1($this->toString());
-    }
-
-    /**
-     * Returns a string representation of the pair.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toString();
+        return sha1($this->__toString());
     }
 }

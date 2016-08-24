@@ -11,6 +11,8 @@
 
 namespace Swap;
 
+use Swap\Model\RateInterface;
+
 /**
  * Contract for providers.
  *
@@ -23,7 +25,7 @@ interface ProviderInterface
      *
      * @param ExchangeQueryInterface $exchangeQuery
      *
-     * @return \Swap\Model\Rate
+     * @return RateInterface
      */
     public function fetchRate(ExchangeQueryInterface $exchangeQuery);
 }

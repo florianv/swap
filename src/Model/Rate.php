@@ -16,7 +16,7 @@ namespace Swap\Model;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Rate
+final class Rate implements RateInterface
 {
     private $value;
     private $date;
@@ -34,9 +34,7 @@ final class Rate
     }
 
     /**
-     * Gets the rate value.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getValue()
     {
@@ -44,22 +42,10 @@ final class Rate
     }
 
     /**
-     * Gets the date at which this rate was calculated.
-     *
-     * @return \Datetime
+     * {@inheritdoc}
      */
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * Returns the rate value.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->value;
     }
 }

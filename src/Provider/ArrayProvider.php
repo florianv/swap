@@ -13,8 +13,10 @@ namespace Swap\Provider;
 
 use Swap\Exception\InternalException;
 use Swap\Exception\UnsupportedCurrencyPairException;
+
 use Swap\ExchangeQueryInterface;
 use Swap\Model\Rate;
+use Swap\Model\RateInterface;
 use Swap\ProviderInterface;
 
 /**
@@ -29,7 +31,7 @@ final class ArrayProvider implements ProviderInterface
     /**
      * Constructor.
      *
-     * @param \Swap\Model\Rate[]|string[] $rates An array of rates indexed by the corresponding currency pair symbol
+     * @param RateInterface[]|string[] $rates An array of rates indexed by the corresponding currency pair symbol
      */
     public function __construct(array $rates)
     {
@@ -43,11 +45,11 @@ final class ArrayProvider implements ProviderInterface
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if (!isset($this->rates[$currencyPair->toString()])) {
+        if (!isset($this->rates[$currencyPair->__toString()])) {
             throw new UnsupportedCurrencyPairException($currencyPair);
         }
 
-        $rate = $this->rates[$currencyPair->toString()];
+        $rate = $this->rates[$currencyPair->__toString()];
 
         if (is_scalar($rate)) {
             $rate = new Rate($rate);
