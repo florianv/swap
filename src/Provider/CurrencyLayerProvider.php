@@ -28,7 +28,7 @@ class CurrencyLayerProvider extends AbstractHistoricalProvider
     const FREE_LATEST_URL = 'http://www.apilayer.net/api/live?access_key=%s&currencies=%s';
     const ENTERPRISE_LATEST_URL = 'https://www.apilayer.net/api/live?access_key=%s&source=%s&currencies=%s';
     const FREE_HISTORICAL_URL = 'http://apilayer.net/api/historical?access_key=%s&date=%s';
-    const ENTERPRISE_HISTORICAL_URL = 'http://apilayer.net/api/historical?access_key=%s&date=%s&source=%s';
+    const ENTERPRISE_HISTORICAL_URL = 'https://apilayer.net/api/historical?access_key=%s&date=%s&source=%s';
 
     /**
      * {@inheritdoc}
