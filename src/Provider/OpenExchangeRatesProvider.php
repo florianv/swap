@@ -30,6 +30,7 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
     const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s';
     const ENTERPRISE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s';
     const FREE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s';
+    const ENTERPRISE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&base=%s&symbols=%s';
 
     private $appId;
     private $enterprise;
@@ -83,7 +84,19 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
      */
     protected function fetchHistoricalRate(HistoricalExchangeQueryInterface $exchangeQuery)
     {
-        $url = sprintf(self::FREE_HISTORICAL_URL, $exchangeQuery->getDate()->format('Y-m-d'), $this->appId);
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+
+        if ($this->enterprise) {
+            $url = sprintf(
+                self::ENTERPRISE_HISTORICAL_URL,
+                $exchangeQuery->getDate()->format('Y-m-d'),
+                $this->appId,
+                $currencyPair->getBaseCurrency(),
+                $currencyPair->getQuoteCurrency()
+            );
+        } else {
+            $url = sprintf(self::FREE_HISTORICAL_URL, $exchangeQuery->getDate()->format('Y-m-d'), $this->appId);
+        }
 
         return $this->createRate($url, $exchangeQuery);
     }

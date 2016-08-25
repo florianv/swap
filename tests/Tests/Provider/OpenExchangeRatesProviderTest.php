@@ -97,6 +97,26 @@ class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
 
     /**
      * @test
+     */
+    public function it_fetches_a_historical_rate_enterprise()
+    {
+        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&base=USD&symbols=EUR';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/historical_success.json');
+
+        $provider = new OpenExchangeRatesProvider('secret', true, $this->getHttpAdapterMock($url, $content));
+        $rate = $provider->fetchRate(
+            new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime('2016-08-23'))
+        );
+
+        $expectedDate = new \DateTime();
+        $expectedDate->setTimestamp(982342800);
+
+        $this->assertEquals('1.092882', $rate->getValue());
+        $this->assertEquals($expectedDate, $rate->getDate());
+    }
+
+    /**
+     * @test
      * @expectedException \Swap\Exception\Exception
      * @expectedExceptionMessage Historical rates for the requested date are not available - please try a different date, or contact support@openexchangerates.org.
      */
