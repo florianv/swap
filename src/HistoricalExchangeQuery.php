@@ -23,7 +23,7 @@ class HistoricalExchangeQuery extends ExchangeQuery implements HistoricalExchang
     /**
      * Gets the date.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $date;
 
@@ -31,14 +31,14 @@ class HistoricalExchangeQuery extends ExchangeQuery implements HistoricalExchang
      * Creates a new query.
      *
      * @param CurrencyPairInterface $currencyPair
-     * @param \DateTime             $date
+     * @param \DateTimeInterface    $date
      * @param array                 $options
      */
-    public function __construct(CurrencyPairInterface $currencyPair, \DateTime $date, array $options = [])
+    public function __construct(CurrencyPairInterface $currencyPair, \DateTimeInterface $date, array $options = [])
     {
         parent::__construct($currencyPair, $options);
 
-        $this->date = $date;
+        $this->date = $date instanceof \DateTime ? clone $date : $date;
     }
 
     /**

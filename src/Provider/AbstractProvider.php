@@ -43,6 +43,7 @@ abstract class AbstractProvider implements ProviderInterface
     {
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        $this->options = $options;
     }
 
     /**

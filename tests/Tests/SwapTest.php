@@ -263,6 +263,30 @@ class SwapTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_does_not_use_cache_if_disabled()
+    {
+        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD', ['cache_disabled' => true]);
+
+        $provider = $this->getMock('Swap\ProviderInterface');
+
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true));
+
+        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+
+        $pool
+            ->expects($this->never())
+            ->method('getItem');
+
+        $swap = new Swap($provider, $pool);
+        $swap->getExchangeRate($exchangeQuery);
+    }
+
+    /**
+     * @test
+     */
     public function it_supports_overrding_ttl_per_query()
     {
         $ttl = 3600;

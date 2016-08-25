@@ -2,7 +2,7 @@
 
 ## Installation
 
-Swap is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) which provides the http layer used to send requests to exchange rate services. This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use. 
+Swap is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) which provides the http layer used to send requests to exchange rate services. This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
 
 Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). Below is an example using Guzzle6:
 
@@ -21,6 +21,36 @@ $yahooProvider = new \Swap\Provider\YahooFinanceProvider($httpAdapter);
 
 // Create Swap with the provider
 $swap = new \Swap\Swap($yahooProvider);
+```
+
+### Exchange Query Builder
+
+```php
+// Latest rate
+$query = (new ExchangeQueryBuilder('EUR/USD'))
+    ->build();
+
+// Historical rates
+$query = (new ExchangeQueryBuilder('EUR/USD'))
+    ->setDate((new \DateTime())->modify('-15 days'))
+    ->build();
+
+// Overrides global caching ttl for this query
+$query = (new ExchangeQueryBuilder('EUR/USD'))
+    ->setCacheTtl(3600)
+    ->build();
+
+// Disable caching for this query
+$query = (new ExchangeQueryBuilder('EUR/USD'))
+    ->disableCache()
+    ->build();
+
+// Forces the rate to be refreshed from the provider
+$query = (new ExchangeQueryBuilder('EUR/USD'))
+    ->mustBeFresh()
+    ->build();
+
+$exchangeRate = $swap->execute($query);
 ```
 
 ### Quoting

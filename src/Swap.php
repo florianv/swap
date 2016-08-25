@@ -48,7 +48,7 @@ class Swap implements SwapInterface
             throw new UnsupportedExchangeQueryException($exchangeQuery);
         }
 
-        if (null === $this->cacheItemPool) {
+        if (null === $this->cacheItemPool || $exchangeQuery->getOption('cache_disabled')) {
             return $this->provider->fetchRate($exchangeQuery);
         }
 

@@ -21,7 +21,7 @@ interface HistoricalExchangeQueryInterface extends ExchangeQueryInterface
     /**
      * Gets the date.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getDate();
 }
