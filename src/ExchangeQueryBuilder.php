@@ -18,7 +18,7 @@ use Swap\Model\CurrencyPair;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class ExchangeQueryBuilder
+final class ExchangeQueryBuilder
 {
     /**
      * The currency pair.

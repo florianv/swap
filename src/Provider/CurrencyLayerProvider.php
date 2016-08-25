@@ -11,8 +11,6 @@
 
 namespace Swap\Provider;
 
-use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
@@ -30,27 +28,20 @@ class CurrencyLayerProvider extends AbstractProvider
     const FREE_URL = 'http://www.apilayer.net/api/live?access_key=%s&currencies=%s';
     const ENTERPRISE_URL = 'https://www.apilayer.net/api/live?access_key=%s&source=%s&currencies=%s';
 
-    private $accessKey;
-    private $enterprise;
-
     /**
-     * Creates a new provider.
-     *
-     * @param string         $accessKey      The access key
-     * @param bool           $enterprise     A flag to tell if it is in enterprise mode
-     * @param HttpClient     $httpClient
-     * @param RequestFactory $requestFactory
+     * {@inheritdoc}
      */
-    public function __construct(
-        $accessKey,
-        $enterprise = false,
-        HttpClient $httpClient = null,
-        RequestFactory $requestFactory = null
-    ) {
-        parent::__construct($httpClient, $requestFactory);
+    public function processOptions(array $options)
+    {
+        if (!isset($options['access_key'])) {
+            throw new \InvalidArgumentException('The access_key option must be provided');
+        }
 
-        $this->accessKey = $accessKey;
-        $this->enterprise = $enterprise;
+        if (empty($options['enterprise'])) {
+            $options['enterprise'] = false;
+        }
+
+        return $options;
     }
 
     /**
@@ -60,10 +51,10 @@ class CurrencyLayerProvider extends AbstractProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if ($this->enterprise) {
-            $url = sprintf(self::ENTERPRISE_URL, $this->accessKey, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
+        if ($this->options['enterprise']) {
+            $url = sprintf(self::ENTERPRISE_URL, $this->options['access_key'], $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         } else {
-            $url = sprintf(self::FREE_URL, $this->accessKey, $currencyPair->getQuoteCurrency());
+            $url = sprintf(self::FREE_URL, $this->options['access_key'], $currencyPair->getQuoteCurrency());
         }
 
         $content = $this->fetchContent($url);
@@ -91,6 +82,6 @@ class CurrencyLayerProvider extends AbstractProvider
     public function support(ExchangeQueryInterface $exchangeQuery)
     {
         return !$exchangeQuery instanceof HistoricalExchangeQueryInterface
-        && ($this->enterprise || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency());
+        && ($this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency());
     }
 }

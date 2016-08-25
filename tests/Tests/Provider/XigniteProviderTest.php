@@ -24,9 +24,9 @@ class XigniteProviderTest extends AbstractProviderTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $provider = new XigniteProvider($this->getMock('Http\Client\HttpClient'));
+        $provider = new XigniteProvider($this->getMock('Http\Client\HttpClient'), null, ['token' => 'token']);
 
-        $this->assertTrue($provider->support(ExchangeQuery::createFromString('USD/EUR')));
+        $this->assertTrue($provider->support(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
@@ -38,11 +38,11 @@ class XigniteProviderTest extends AbstractProviderTestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/error.json');
 
-        $provider = new XigniteProvider('token', $this->getHttpAdapterMock($uri, $content));
+        $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
         $caught = false;
 
         try {
-            $provider->fetchRate(ExchangeQuery::createFromString('GBP/AWG'));
+            $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('GBP/AWG')));
         } catch (Exception $e) {
             $caught = true;
             $this->assertEquals('Error message', $e->getMessage());
@@ -59,8 +59,8 @@ class XigniteProviderTest extends AbstractProviderTestCase
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/success.json');
 
-        $provider = new XigniteProvider('token', $this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('GBP/AWG'));
+        $provider = new XigniteProvider($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('GBP/AWG')));
 
         $this->assertEquals('2.982308', $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-11 21:22:00', new \DateTimeZone('UTC')), $rate->getDate());

@@ -58,8 +58,8 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     {
         $provider = new CentralBankOfCzechRepublicProvider($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertFalse($provider->support(ExchangeQuery::createFromString('CZK/EUR')));
-        $this->assertFalse($provider->support(ExchangeQuery::createFromString('XXX/TRY')));
+        $this->assertFalse($provider->support(new ExchangeQuery(CurrencyPair::createFromString('CZK/EUR'))));
+        $this->assertFalse($provider->support(new ExchangeQuery(CurrencyPair::createFromString('XXX/TRY'))));
         $this->assertFalse($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('XXX/TRY'), new \DateTime())));
     }
 
@@ -69,7 +69,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
     public function itFetchesAEurRate()
     {
         $provider = $this->createProvider();
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/CZK'));
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/CZK')));
 
         $this->assertSame('27.035', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-04-05'), $rate->getDate());
@@ -80,7 +80,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
      */
     public function itFetchesAPhpRate()
     {
-        $rate = $this->createProvider()->fetchRate(ExchangeQuery::createFromString('PHP/CZK'));
+        $rate = $this->createProvider()->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('PHP/CZK')));
         $this->assertSame('0.51384', $rate->getValue());
     }
 
@@ -89,7 +89,7 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
      */
     public function itFetchesAIdrRate()
     {
-        $rate = $this->createProvider()->fetchRate(ExchangeQuery::createFromString('IDR/CZK'));
+        $rate = $this->createProvider()->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('IDR/CZK')));
         $this->assertSame('0.001798', $rate->getValue());
     }
 

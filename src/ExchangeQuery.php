@@ -53,19 +53,6 @@ class ExchangeQuery implements ExchangeQueryInterface
     }
 
     /**
-     * Creates a new query from a string.
-     *
-     * @param string $currencyPair
-     * @param array  $options
-     *
-     * @return ExchangeQueryInterface
-     */
-    public static function createFromString($currencyPair, array $options = [])
-    {
-        return new static(CurrencyPair::createFromString($currencyPair), $options);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getCurrencyPair()

@@ -25,7 +25,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
     {
         $provider = new YahooFinanceProvider($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertTrue($provider->support(ExchangeQuery::createFromString('USD/EUR')));
+        $this->assertTrue($provider->support(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
@@ -39,7 +39,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/unsupported.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(ExchangeQuery::createFromString('EUR/XXL'));
+        $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/XXL')));
     }
 
     /**
@@ -51,7 +51,7 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/success.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertSame('1.3758', $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-10 07:23:00'), $rate->getDate());
@@ -67,6 +67,6 @@ class YahooFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/error.json');
 
         $provider = new YahooFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 }

@@ -25,7 +25,7 @@ class WebserviceXProviderTest extends AbstractProviderTestCase
     {
         $provider = new WebserviceXProvider($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertTrue($provider->support(ExchangeQuery::createFromString('USD/EUR')));
+        $this->assertTrue($provider->support(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
@@ -38,7 +38,7 @@ class WebserviceXProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/WebserviceX/success.xml');
 
         $provider = new WebserviceXProvider($this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertEquals('1.3608', $rate->getValue());
         $this->assertEquals(new \DateTime(), $rate->getDate());

@@ -24,13 +24,13 @@ class Swap implements SwapInterface
 {
     private $provider;
     private $cacheItemPool;
-    private $cacheTtl;
+    private $options;
 
-    public function __construct(ProviderInterface $provider, CacheItemPoolInterface $cacheItemPool = null, $cacheTtl = 0)
+    public function __construct(ProviderInterface $provider, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
     {
         $this->provider = $provider;
         $this->cacheItemPool = $cacheItemPool;
-        $this->cacheTtl = $cacheTtl;
+        $this->options = $options;
     }
 
     /**
@@ -61,7 +61,7 @@ class Swap implements SwapInterface
         $rate = $this->provider->fetchRate($exchangeQuery);
 
         $item->set($rate);
-        $item->expiresAfter($exchangeQuery->getOption('cache_ttl', $this->cacheTtl));
+        $item->expiresAfter($exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null));
 
         $this->cacheItemPool->save($item);
 

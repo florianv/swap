@@ -15,6 +15,7 @@ use Swap\Exception\ChainProviderException;
 use Swap\Exception\Exception;
 use Swap\Exception\InternalException;
 use Swap\ExchangeQuery;
+use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 use Swap\Provider\ChainProvider;
 
@@ -42,7 +43,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
 
         $chain = new ChainProvider([$providerOne, $providerTwo]);
 
-        $this->assertFalse($chain->support(ExchangeQuery::createFromString('TRY/EUR')));
+        $this->assertFalse($chain->support(new ExchangeQuery(CurrencyPair::createFromString('TRY/EUR'))));
 
         // Supported
         $providerOne = $this->getMock('Swap\ProviderInterface');
@@ -61,7 +62,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
 
         $chain = new ChainProvider([$providerOne, $providerTwo]);
 
-        $this->assertTrue($chain->support(ExchangeQuery::createFromString('TRY/EUR')));
+        $this->assertTrue($chain->support(new ExchangeQuery(CurrencyPair::createFromString('TRY/EUR'))));
     }
 
     /**
@@ -69,7 +70,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function it_use_next_provider_in_the_chain()
     {
-        $pair = ExchangeQuery::createFromString('EUR/USD');
+        $pair = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'));
         $rate = new Rate(1, new \DateTime());
 
         $providerOne = $this->getMock('Swap\ProviderInterface');
@@ -124,7 +125,7 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
         $caught = false;
 
         try {
-            $chain->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+            $chain->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/USD')));
         } catch (ChainProviderException $e) {
             $caught = true;
             $this->assertEquals([$exception, $exception], $e->getExceptions());
@@ -154,6 +155,6 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
             ->method('fetchRate');
 
         $chain = new ChainProvider([$providerOne, $providerTwo]);
-        $chain->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $chain->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 }

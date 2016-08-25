@@ -11,8 +11,6 @@
 
 namespace Swap\Provider;
 
-use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\ExchangeQueryInterface;
 use Swap\HistoricalExchangeQueryInterface;
@@ -29,21 +27,15 @@ class XigniteProvider extends AbstractProvider
     const URL = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
-    private $token;
-
-    /**
-     * Creates a new provider.
-     *
-     * @param string         $token          The application token
-     * @param HttpClient     $httpClient
-     * @param RequestFactory $requestFactory
-     */
-    public function __construct($token, HttpClient $httpClient = null, RequestFactory $requestFactory = null)
+    public function processOptions(array $options)
     {
-        parent::__construct($httpClient, $requestFactory);
-        $this->token = $token;
+        if (!isset($options['token'])) {
+            throw new \InvalidArgumentException('The token option must be provided');
+        }
+
+        return $options;
     }
 
     /**
@@ -53,7 +45,7 @@ class XigniteProvider extends AbstractProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        $url = sprintf(self::URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->token);
+        $url = sprintf(self::URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->options['token']);
         $content = $this->fetchContent($url);
 
         $json = StringUtil::jsonToArray($content);

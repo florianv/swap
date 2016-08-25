@@ -24,7 +24,7 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
     public function it_does_not_support_all_queries()
     {
         $provider = new EuropeanCentralBankProvider($this->getMock('Http\Client\HttpClient'));
-        $this->assertFalse($provider->support(ExchangeQuery::createFromString('USD/EUR')));
+        $this->assertFalse($provider->support(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
@@ -39,7 +39,7 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
         $provider = new EuropeanCentralBankProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(ExchangeQuery::createFromString('EUR/XXL'));
+        $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/XXL')));
     }
 
     /**
@@ -51,7 +51,7 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/EuropeanCentralBank/success.xml');
 
         $provider = new EuropeanCentralBankProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/BGN'));
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/BGN')));
 
         $this->assertSame('1.9558', $rate->getValue());
         $this->assertEquals(new \DateTime('2015-01-07'), $rate->getDate());

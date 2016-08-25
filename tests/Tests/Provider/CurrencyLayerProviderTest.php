@@ -11,6 +11,7 @@
 namespace Swap\Tests\Provider;
 
 use Swap\ExchangeQuery;
+use Swap\Model\CurrencyPair;
 use Swap\Provider\CurrencyLayerProvider;
 
 class CurrencyLayerProviderTest extends AbstractProviderTestCase
@@ -20,8 +21,8 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $provider = new CurrencyLayerProvider('secret', false, $this->getMock('Http\Client\HttpClient'));
-        $this->assertFalse($provider->support(ExchangeQuery::createFromString('EUR/EUR')));
+        $provider = new CurrencyLayerProvider($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
+        $this->assertFalse($provider->support(new ExchangeQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 
     /**
@@ -33,8 +34,8 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
         $uri = 'http://www.apilayer.net/api/live?access_key=secret&currencies=EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/error.json');
 
-        $provider = new CurrencyLayerProvider('secret', false, $this->getHttpAdapterMock($uri, $content));
-        $provider->fetchRate(ExchangeQuery::createFromString('USD/EUR'));
+        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
+        $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
     /**
@@ -47,8 +48,8 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/success.json');
 
-        $provider = new CurrencyLayerProvider('secret', false, $this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('USD/EUR'));
+        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertEquals('0.726804', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
@@ -64,8 +65,8 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/success.json');
 
-        $provider = new CurrencyLayerProvider('secret', true, $this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('USD/EUR'));
+        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertEquals('0.726804', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());

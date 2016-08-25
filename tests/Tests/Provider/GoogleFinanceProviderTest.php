@@ -25,7 +25,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
     {
         $provider = new GoogleFinanceProvider($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertTrue($provider->support(ExchangeQuery::createFromString('USD/EUR')));
+        $this->assertTrue($provider->support(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
@@ -39,7 +39,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/unsupported.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($uri, $content));
-        $provider->fetchRate(ExchangeQuery::createFromString('EUR/XXL'));
+        $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/XXL')));
     }
 
     /**
@@ -51,7 +51,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/success.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertSame('1.1825', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
@@ -66,7 +66,7 @@ class GoogleFinanceProviderTest extends AbstractProviderTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/GoogleFinance/success.html');
 
         $provider = new GoogleFinanceProvider($this->getHttpAdapterMock($url, $content));
-        $provider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertNull(error_get_last());
     }

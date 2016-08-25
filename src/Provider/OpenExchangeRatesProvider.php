@@ -11,8 +11,6 @@
 
 namespace Swap\Provider;
 
-use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\ExchangeQueryInterface;
 use Swap\HistoricalExchangeQueryInterface;
@@ -31,27 +29,20 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
     const FREE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s';
     const ENTERPRISE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&base=%s&symbols=%s';
 
-    private $appId;
-    private $enterprise;
-
     /**
-     * Creates a new provider.
-     *
-     * @param string         $appId          The application id
-     * @param bool           $enterprise     A flag to tell if it is in enterprise mode
-     * @param HttpClient     $httpClient
-     * @param RequestFactory $requestFactory
+     * {@inheritdoc}
      */
-    public function __construct(
-        $appId,
-        $enterprise = false,
-        HttpClient $httpClient = null,
-        RequestFactory $requestFactory = null
-    ) {
-        parent::__construct($httpClient, $requestFactory);
+    public function processOptions(array $options)
+    {
+        if (!isset($options['app_id'])) {
+            throw new \InvalidArgumentException('The app_id option must be provided');
+        }
 
-        $this->appId = $appId;
-        $this->enterprise = $enterprise;
+        if (empty($options['enterprise'])) {
+            $options['enterprise'] = false;
+        }
+
+        return $options;
     }
 
     /**
@@ -61,10 +52,10 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if ($this->enterprise) {
-            $url = sprintf(self::ENTERPRISE_LATEST_URL, $this->appId, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
+        if ($this->options['enterprise']) {
+            $url = sprintf(self::ENTERPRISE_LATEST_URL, $this->options['app_id'], $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         } else {
-            $url = sprintf(self::FREE_LATEST_URL, $this->appId);
+            $url = sprintf(self::FREE_LATEST_URL, $this->options['app_id']);
         }
 
         return $this->createRate($url, $exchangeQuery);
@@ -77,16 +68,16 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if ($this->enterprise) {
+        if ($this->options['enterprise']) {
             $url = sprintf(
                 self::ENTERPRISE_HISTORICAL_URL,
                 $exchangeQuery->getDate()->format('Y-m-d'),
-                $this->appId,
+                $this->options['app_id'],
                 $currencyPair->getBaseCurrency(),
                 $currencyPair->getQuoteCurrency()
             );
         } else {
-            $url = sprintf(self::FREE_HISTORICAL_URL, $exchangeQuery->getDate()->format('Y-m-d'), $this->appId);
+            $url = sprintf(self::FREE_HISTORICAL_URL, $exchangeQuery->getDate()->format('Y-m-d'), $this->options['app_id']);
         }
 
         return $this->createRate($url, $exchangeQuery);
@@ -97,7 +88,7 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
      */
     public function support(ExchangeQueryInterface $exchangeQuery)
     {
-        return $this->enterprise || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
+        return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
 
     /**

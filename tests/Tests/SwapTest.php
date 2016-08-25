@@ -12,6 +12,7 @@
 namespace Swap\Tests;
 
 use Swap\ExchangeQuery;
+use Swap\Model\CurrencyPair;
 use Swap\Model\Rate;
 use Swap\Swap;
 
@@ -31,7 +32,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->method('support')
             ->will($this->returnValue(false));
 
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD');
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'));
 
         $swap = new Swap($provider);
         $swap->getExchangeRate($exchangeQuery);
@@ -42,7 +43,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
      */
     public function it_quotes_a_pair()
     {
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD');
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'));
         $provider = $this->getMock('Swap\ProviderInterface');
         $rate = new Rate('1', new \DateTime());
 
@@ -67,7 +68,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
     public function it_quotes_an_identical_pair()
     {
         $provider = $this->getMock('Swap\ProviderInterface');
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/EUR');
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/EUR'));
 
         $swap = new Swap($provider);
         $rate = $swap->getExchangeRate($exchangeQuery);
@@ -81,7 +82,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
      */
     public function it_does_not_cache_identical_pairs()
     {
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/EUR');
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/EUR'));
         $provider = $this->getMock('Swap\ProviderInterface');
         $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
 
@@ -101,7 +102,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
      */
     public function it_returns_null_if_rate_absent_in_cache()
     {
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD');
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'));
         $pair = $exchangeQuery->getCurrencyPair();
 
         $provider = $this->getMock('Swap\ProviderInterface');
@@ -135,7 +136,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
      */
     public function it_fetches_a_rate_from_cache()
     {
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD');
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'));
         $pair = $exchangeQuery->getCurrencyPair();
         $rate = new Rate('1', new \DateTime());
 
@@ -175,7 +176,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
      */
     public function it_caches_a_rate()
     {
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD');
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'));
         $pair = $exchangeQuery->getCurrencyPair();
         $rate = new Rate('1', new \DateTime());
         $ttl = 3600;
@@ -222,7 +223,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($item);
 
-        $swap = new Swap($provider, $pool, $ttl);
+        $swap = new Swap($provider, $pool, ['cache_ttl' => $ttl]);
         $swap->getExchangeRate($exchangeQuery);
     }
 
@@ -231,7 +232,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
      */
     public function it_does_not_use_cache_if_refresh()
     {
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD', ['refresh' => true]);
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'), ['refresh' => true]);
 
         $pair = $exchangeQuery->getCurrencyPair();
 
@@ -265,7 +266,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
      */
     public function it_does_not_use_cache_if_disabled()
     {
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD', ['cache_disabled' => true]);
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_disabled' => true]);
 
         $provider = $this->getMock('Swap\ProviderInterface');
 
@@ -290,7 +291,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
     public function it_supports_overrding_ttl_per_query()
     {
         $ttl = 3600;
-        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD', ['cache_ttl' => $ttl]);
+        $exchangeQuery = new ExchangeQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_ttl' => $ttl]);
         $pair = $exchangeQuery->getCurrencyPair();
         $rate = new Rate('1', new \DateTime());
 

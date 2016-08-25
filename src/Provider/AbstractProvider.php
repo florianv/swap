@@ -25,14 +25,25 @@ use Swap\ProviderInterface;
 abstract class AbstractProvider implements ProviderInterface
 {
     /**
+     * The client.
+     *
      * @var HttpClient
      */
     private $httpClient;
 
     /**
+     * The request factory.
+     *
      * @var RequestFactory
      */
     private $requestFactory;
+
+    /**
+     * The options.
+     *
+     * @var array
+     */
+    protected $options = [];
 
     /**
      * @param HttpClient|null     $httpClient
@@ -43,7 +54,20 @@ abstract class AbstractProvider implements ProviderInterface
     {
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
-        $this->options = $options;
+
+        $this->options = $this->processOptions($options);
+    }
+
+    /**
+     * Processes the provider options.
+     *
+     * @param array $options
+     *
+     * @return array
+     */
+    public function processOptions(array $options)
+    {
+        return $options;
     }
 
     /**

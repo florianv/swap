@@ -18,7 +18,7 @@ namespace Swap\Exception;
  */
 class UnsupportedDateException extends Exception
 {
-    public function __construct(\DateTime $date)
+    public function __construct(\DateTimeInterface $date)
     {
         parent::__construct(sprintf('The date "%s" is not supported by the provider.', $date->format('Y-m-d')));
     }
