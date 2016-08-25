@@ -37,7 +37,7 @@ class ExchangeQueryBuilder
     /**
      * The options.
      *
-     * @var  array
+     * @var array
      */
     private $options = [];
 
