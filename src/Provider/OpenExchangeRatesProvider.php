@@ -38,7 +38,7 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
             throw new \InvalidArgumentException('The "app_id" option must be provided.');
         }
 
-        if (empty($options['enterprise'])) {
+        if (!isset($options['enterprise'])) {
             $options['enterprise'] = false;
         }
     }
@@ -51,7 +51,12 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($this->options['enterprise']) {
-            $url = sprintf(self::ENTERPRISE_LATEST_URL, $this->options['app_id'], $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
+            $url = sprintf(
+                self::ENTERPRISE_LATEST_URL,
+                $this->options['app_id'],
+                $currencyPair->getBaseCurrency(),
+                $currencyPair->getQuoteCurrency()
+            );
         } else {
             $url = sprintf(self::FREE_LATEST_URL, $this->options['app_id']);
         }
@@ -75,7 +80,11 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
                 $currencyPair->getQuoteCurrency()
             );
         } else {
-            $url = sprintf(self::FREE_HISTORICAL_URL, $exchangeQuery->getDate()->format('Y-m-d'), $this->options['app_id']);
+            $url = sprintf(
+                self::FREE_HISTORICAL_URL,
+                $exchangeQuery->getDate()->format('Y-m-d'),
+                $this->options['app_id']
+            );
         }
 
         return $this->createRate($url, $exchangeQuery);

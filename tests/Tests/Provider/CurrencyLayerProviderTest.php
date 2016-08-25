@@ -11,6 +11,7 @@
 namespace Swap\Tests\Provider;
 
 use Swap\ExchangeQuery;
+use Swap\HistoricalExchangeQuery;
 use Swap\Model\CurrencyPair;
 use Swap\Provider\CurrencyLayerProvider;
 
@@ -79,6 +80,40 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
         $rate = $provider->fetchRate(new ExchangeQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertEquals('0.726804', $rate->getValue());
+        $this->assertEquals($expectedDate, $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_historical_rate_normal_mode()
+    {
+        $uri = 'http://apilayer.net/api/historical?access_key=secret&date=2015-05-06';
+        $expectedDate = new \DateTime();
+        $expectedDate->setTimestamp(1430870399);
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/historical_success.json');
+
+        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
+        $rate = $provider->fetchRate(new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/AED'), (new \DateTime())->setTimestamp(1430870399)));
+
+        $this->assertEquals('3.673069', $rate->getValue());
+        $this->assertEquals($expectedDate, $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_historical_rate_enterprise_mode()
+    {
+        $uri = 'http://apilayer.net/api/historical?access_key=secret&date=2015-05-06&source=USD';
+        $expectedDate = new \DateTime();
+        $expectedDate->setTimestamp(1430870399);
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/historical_success.json');
+
+        $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $rate = $provider->fetchRate(new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/AED'), (new \DateTime())->setTimestamp(1430870399)));
+
+        $this->assertEquals('3.673069', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
     }
 }

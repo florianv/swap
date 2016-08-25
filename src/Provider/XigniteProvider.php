@@ -44,7 +44,12 @@ class XigniteProvider extends AbstractHistoricalProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        $url = sprintf(self::LATEST_URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->options['token']);
+        $url = sprintf(
+            self::LATEST_URL,
+            $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(),
+            $this->options['token']
+        );
+
         $content = $this->fetchContent($url);
 
         $json = StringUtil::jsonToArray($content);
@@ -69,7 +74,13 @@ class XigniteProvider extends AbstractHistoricalProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $symbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
-        $url = sprintf(self::HISTORICAL_URL, $symbol, $exchangeQuery->getDate()->format('m/d/Y'), $this->options['token']);
+
+        $url = sprintf(
+            self::HISTORICAL_URL,
+            $symbol,
+            $exchangeQuery->getDate()->format('m/d/Y'),
+            $this->options['token']
+        );
 
         $content = $this->fetchContent($url);
 
