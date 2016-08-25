@@ -24,7 +24,7 @@ class ExchangeQuery implements ExchangeQueryInterface
     /**
      * The currency pair.
      *
-     * @var CurrencyPair
+     * @var CurrencyPairInterface
      */
     private $currencyPair;
 

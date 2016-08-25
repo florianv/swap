@@ -24,10 +24,10 @@ final class Rate implements RateInterface
     /**
      * Creates a new rate.
      *
-     * @param string         $value The rate value
-     * @param \DateTime|null $date  The date at which this rate was calculated
+     * @param string                  $value The rate value
+     * @param \DateTimeInterface|null $date  The date at which this rate was calculated
      */
-    public function __construct($value, \DateTime $date = null)
+    public function __construct($value, \DateTimeInterface $date = null)
     {
         $this->value = (string) $value;
         $this->date = $date ?: new \DateTime();
