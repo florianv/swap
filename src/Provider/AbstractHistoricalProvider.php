@@ -10,6 +10,7 @@
  */
 
 namespace Swap\Provider;
+
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
 use Swap\HistoricalExchangeQueryInterface;
