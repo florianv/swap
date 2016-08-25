@@ -31,32 +31,24 @@ class NationalBankOfRomaniaProvider extends AbstractProvider
      */
     public function fetchRate(ExchangeQueryInterface $exchangeQuery)
     {
-        $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->fetchContent(self::URL);
 
-        $xmlElement = StringUtil::xmlToElement($content);
+        $element = StringUtil::xmlToElement($content);
+        $element->registerXPathNamespace('xmlns', 'http://www.bnr.ro/xsd');
 
-        $baseCurrency = (string) $xmlElement->Body->OrigCurrency;
-        if ($baseCurrency !== $currencyPair->getBaseCurrency()) {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+        $date = new \DateTime((string) $element->xpath('//xmlns:PublishingDate')[0]);
+        $elements = $element->xpath('//xmlns:Rate[@currency="'.$currencyPair->getQuoteCurrency().'"]');
+
+        if (empty($elements)) {
             throw new UnsupportedCurrencyPairException($currencyPair);
         }
 
-        $cube = $xmlElement->Body->Cube;
-        $cubeAttributes = $cube->attributes();
-        $date = new \DateTime((string) $cubeAttributes['date']);
+        $element = $elements[0];
+        $rate = (string) $element;
+        $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
 
-        foreach ($cube->Rate as $rate) {
-            $rateAttributes = $rate->attributes();
-            $rateQuoteCurrency = (string) $rateAttributes['currency'];
-
-            if ($rateQuoteCurrency === $currencyPair->getQuoteCurrency()) {
-                $rateValue = (!empty($rateAttributes['multiplier'])) ? (float) $rate / (int) $rateAttributes['multiplier'] : (float) $rate;
-
-                return new Rate((string) $rateValue, $date);
-            }
-        }
-
-        throw new UnsupportedCurrencyPairException($currencyPair);
+        return new Rate((string) $rateValue, $date);
     }
 
     /**

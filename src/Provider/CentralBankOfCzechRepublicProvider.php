@@ -39,7 +39,6 @@ class CentralBankOfCzechRepublicProvider extends AbstractProvider
         $date = \DateTime::createFromFormat(self::DATE_FORMAT, $this->parseDate($lines[0]));
         $date->setTime(0, 0, 0);
 
-        // Skip first two lines (date and headers)
         foreach (array_slice($lines, 2) as $currency) {
             list(, , $count, $code, $rate) = explode('|', $currency);
 
