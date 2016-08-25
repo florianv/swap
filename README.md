@@ -17,10 +17,10 @@ The documentation can be found [here](https://github.com/florianv/swap/blob/mast
 ## Providers
 
 | Provider | Base Currency | Quote Currency | Historical |
-|---------------------------------------------------------------------------|----------------------|----------------|
+|---------------------------------------------------------------------------|----------------------|----------------|----------------|
 | [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [Google Finance](http://www.google.com/finance) | * | * | No |
-| [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | No |
+| [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
 | [Xignite](https://www.xignite.com) | * | * | No |
 | [Yahoo Finance](https://finance.yahoo.com) | * | * | No |
 | [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * | No |

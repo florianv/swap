@@ -14,8 +14,9 @@ namespace Swap\Provider;
 use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
-use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
+use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -24,10 +25,11 @@ use Swap\Util\StringUtil;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class OpenExchangeRatesProvider extends AbstractProvider
+class OpenExchangeRatesProvider extends AbstractHistoricalProvider
 {
-    const FREE_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s';
-    const ENTERPRISE_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s';
+    const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s';
+    const ENTERPRISE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s';
+    const FREE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s';
 
     private $appId;
     private $enterprise;
@@ -55,20 +57,49 @@ class OpenExchangeRatesProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(ExchangeQueryInterface $exchangeQuery)
+    protected function supportsCurrencyPair(CurrencyPairInterface $currencyPair)
+    {
+        return $this->enterprise || 'USD' === $currencyPair->getBaseCurrency();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function fetchLatestRate(ExchangeQueryInterface $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if (!$this->enterprise && 'USD' !== $currencyPair->getBaseCurrency()) {
-            throw new UnsupportedCurrencyPairException($currencyPair);
-        }
-
         if ($this->enterprise) {
-            $url = sprintf(self::ENTERPRISE_URL, $this->appId, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
+            $url = sprintf(self::ENTERPRISE_LATEST_URL, $this->appId, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         } else {
-            $url = sprintf(self::FREE_URL, $this->appId);
+            $url = sprintf(self::FREE_LATEST_URL, $this->appId);
         }
 
+        return $this->createRate($url, $exchangeQuery);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function fetchHistoricalRate(HistoricalExchangeQueryInterface $exchangeQuery)
+    {
+        $url = sprintf(self::FREE_HISTORICAL_URL, $exchangeQuery->getDate()->format('Y-m-d'), $this->appId);
+
+        return $this->createRate($url, $exchangeQuery);
+    }
+
+    /**
+     * Creates a rate.
+     *
+     * @param string                 $url
+     * @param ExchangeQueryInterface $exchangeQuery
+     *
+     * @return Rate|null
+     *
+     * @throws Exception
+     */
+    private function createRate($url, ExchangeQueryInterface $exchangeQuery)
+    {
         $content = $this->fetchContent($url);
         $data = StringUtil::jsonToArray($content);
 
@@ -78,13 +109,12 @@ class OpenExchangeRatesProvider extends AbstractProvider
 
         $date = new \DateTime();
         $date->setTimestamp($data['timestamp']);
+        $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($data['base'] === $currencyPair->getBaseCurrency()
             && isset($data['rates'][$currencyPair->getQuoteCurrency()])
         ) {
             return new Rate((string) $data['rates'][$currencyPair->getQuoteCurrency()], $date);
         }
-
-        throw new UnsupportedCurrencyPairException($currencyPair);
     }
 }

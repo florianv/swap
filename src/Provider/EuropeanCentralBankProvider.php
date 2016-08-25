@@ -15,6 +15,7 @@ use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Exception\UnsupportedDateException;
 use Swap\ExchangeQueryInterface;
 use Swap\HistoricalExchangeQueryInterface;
+use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -23,7 +24,7 @@ use Swap\Util\StringUtil;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class EuropeanCentralBankProvider extends AbstractProvider
+class EuropeanCentralBankProvider extends AbstractHistoricalProvider
 {
     const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
     const HISTORICAL_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
@@ -31,33 +32,15 @@ class EuropeanCentralBankProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(ExchangeQueryInterface $exchangeQuery)
+    protected function supportsCurrencyPair(CurrencyPairInterface $currencyPair)
     {
-        $currencyPair = $exchangeQuery->getCurrencyPair();
-
-        if ('EUR' !== $currencyPair->getBaseCurrency()) {
-            throw new UnsupportedCurrencyPairException($currencyPair);
-        }
-
-        if ($exchangeQuery instanceof HistoricalExchangeQueryInterface && $rate = $this->fetchHistoricalRate($exchangeQuery)) {
-            return $rate;
-        } elseif ($rate = $this->fetchLatestRate($exchangeQuery)) {
-            return $rate;
-        }
-
-        throw new UnsupportedCurrencyPairException($currencyPair);
+        return 'EUR' === $currencyPair->getBaseCurrency();
     }
 
     /**
-     * Fetches the latest rate.
-     *
-     * @param ExchangeQueryInterface $exchangeQuery
-     *
-     * @return Rate|null
-     *
-     * @throws UnsupportedCurrencyPairException
+     * {@inheritdoc}
      */
-    private function fetchLatestRate(ExchangeQueryInterface $exchangeQuery)
+    protected function fetchLatestRate(ExchangeQueryInterface $exchangeQuery)
     {
         $content = $this->fetchContent(self::DAILY_URL);
 
@@ -77,16 +60,9 @@ class EuropeanCentralBankProvider extends AbstractProvider
     }
 
     /**
-     * Fetches an historical rate.
-     *
-     * @param HistoricalExchangeQueryInterface $exchangeQuery
-     *
-     * @return Rate|null
-     *
-     * @throws UnsupportedCurrencyPairException
-     * @throws UnsupportedDateException
+     * {@inheritdoc}
      */
-    private function fetchHistoricalRate(HistoricalExchangeQueryInterface $exchangeQuery)
+    protected function fetchHistoricalRate(HistoricalExchangeQueryInterface $exchangeQuery)
     {
         $content = $this->fetchContent(self::HISTORICAL_URL);
 

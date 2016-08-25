@@ -12,6 +12,8 @@
 namespace Swap\Tests\Provider;
 
 use Swap\ExchangeQuery;
+use Swap\HistoricalExchangeQuery;
+use Swap\Model\CurrencyPair;
 use Swap\Provider\OpenExchangeRatesProvider;
 
 class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
@@ -71,5 +73,59 @@ class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
 
         $this->assertEquals('0.726804', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_historical_rate()
+    {
+        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/historical_success.json');
+
+        $provider = new OpenExchangeRatesProvider('secret', false, $this->getHttpAdapterMock($url, $content));
+        $rate = $provider->fetchRate(
+            new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/AED'), new \DateTime('2016-08-23'))
+        );
+
+        $expectedDate = new \DateTime();
+        $expectedDate->setTimestamp(982342800);
+
+        $this->assertEquals('3.67246', $rate->getValue());
+        $this->assertEquals($expectedDate, $rate->getDate());
+    }
+
+    /**
+     * @test
+     * @expectedException \Swap\Exception\Exception
+     * @expectedExceptionMessage Historical rates for the requested date are not available - please try a different date, or contact support@openexchangerates.org.
+     */
+    public function it_throws_an_exception_when_historical_date_is_not_supported()
+    {
+        $url = 'https://openexchangerates.org/api/historical/1900-08-23.json?app_id=secret';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/historical_error.json');
+
+        $provider = new OpenExchangeRatesProvider('secret', false, $this->getHttpAdapterMock($url, $content));
+
+        $provider->fetchRate(
+            new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/AED'), new \DateTime('1900-08-23'))
+        );
+    }
+
+    /**
+     * @test
+     * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
+     * @expectedExceptionMessage The currency pair "USD/XXL" is not supported by the provider.
+     */
+    public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
+    {
+        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/historical_success.json');
+
+        $provider = new OpenExchangeRatesProvider('secret', false, $this->getHttpAdapterMock($url, $content));
+
+        $provider->fetchRate(
+            new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/XXL'), new \DateTime('2016-08-23'))
+        );
     }
 }
