@@ -1,0 +1,20 @@
+[
+  {
+    "Outcome": "Success",
+    "Message": null,
+    "Identity": "Request",
+    "Delay": 0.0774414,
+    "BaseCurrency": "EUR",
+    "QuoteCurrency": "USD",
+    "Symbol": "EURUSD",
+    "StartDate": "08/17/2016",
+    "StartTime": "3:00:00 PM",
+    "EndDate": "08/18/2016",
+    "EndTime": "3:00:00 PM",
+    "Open": 1.127555,
+    "High": 1.1339,
+    "Low": 1.1241,
+    "Close": 1.13272,
+    "Average": 1.130228
+  }
+]

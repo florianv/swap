@@ -22,9 +22,10 @@ use Swap\Util\StringUtil;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class XigniteProvider extends AbstractProvider
+class XigniteProvider extends AbstractHistoricalProvider
 {
-    const URL = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
+    const LATEST_URL = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
+    const HISTORICAL_URL = 'http://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetHistoricalRates?Symbols=%s&AsOfDate=%s&_Token=%s&FixingTime=&PriceType=Mid';
 
     /**
      * {@inheritdoc}
@@ -39,11 +40,11 @@ class XigniteProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchRate(ExchangeQueryInterface $exchangeQuery)
+    protected function fetchLatestRate(ExchangeQueryInterface $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        $url = sprintf(self::URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->options['token']);
+        $url = sprintf(self::LATEST_URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->options['token']);
         $content = $this->fetchContent($url);
 
         $json = StringUtil::jsonToArray($content);
@@ -64,8 +65,32 @@ class XigniteProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
+    protected function fetchHistoricalRate(HistoricalExchangeQueryInterface $exchangeQuery)
+    {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+        $symbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
+        $url = sprintf(self::HISTORICAL_URL, $symbol, $exchangeQuery->getDate()->format('m/d/Y'), $this->options['token']);
+
+        $content = $this->fetchContent($url);
+
+        $json = StringUtil::jsonToArray($content);
+        $data = $json[0];
+
+        if ('Success' === $data['Outcome']) {
+            return new Rate(
+                (string) $data['Average'],
+                \DateTime::createFromFormat('m/d/Y', $data['StartDate'], new \DateTimeZone('UTC'))
+            );
+        }
+
+        throw new Exception($data['Message']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function support(ExchangeQueryInterface $exchangeQuery)
     {
-        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface;
+        return true;
     }
 }
