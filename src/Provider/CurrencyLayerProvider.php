@@ -16,6 +16,7 @@ use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -59,10 +60,6 @@ class CurrencyLayerProvider extends AbstractProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if (!$this->enterprise && 'USD' !== $currencyPair->getBaseCurrency()) {
-            throw new UnsupportedCurrencyPairException($currencyPair);
-        }
-
         if ($this->enterprise) {
             $url = sprintf(self::ENTERPRISE_URL, $this->accessKey, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         } else {
@@ -86,5 +83,14 @@ class CurrencyLayerProvider extends AbstractProvider
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface
+        && ($this->enterprise || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency());
     }
 }

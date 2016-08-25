@@ -12,6 +12,7 @@
 namespace Swap;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Swap\Exception\UnsupportedExchangeQueryException;
 use Swap\Model\Rate;
 
 /**
@@ -41,6 +42,10 @@ class Swap implements SwapInterface
 
         if ($currencyPair->isIdentical()) {
             return new Rate(1);
+        }
+
+        if (!$this->provider->support($exchangeQuery)) {
+            throw new UnsupportedExchangeQueryException($exchangeQuery);
         }
 
         if (null === $this->cacheItemPool) {

@@ -13,6 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -37,10 +38,6 @@ class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
 
         $xmlElement = StringUtil::xmlToElement($content);
 
-        if ('TRY' !== $currencyPair->getQuoteCurrency()) {
-            throw new UnsupportedCurrencyPairException($currencyPair);
-        }
-
         $rootAttributes = $xmlElement->attributes();
         $date = new \DateTime((string) $rootAttributes['Date']);
 
@@ -53,5 +50,14 @@ class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface
+        && 'TRY' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 }

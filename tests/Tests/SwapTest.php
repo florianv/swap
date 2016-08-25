@@ -19,12 +19,37 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     * @expectedException \Swap\Exception\UnsupportedExchangeQueryException
+     * @expectedExceptionMessage The exchange query "EUR/USD" is not supported by the provider.
+     */
+    public function it_throws_an_exception_when_provider_does_not_support_query()
+    {
+        $provider = $this->getMock('Swap\ProviderInterface');
+
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(false));
+
+        $exchangeQuery = ExchangeQuery::createFromString('EUR/USD');
+
+        $swap = new Swap($provider);
+        $swap->getExchangeRate($exchangeQuery);
+    }
+
+    /**
+     * @test
      */
     public function it_quotes_a_pair()
     {
         $exchangeQuery = ExchangeQuery::createFromString('EUR/USD');
         $provider = $this->getMock('Swap\ProviderInterface');
         $rate = new Rate('1', new \DateTime());
+
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true));
 
         $provider
             ->expects($this->once())
@@ -81,6 +106,11 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
         $provider = $this->getMock('Swap\ProviderInterface');
 
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true));
+
         $item = $this->getMock('Psr\Cache\CacheItemInterface');
 
         $item
@@ -110,6 +140,11 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $rate = new Rate('1', new \DateTime());
 
         $provider = $this->getMock('Swap\ProviderInterface');
+
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true));
 
         $item = $this->getMock('Psr\Cache\CacheItemInterface');
 
@@ -146,6 +181,11 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $ttl = 3600;
 
         $provider = $this->getMock('Swap\ProviderInterface');
+
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true));
 
         $provider
             ->expects($this->once())
@@ -197,6 +237,11 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
         $provider = $this->getMock('Swap\ProviderInterface');
 
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true));
+
         $item = $this->getMock('Psr\Cache\CacheItemInterface');
 
         $item
@@ -226,6 +271,11 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $rate = new Rate('1', new \DateTime());
 
         $provider = $this->getMock('Swap\ProviderInterface');
+
+        $provider
+            ->expects($this->any())
+            ->method('support')
+            ->will($this->returnValue(true));
 
         $provider
             ->expects($this->once())

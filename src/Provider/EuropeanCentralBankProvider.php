@@ -15,7 +15,6 @@ use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\Exception\UnsupportedDateException;
 use Swap\ExchangeQueryInterface;
 use Swap\HistoricalExchangeQueryInterface;
-use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -28,14 +27,6 @@ class EuropeanCentralBankProvider extends AbstractHistoricalProvider
 {
     const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
     const HISTORICAL_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function supportsCurrencyPair(CurrencyPairInterface $currencyPair)
-    {
-        return 'EUR' === $currencyPair->getBaseCurrency();
-    }
 
     /**
      * {@inheritdoc}
@@ -83,5 +74,13 @@ class EuropeanCentralBankProvider extends AbstractHistoricalProvider
         }
 
         return new Rate((string) $elements[0]['rate'], $exchangeQuery->getDate());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
 }

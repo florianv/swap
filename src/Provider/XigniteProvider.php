@@ -15,6 +15,7 @@ use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -68,5 +69,13 @@ class XigniteProvider extends AbstractProvider
         }
 
         throw new Exception($data['Message']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface;
     }
 }

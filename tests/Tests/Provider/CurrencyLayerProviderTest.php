@@ -17,12 +17,11 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
-     * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
      */
-    public function it_throws_an_exception_if_base_is_not_usd_and_non_enterprise_mode()
+    public function it_does_not_support_all_queries()
     {
         $provider = new CurrencyLayerProvider('secret', false, $this->getMock('Http\Client\HttpClient'));
-        $provider->fetchRate(ExchangeQuery::createFromString('EUR/EUR'));
+        $this->assertFalse($provider->support(ExchangeQuery::createFromString('EUR/EUR')));
     }
 
     /**

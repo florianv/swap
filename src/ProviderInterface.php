@@ -28,4 +28,13 @@ interface ProviderInterface
      * @return RateInterface
      */
     public function fetchRate(ExchangeQueryInterface $exchangeQuery);
+
+    /**
+     * Tells if the provider supports the exchange query.
+     *
+     * @param ExchangeQueryInterface $exchangeQuery
+     *
+     * @return bool
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery);
 }

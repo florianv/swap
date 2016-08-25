@@ -13,6 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\Exception;
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
 use Swap\Model\Rate;
 
 /**
@@ -60,5 +61,13 @@ class GoogleFinanceProvider extends AbstractProvider
         libxml_disable_entity_loader($disableEntities);
 
         return new Rate($bid, new \DateTime());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface;
     }
 }

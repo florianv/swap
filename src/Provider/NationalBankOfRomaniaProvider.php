@@ -13,6 +13,7 @@ namespace Swap\Provider;
 
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -56,5 +57,14 @@ class NationalBankOfRomaniaProvider extends AbstractProvider
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface
+        && 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 }

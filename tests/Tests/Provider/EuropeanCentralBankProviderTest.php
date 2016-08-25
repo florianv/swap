@@ -20,13 +20,12 @@ class EuropeanCentralBankProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
-     * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "USD/EUR" is not supported by the provider.
      */
-    public function it_throws_an_exception_when_base_is_not_euro()
+    public function it_does_not_support_all_queries()
     {
         $provider = new EuropeanCentralBankProvider($this->getMock('Http\Client\HttpClient'));
-        $provider->fetchRate(ExchangeQuery::createFromString('USD/EUR'));
+        $this->assertFalse($provider->support(ExchangeQuery::createFromString('USD/EUR')));
+        $this->assertTrue($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     /**

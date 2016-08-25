@@ -14,7 +14,6 @@ namespace Swap\Provider;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
 use Swap\HistoricalExchangeQueryInterface;
-use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 
 /**
@@ -31,10 +30,6 @@ abstract class AbstractHistoricalProvider extends AbstractProvider
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if (!$this->supportsCurrencyPair($currencyPair)) {
-            throw new UnsupportedCurrencyPairException($currencyPair);
-        }
-
         if ($exchangeQuery instanceof HistoricalExchangeQueryInterface) {
             if ($rate = $this->fetchHistoricalRate($exchangeQuery)) {
                 return $rate;
@@ -44,18 +39,6 @@ abstract class AbstractHistoricalProvider extends AbstractProvider
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair);
-    }
-
-    /**
-     * Tells whether the provider supports the currency pair.
-     *
-     * @param CurrencyPairInterface $currencyPair
-     *
-     * @return bool
-     */
-    protected function supportsCurrencyPair(CurrencyPairInterface $currencyPair)
-    {
-        return true;
     }
 
     /**

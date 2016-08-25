@@ -12,6 +12,8 @@
 namespace Swap\Tests\Provider;
 
 use Swap\ExchangeQuery;
+use Swap\HistoricalExchangeQuery;
+use Swap\Model\CurrencyPair;
 use Swap\Provider\CentralBankOfCzechRepublicProvider;
 
 /**
@@ -51,22 +53,14 @@ class CentralBankOfCzechRepublicProviderTest extends AbstractProviderTestCase
 
     /**
      * @test
-     * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
      */
-    public function itThrowsAnExceptionWhenQuotesIsNotCzk()
+    public function it_does_not_support_all_queries()
     {
-        $provider = $this->createProvider();
-        $provider->fetchRate(ExchangeQuery::createFromString('CZK/EUR'));
-    }
+        $provider = new CentralBankOfCzechRepublicProvider($this->getMock('Http\Client\HttpClient'));
 
-    /**
-     * @test
-     * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
-     */
-    public function itThrowsAnExceptionWhenThePairIsNotSupported()
-    {
-        $provider = $this->createProvider();
-        $provider->fetchRate(ExchangeQuery::createFromString('XXX/TRY'));
+        $this->assertFalse($provider->support(ExchangeQuery::createFromString('CZK/EUR')));
+        $this->assertFalse($provider->support(ExchangeQuery::createFromString('XXX/TRY')));
+        $this->assertFalse($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('XXX/TRY'), new \DateTime())));
     }
 
     /**

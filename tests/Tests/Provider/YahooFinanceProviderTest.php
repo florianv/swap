@@ -11,11 +11,24 @@
 
 namespace Swap\Tests\Provider;
 
+use Swap\HistoricalExchangeQuery;
+use Swap\Model\CurrencyPair;
 use Swap\Provider\YahooFinanceProvider;
 use Swap\ExchangeQuery;
 
 class YahooFinanceProviderTest extends AbstractProviderTestCase
 {
+    /**
+     * @test
+     */
+    public function it_does_not_support_all_queries()
+    {
+        $provider = new YahooFinanceProvider($this->getMock('Http\Client\HttpClient'));
+
+        $this->assertTrue($provider->support(ExchangeQuery::createFromString('USD/EUR')));
+        $this->assertFalse($provider->support(new HistoricalExchangeQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+    }
+
     /**
      * @test
      * @expectedException \Swap\Exception\UnsupportedCurrencyPairException

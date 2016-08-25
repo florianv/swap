@@ -19,12 +19,11 @@ class ArrayProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @expectedException \Swap\Exception\Exception
      */
-    public function it_throws_an_exception_when_rate_not_supported()
+    public function it_does_not_support_all_queries()
     {
-        $arrayProvider = new ArrayProvider([]);
-        $arrayProvider->fetchRate(ExchangeQuery::createFromString('EUR/USD'));
+        $provider = new ArrayProvider([]);
+        $this->assertFalse($provider->support(ExchangeQuery::createFromString('EUR/USD')));
     }
 
     /**

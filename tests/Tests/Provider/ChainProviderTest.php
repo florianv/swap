@@ -23,6 +23,50 @@ class ChainProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_does_not_support_all_queries()
+    {
+        // Not supported
+        $providerOne = $this->getMock('Swap\ProviderInterface');
+
+        $providerOne
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
+
+        $providerTwo = $this->getMock('Swap\ProviderInterface');
+
+        $providerTwo
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(false));
+
+        $chain = new ChainProvider([$providerOne, $providerTwo]);
+
+        $this->assertFalse($chain->support(ExchangeQuery::createFromString('TRY/EUR')));
+
+        // Supported
+        $providerOne = $this->getMock('Swap\ProviderInterface');
+
+        $providerOne
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
+
+        $providerTwo = $this->getMock('Swap\ProviderInterface');
+
+        $providerTwo
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
+
+        $chain = new ChainProvider([$providerOne, $providerTwo]);
+
+        $this->assertTrue($chain->support(ExchangeQuery::createFromString('TRY/EUR')));
+    }
+
+    /**
+     * @test
+     */
     public function it_use_next_provider_in_the_chain()
     {
         $pair = ExchangeQuery::createFromString('EUR/USD');

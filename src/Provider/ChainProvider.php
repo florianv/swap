@@ -56,4 +56,18 @@ class ChainProvider implements ProviderInterface
 
         throw new ChainProviderException($exceptions);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        foreach ($this->providers as $provider) {
+            if (!$provider->support($exchangeQuery)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

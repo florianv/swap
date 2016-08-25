@@ -16,7 +16,6 @@ use Http\Message\RequestFactory;
 use Swap\Exception\Exception;
 use Swap\ExchangeQueryInterface;
 use Swap\HistoricalExchangeQueryInterface;
-use Swap\Model\CurrencyPairInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -58,14 +57,6 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
     /**
      * {@inheritdoc}
      */
-    protected function supportsCurrencyPair(CurrencyPairInterface $currencyPair)
-    {
-        return $this->enterprise || 'USD' === $currencyPair->getBaseCurrency();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function fetchLatestRate(ExchangeQueryInterface $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -99,6 +90,14 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
         }
 
         return $this->createRate($url, $exchangeQuery);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return $this->enterprise || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
 
     /**

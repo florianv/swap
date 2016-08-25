@@ -14,6 +14,7 @@ namespace Swap\Provider;
 use Swap\Exception\Exception;
 use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -55,5 +56,13 @@ class YahooFinanceProvider extends AbstractProvider
         $date = \DateTime::createFromFormat('m/d/Y H:ia', $dateString);
 
         return new Rate($data['Rate'], $date);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface;
     }
 }

@@ -12,6 +12,7 @@
 namespace Swap\Provider;
 
 use Swap\ExchangeQueryInterface;
+use Swap\HistoricalExchangeQueryInterface;
 use Swap\Model\Rate;
 use Swap\Util\StringUtil;
 
@@ -35,5 +36,13 @@ class WebserviceXProvider extends AbstractProvider
         $content = $this->fetchContent($url);
 
         return new Rate((string) StringUtil::xmlToElement($content), new \DateTime());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function support(ExchangeQueryInterface $exchangeQuery)
+    {
+        return !$exchangeQuery instanceof HistoricalExchangeQueryInterface;
     }
 }
