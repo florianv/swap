@@ -37,8 +37,9 @@ abstract class AbstractProvider implements ProviderInterface
     /**
      * @param HttpClient|null     $httpClient
      * @param RequestFactory|null $requestFactory
+     * @param array               $options
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
+    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, array $options = [])
     {
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
