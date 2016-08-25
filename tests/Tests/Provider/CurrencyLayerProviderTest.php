@@ -90,15 +90,15 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
     {
         $uri = 'http://apilayer.net/api/historical?access_key=secret&date=2015-05-06';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/historical_success.json');
-
-        $date = new \DateTime();
-        $date->setTimestamp(1430870399);
+        $date = new \DateTime('2015-05-06');
+        $expectedDate = new \DateTime();
+        $expectedDate->setTimestamp(1430870399);
 
         $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
         $rate = $provider->fetchRate(new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/AED'), $date));
 
         $this->assertEquals('3.673069', $rate->getValue());
-        $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals($expectedDate, $rate->getDate());
     }
 
     /**
@@ -108,14 +108,14 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
     {
         $uri = 'https://apilayer.net/api/historical?access_key=secret&date=2015-05-06&source=USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/historical_success.json');
-
-        $date = new \DateTime();
-        $date->setTimestamp(1430870399);
+        $date = new \DateTime('2015-05-06');
+        $expectedDate = new \DateTime();
+        $expectedDate->setTimestamp(1430870399);
 
         $provider = new CurrencyLayerProvider($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $provider->fetchRate(new HistoricalExchangeQuery(CurrencyPair::createFromString('USD/AED'), $date));
 
         $this->assertEquals('3.673069', $rate->getValue());
-        $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals($expectedDate, $rate->getDate());
     }
 }
