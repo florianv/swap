@@ -39,7 +39,7 @@ class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
         $element = StringUtil::xmlToElement($content);
 
         $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
-        $elements = $element->xpath('//Currency[@CurrencyCode="'. $currencyPair->getBaseCurrency() .'"]/ForexSelling');
+        $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
 
         if (!empty($elements)) {
             return new Rate((string) $elements[0], $date);
