@@ -47,7 +47,7 @@ class CurrencyLayerProvider extends AbstractHistoricalProvider
     /**
      * {@inheritdoc}
      */
-    public function fetchLatestRate(ExchangeQueryInterface $exchangeQuery)
+    protected function fetchLatestRate(ExchangeQueryInterface $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
