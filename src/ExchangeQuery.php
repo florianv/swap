@@ -12,13 +12,14 @@
 namespace Swap;
 
 use Swap\Model\CurrencyPair;
+use Swap\Model\CurrencyPairInterface;
 
 /**
  * Default exchange query implementation.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class ExchangeQuery implements ExchangeQueryInterface
+class ExchangeQuery implements ExchangeQueryInterface
 {
     /**
      * The currency pair.
@@ -39,19 +40,19 @@ final class ExchangeQuery implements ExchangeQueryInterface
     private $options;
 
     /**
-     * Creates a new request.
+     * Creates a new query.
      *
-     * @param CurrencyPair $currencyPair
-     * @param array        $options
+     * @param CurrencyPairInterface $currencyPair
+     * @param array                 $options
      */
-    public function __construct(CurrencyPair $currencyPair, array $options = [])
+    public function __construct(CurrencyPairInterface $currencyPair, array $options = [])
     {
         $this->currencyPair = $currencyPair;
         $this->options = $options;
     }
 
     /**
-     * Creates a new request from a string.
+     * Creates a new query from a string.
      *
      * @param string $currencyPair
      * @param array  $options

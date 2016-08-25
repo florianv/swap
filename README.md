@@ -16,18 +16,18 @@ The documentation can be found [here](https://github.com/florianv/swap/blob/mast
 
 ## Providers
 
-| Provider | Base Currency | Quote Currency |
+| Provider | Base Currency | Quote Currency | Historical |
 |---------------------------------------------------------------------------|----------------------|----------------|
-| [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | EUR | * |
-| [Google Finance](http://www.google.com/finance) | * | * |
-| [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * |
-| [Xignite](https://www.xignite.com) | * | * |
-| [Yahoo Finance](https://finance.yahoo.com) | * | * |
-| [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * |
-| [National Bank of Romania](http://www.bnr.ro) | RON | * |
-| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY |
-| [Central Bank of the Czech Republic](http://www.cnb.cz) | * | CZK |
-| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * |
+| [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
+| [Google Finance](http://www.google.com/finance) | * | * | No |
+| [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | No |
+| [Xignite](https://www.xignite.com) | * | * | No |
+| [Yahoo Finance](https://finance.yahoo.com) | * | * | No |
+| [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * | No |
+| [National Bank of Romania](http://www.bnr.ro) | RON | * | No |
+| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |
+| [Central Bank of the Czech Republic](http://www.cnb.cz) | * | CZK | No |
+| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | No |
 
 ## Integrations
 

@@ -24,7 +24,7 @@ class UnsupportedCurrencyPairException extends Exception
 
     public function __construct(CurrencyPairInterface $currencyPair)
     {
-        parent::__construct(sprintf('The currency pair "%s" is not supported.', $currencyPair->__toString()));
+        parent::__construct(sprintf('The currency pair "%s" is not supported by the provider.', $currencyPair->__toString()));
         $this->currencyPair = $currencyPair;
     }
 
