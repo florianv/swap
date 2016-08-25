@@ -1,7 +1,7 @@
 <img src="doc/logo.png" width="200px" align="left"/>
 > The exchange rates library for PHP
 
-[![Build status](http://img.shields.io/travis/florianv/swap.svg?style=flat-square)](https://travis-ci.org/florianv/swap)
+[![Build status](http://img.shields.io/travis/florianv/swap/master.svg?style=flat-square)](https://travis-ci.org/florianv/swap)
 [![Total Downloads](https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/florianv/swap.svg?style=flat-square)](https://scrutinizer-ci.com/g/florianv/swap)
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
