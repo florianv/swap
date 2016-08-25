@@ -21,6 +21,16 @@ class XigniteProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The "token" option must be provided.
+     */
+    public function it_throws_an_exception_if_token_option_missing()
+    {
+        new XigniteProvider($this->getMock('Http\Client\HttpClient'));
+    }
+
+    /**
+     * @test
      */
     public function it_does_not_support_all_queries()
     {

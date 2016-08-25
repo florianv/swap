@@ -18,6 +18,16 @@ class CurrencyLayerProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The "access_key" option must be provided.
+     */
+    public function it_throws_an_exception_if_access_key_option_missing()
+    {
+        new CurrencyLayerProvider($this->getMock('Http\Client\HttpClient'));
+    }
+
+    /**
+     * @test
      */
     public function it_does_not_support_all_queries()
     {

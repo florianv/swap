@@ -32,17 +32,15 @@ class OpenExchangeRatesProvider extends AbstractHistoricalProvider
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array $options)
+    public function processOptions(array &$options)
     {
         if (!isset($options['app_id'])) {
-            throw new \InvalidArgumentException('The app_id option must be provided');
+            throw new \InvalidArgumentException('The "app_id" option must be provided.');
         }
 
         if (empty($options['enterprise'])) {
             $options['enterprise'] = false;
         }
-
-        return $options;
     }
 
     /**

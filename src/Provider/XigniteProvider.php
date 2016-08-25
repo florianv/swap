@@ -29,13 +29,11 @@ class XigniteProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array $options)
+    public function processOptions(array &$options)
     {
         if (!isset($options['token'])) {
-            throw new \InvalidArgumentException('The token option must be provided');
+            throw new \InvalidArgumentException('The "token" option must be provided.');
         }
-
-        return $options;
     }
 
     /**

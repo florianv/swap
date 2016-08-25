@@ -55,19 +55,19 @@ abstract class AbstractProvider implements ProviderInterface
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
 
-        $this->options = $this->processOptions($options);
+        $this->processOptions($options);
+        $this->options = $options;
     }
 
     /**
      * Processes the provider options.
      *
-     * @param array $options
+     * @param array &$options
      *
      * @return array
      */
-    public function processOptions(array $options)
+    public function processOptions(array &$options)
     {
-        return $options;
     }
 
     /**

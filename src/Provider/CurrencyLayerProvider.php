@@ -31,17 +31,15 @@ class CurrencyLayerProvider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array $options)
+    public function processOptions(array &$options)
     {
         if (!isset($options['access_key'])) {
-            throw new \InvalidArgumentException('The access_key option must be provided');
+            throw new \InvalidArgumentException('The "access_key" option must be provided.');
         }
 
         if (empty($options['enterprise'])) {
             $options['enterprise'] = false;
         }
-
-        return $options;
     }
 
     /**

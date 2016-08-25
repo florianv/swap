@@ -20,6 +20,16 @@ class OpenExchangeRatesProviderTest extends AbstractProviderTestCase
 {
     /**
      * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The "app_id" option must be provided.
+     */
+    public function it_throws_an_exception_if_app_id_option_missing()
+    {
+        new OpenExchangeRatesProvider($this->getMock('Http\Client\HttpClient'));
+    }
+
+    /**
+     * @test
      */
     public function it_does_not_support_all_queries()
     {
