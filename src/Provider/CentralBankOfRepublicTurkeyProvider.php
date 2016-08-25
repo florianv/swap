@@ -36,17 +36,13 @@ class CentralBankOfRepublicTurkeyProvider extends AbstractProvider
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->fetchContent(self::URL);
 
-        $xmlElement = StringUtil::xmlToElement($content);
+        $element = StringUtil::xmlToElement($content);
 
-        $rootAttributes = $xmlElement->attributes();
-        $date = new \DateTime((string) $rootAttributes['Date']);
+        $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
+        $elements = $element->xpath('//Currency[@CurrencyCode="'. $currencyPair->getBaseCurrency() .'"]/ForexSelling');
 
-        foreach ($xmlElement->Currency as $currency) {
-            $currencyAttributes = $currency->attributes();
-
-            if ((string) $currencyAttributes['CurrencyCode'] === $currencyPair->getBaseCurrency()) {
-                return new Rate((string) $currency->ForexSelling, $date);
-            }
+        if (!empty($elements)) {
+            return new Rate((string) $elements[0], $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair);
