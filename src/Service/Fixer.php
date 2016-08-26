@@ -26,7 +26,7 @@ use Swap\StringUtil;
 class Fixer extends HistoricalService
 {
     const LATEST_URL = 'https://api.fixer.io/latest?base=%s';
-    const HISTORICAL_URL = 'http://api.fixer.io/%s?base=%s';
+    const HISTORICAL_URL = 'https://api.fixer.io/%s?base=%s';
 
     /**
      * {@inheritdoc}
@@ -79,8 +79,12 @@ class Fixer extends HistoricalService
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
 
+        if (isset($data['error'])) {
+            throw new Exception($data['error']);
+        }
+
         if (isset($data['rates'][$currencyPair->getQuoteCurrency()])) {
-            $date = new \DateTimeImmutable('2016-08-26');
+            $date = new \DateTimeImmutable($data['date']);
             $rate = $data['rates'][$currencyPair->getQuoteCurrency()];
 
             return new ExchangeRate($rate, $date);
