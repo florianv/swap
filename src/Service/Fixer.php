@@ -84,7 +84,7 @@ class Fixer extends HistoricalService
         }
 
         if (isset($data['rates'][$currencyPair->getQuoteCurrency()])) {
-            $date = new \DateTimeImmutable($data['date']);
+            $date = new \DateTime($data['date']);
             $rate = $data['rates'][$currencyPair->getQuoteCurrency()];
 
             return new ExchangeRate($rate, $date);
