@@ -11,41 +11,39 @@
 
 namespace Swap\Exception;
 
-use Swap\Contract\CurrencyPair;
 use Swap\Contract\ExchangeRateService;
 
 /**
- * Exception thrown when a currency pair is not supported by a service.
+ * Exception thrown when a date is not supported by a service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class UnsupportedCurrencyPairException extends Exception
+class UnsupportedDateException extends Exception
 {
-    private $currencyPair;
+    private $date;
     private $service;
 
-    public function __construct(CurrencyPair $currencyPair, ExchangeRateService $service)
+    public function __construct(\DateTimeInterface $date, ExchangeRateService $service)
     {
         parent::__construct(
             sprintf(
-                'The currency pair "%s" is not supported by the service "%s".',
-                $currencyPair->__toString(),
+                'The date "%s" is not supported by the service "%s".',
+                $date->format('Y-m-d'),
                 get_class($service)
             )
         );
 
-        $this->currencyPair = $currencyPair;
         $this->service = $service;
     }
 
     /**
-     * Gets the unsupported currency pair.
+     * Gets the date.
      *
-     * @return CurrencyPair
+     * @return \DateTimeInterface
      */
-    public function getCurrencyPair()
+    public function getDate()
     {
-        return $this->currencyPair;
+        return $this->date;
     }
 
     /**

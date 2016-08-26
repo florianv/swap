@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Swap.
  *
@@ -9,13 +8,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Swap\Exception;
+namespace Swap\Service\Traits;
 
 /**
- * For internal exceptions only that are not caught by the Chain Service.
+ * Service Trait for getting its name.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class InternalException extends Exception
+trait GetName
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        $parts = explode('\\', get_class($this));
+
+        return strtolower(preg_replace('/\B([A-Z])/', '_$1', end($parts)));
+    }
 }

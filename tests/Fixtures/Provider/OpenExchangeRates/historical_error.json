@@ -1,0 +1,6 @@
+{
+  "error": true,
+  "status": 400,
+  "message": "not_available",
+  "description": "Historical rates for the requested date are not available - please try a different date, or contact support@openexchangerates.org."
+}

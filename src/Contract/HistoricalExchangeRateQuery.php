@@ -9,13 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Swap\Exception;
+namespace Swap\Contract;
 
 /**
- * For internal exceptions only that are not caught by the Chain Service.
+ * Contract for historical exchange rate queries.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class InternalException extends Exception
+interface HistoricalExchangeRateQuery extends ExchangeRateQuery
 {
+    /**
+     * Gets the date.
+     *
+     * @return \DateTimeInterface
+     */
+    public function getDate();
 }
