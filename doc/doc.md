@@ -92,7 +92,9 @@ You can also control the cache per currency query:
 ```php
 // Overrides the cache ttl for this query
 $rate = $swap->latest('EUR/USD', ['cache_ttl' => 60]);
+$rate = $swap->historical('EUR/USD', $date, ['cache_ttl' => 60]);
 
 // Gets a refreshed rate
 $rate = $swap->latest('EUR/USD', ['refresh' => true]);
+$rate = $swap->historical('EUR/USD', $date, ['refresh' => true]);
 ```
