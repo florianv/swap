@@ -10,10 +10,6 @@ Read more about the benefits of this and about what different HTTP clients you m
 composer require florianv/swap php-http/message php-http/guzzle6-adapter
 ```
 
-## Usage
-
-### Without a framework
-
 ### Creating
 
 Swap supports chaining exchange rates services in case the previous one fails.
@@ -75,6 +71,8 @@ $rate = $swap->historical('EUR/USD', (new DateTime())->modify('-15 days'));
 
 ### Caching
 
+#### Rates Caching
+
 Swap provides a [PSR-6 Caching Interface](http://www.php-fig.org/psr/psr-6) integration allowing you to cache rates during a given time using the adapter of your choice.
 
 The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/apcu-adapter`.
@@ -97,4 +95,41 @@ $rate = $swap->historical('EUR/USD', $date, ['cache_ttl' => 60]);
 // Gets a refreshed rate
 $rate = $swap->latest('EUR/USD', ['refresh' => true]);
 $rate = $swap->historical('EUR/USD', $date, ['refresh' => true]);
+```
+
+#### Requests Caching
+
+By default, Swap queries the provider for each rate you request, but some providers like the `EuropeanCentralBankProvider`
+return the same response no matter the requested currency pair. It means performances can be improved when using these providers
+and when quoting multiple pairs during the same request.
+
+#### Example
+
+Install the PHP HTTP Cache plugin and the PHP Cache Array adapter `composer require php-http/cache-plugin cache/array-adapter`.
+
+Modify the way you create your HTTP Client by decorating it with a `PluginClient` using the `Array` cache:
+
+```php
+use Http\Client\Common\PluginClient;
+use Http\Client\Common\Plugin\CachePlugin;
+use Http\Message\StreamFactory\GuzzleStreamFactory;
+use Http\Adapter\Guzzle6\Client as GuzzleClient;
+use Cache\Adapter\PHPArray\ArrayCachePool;
+use Swap\Provider\EuropeanCentralBankProvider;
+use Swap\Swap;
+
+$pool = new ArrayCachePool();
+$streamFactory = new GuzzleStreamFactory();
+$cachePlugin = new CachePlugin($pool, $streamFactory);
+$httpAdapter = new PluginClient(new GuzzleClient(), [$cachePlugin]);
+
+$yahooProvider = new EuropeanCentralBankProvider($httpAdapter);
+
+$swap = new Swap($yahooProvider);
+
+// A http request is sent
+$rate = $swap->quote('EUR/USD');
+
+// A new request won't be sent
+$rate = $swap->quote('EUR/GBP');
 ```
