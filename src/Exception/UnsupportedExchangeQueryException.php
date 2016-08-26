@@ -11,7 +11,7 @@
 
 namespace Swap\Exception;
 
-use Swap\ExchangeQueryInterface;
+use Swap\Contract\ExchangeRateQuery;
 
 /**
  * Exception thrown when an exchange query is not supported by a provider.
@@ -20,21 +20,25 @@ use Swap\ExchangeQueryInterface;
  */
 class UnsupportedExchangeQueryException extends Exception
 {
-    private $exchangeQuery;
+    private $exchangeRateQuery;
 
-    public function __construct(ExchangeQueryInterface $exchangeQuery)
+    public function __construct(ExchangeRateQuery $exchangeRateQuery)
     {
-        parent::__construct(sprintf('The exchange query "%s" is not supported by the provider.', $exchangeQuery->getCurrencyPair()->__toString()));
-        $this->exchangeQuery = $exchangeQuery;
+        parent::__construct(sprintf(
+            'The exchange query "%s" is not supported by the provider.',
+            $exchangeRateQuery->getCurrencyPair()->__toString()
+        ));
+
+        $this->exchangeRateQuery = $exchangeRateQuery;
     }
 
     /**
      * Gets the unsupported exchange query.
      *
-     * @return ExchangeQueryInterface
+     * @return ExchangeRateQuery
      */
-    public function getExchangeQuery()
+    public function getExchangeRateQuery()
     {
-        return $this->exchangeQuery;
+        return $this->exchangeRateQuery;
     }
 }

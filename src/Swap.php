@@ -12,21 +12,23 @@
 namespace Swap;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Swap\Contract\ExchangeRateProvider;
+use Swap\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
+use Swap\Contract\ExchangeRateService as ExchangeRateServiceContract;
 use Swap\Exception\UnsupportedExchangeQueryException;
-use Swap\Model\Rate;
 
 /**
  * An implementation of Swap.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Swap implements SwapInterface
+class Swap implements ExchangeRateProvider
 {
     private $provider;
     private $cacheItemPool;
     private $options;
 
-    public function __construct(ProviderInterface $provider, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
+    public function __construct(ExchangeRateServiceContract $provider, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
     {
         $this->provider = $provider;
         $this->cacheItemPool = $cacheItemPool;
@@ -36,12 +38,12 @@ class Swap implements SwapInterface
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeQueryInterface $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($currencyPair->isIdentical()) {
-            return new Rate(1);
+            return new ExchangeRate(1);
         }
 
         if (!$this->provider->support($exchangeQuery)) {
@@ -49,7 +51,7 @@ class Swap implements SwapInterface
         }
 
         if (null === $this->cacheItemPool || $exchangeQuery->getOption('cache_disabled')) {
-            return $this->provider->fetchRate($exchangeQuery);
+            return $this->provider->get($exchangeQuery);
         }
 
         $item = $this->cacheItemPool->getItem($currencyPair->toHash());
@@ -58,7 +60,7 @@ class Swap implements SwapInterface
             return $item->get();
         }
 
-        $rate = $this->provider->fetchRate($exchangeQuery);
+        $rate = $this->provider->get($exchangeQuery);
 
         $item->set($rate);
         $item->expiresAfter($exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null));
