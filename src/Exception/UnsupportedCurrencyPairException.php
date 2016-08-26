@@ -12,6 +12,7 @@
 namespace Swap\Exception;
 
 use Swap\Contract\CurrencyPair;
+use Swap\Contract\ExchangeRateService;
 
 /**
  * Exception thrown when a currency pair is not supported by a provider.
@@ -21,11 +22,20 @@ use Swap\Contract\CurrencyPair;
 class UnsupportedCurrencyPairException extends Exception
 {
     private $currencyPair;
+    private $service;
 
-    public function __construct(CurrencyPair $currencyPair)
+    public function __construct(CurrencyPair $currencyPair, ExchangeRateService $service)
     {
-        parent::__construct(sprintf('The currency pair "%s" is not supported by the provider.', $currencyPair->__toString()));
+        parent::__construct(
+            sprintf(
+                'The currency pair "%s" is not supported by the service "%s".',
+                $currencyPair->__toString(),
+                get_class($this->service)
+            )
+        );
+
         $this->currencyPair = $currencyPair;
+        $this->service = $service;
     }
 
     /**
@@ -36,5 +46,10 @@ class UnsupportedCurrencyPairException extends Exception
     public function getCurrencyPair()
     {
         return $this->currencyPair;
+    }
+
+    public function getService()
+    {
+        return $this->service;
     }
 }

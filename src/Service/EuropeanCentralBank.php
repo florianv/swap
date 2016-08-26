@@ -67,7 +67,7 @@ class EuropeanCentralBank extends HistoricalService
 
         if (empty($elements)) {
             if (empty($element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]'))) {
-                throw new UnsupportedDateException($exchangeQuery->getDate());
+                throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
             }
 
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair());

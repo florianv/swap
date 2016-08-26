@@ -102,16 +102,16 @@ final class ExchangeRateQueryBuilder
     }
 
     /**
-     * Sets the date.
+     * Adds an option.
      *
      * @param string $name
-     * @param mixed  $default
+     * @param mixed  $value
      *
      * @return $this
      */
-    public function addOption($name, $default = null)
+    public function addOption($name, $value)
     {
-        $this->options[$name] = $default;
+        $this->options[$name] = $value;
 
         return $this;
     }

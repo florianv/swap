@@ -14,7 +14,7 @@ namespace Swap\Tests;
 use Swap\ExchangeRate;
 use Swap\ExchangeRateQuery;
 use Swap\CurrencyPair;
-use Swap\Swap;
+use Swap\ExchangeRateProvider;
 
 class SwapTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +34,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
         $ExchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
-        $swap = new Swap($provider);
+        $swap = new ExchangeRateProvider($provider);
         $swap->getExchangeRate($ExchangeRateQuery);
     }
 
@@ -57,7 +57,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($rate));
 
-        $swap = new Swap($provider);
+        $swap = new ExchangeRateProvider($provider);
 
         $this->assertSame($rate, $swap->getExchangeRate($ExchangeRateQuery));
     }
@@ -70,7 +70,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
         $provider = $this->getMock('Swap\Contract\ExchangeRateService');
         $ExchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'));
 
-        $swap = new Swap($provider);
+        $swap = new ExchangeRateProvider($provider);
         $rate = $swap->getExchangeRate($ExchangeRateQuery);
 
         $this->assertSame('1', $rate->getValue());
@@ -90,7 +90,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getItem');
 
-        $swap = new Swap($provider, $pool);
+        $swap = new ExchangeRateProvider($provider, $pool);
         $rate1 = $swap->getExchangeRate($ExchangeRateQuery);
         $rate2 = $swap->getExchangeRate($ExchangeRateQuery);
 
@@ -127,7 +127,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->with($pair->toHash())
             ->will($this->returnValue($item));
 
-        $swap = new Swap($provider, $pool);
+        $swap = new ExchangeRateProvider($provider, $pool);
         $this->assertNull($swap->getExchangeRate($ExchangeRateQuery));
     }
 
@@ -167,7 +167,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->with($pair->toHash())
             ->will($this->returnValue($item));
 
-        $swap = new Swap($provider, $pool);
+        $swap = new ExchangeRateProvider($provider, $pool);
         $this->assertSame($rate, $swap->getExchangeRate($ExchangeRateQuery));
     }
 
@@ -223,7 +223,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($item);
 
-        $swap = new Swap($provider, $pool, ['cache_ttl' => $ttl]);
+        $swap = new ExchangeRateProvider($provider, $pool, ['cache_ttl' => $ttl]);
         $swap->getExchangeRate($ExchangeRateQuery);
     }
 
@@ -257,7 +257,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->with($pair->toHash())
             ->will($this->returnValue($item));
 
-        $swap = new Swap($provider, $pool);
+        $swap = new ExchangeRateProvider($provider, $pool);
         $swap->getExchangeRate($ExchangeRateQuery);
     }
 
@@ -281,7 +281,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getItem');
 
-        $swap = new Swap($provider, $pool);
+        $swap = new ExchangeRateProvider($provider, $pool);
         $swap->getExchangeRate($ExchangeRateQuery);
     }
 
@@ -337,7 +337,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($item);
 
-        $swap = new Swap($provider, $pool);
+        $swap = new ExchangeRateProvider($provider, $pool);
         $swap->getExchangeRate($ExchangeRateQuery);
     }
 }

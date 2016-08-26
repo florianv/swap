@@ -12,61 +12,87 @@
 namespace Swap;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Swap\Contract\ExchangeRateProvider;
-use Swap\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
-use Swap\Contract\ExchangeRateService as ExchangeRateServiceContract;
-use Swap\Exception\UnsupportedExchangeQueryException;
+use Swap\Service\Chain;
+use Swap\Service\ServiceFactory;
 
 /**
- * An implementation of Swap.
+ * Swap is an easy to use facade to retrieve exchange rates from various services.
+ * Use this if you don't use a framework integration.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Swap implements ExchangeRateProvider
+class Swap
 {
-    private $provider;
-    private $cacheItemPool;
-    private $options;
+    /**
+     * The service.
+     *
+     * @var Chain
+     */
+    private $service;
 
-    public function __construct(ExchangeRateServiceContract $provider, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
+    /**
+     * Creates a new Swaap.
+     *
+     * @param CacheItemPoolInterface $cacheItemPool
+     * @param array                  $options
+     */
+    private function __construct(CacheItemPoolInterface $cacheItemPool = null, array $options = [])
     {
-        $this->provider = $provider;
-        $this->cacheItemPool = $cacheItemPool;
-        $this->options = $options;
+        $this->service = new Chain([]);
+        $this->exchangeRateProvider = new ExchangeRateProvider($this->service, $cacheItemPool, $options);
     }
 
     /**
-     * {@inheritdoc}
+     * Factory method.
+     *
+     * @param CacheItemPoolInterface $cacheItemPool
+     * @param array                  $options
+     *
+     * @return Swap
      */
-    public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery)
+    public static function create(CacheItemPoolInterface $cacheItemPool = null, array $options = [])
     {
-        $currencyPair = $exchangeQuery->getCurrencyPair();
+        return new static($cacheItemPool, $options);
+    }
 
-        if ($currencyPair->isIdentical()) {
-            return new ExchangeRate(1);
+    /**
+     * Adds a new service.
+     *
+     * @param string $serviceName
+     * @param array  $options
+     *
+     * @return Swap
+     */
+    public function with($serviceName, array $options = [])
+    {
+        $this->service->addService(ServiceFactory::createService($serviceName, $options));
+
+        return $this;
+    }
+
+    /**
+     * Quotes a currency pair.
+     *
+     * @param string             $currencyPair The currency pair like "EUR/USD"
+     * @param \DateTimeInterface $date         An optional date for historical rates
+     * @param array              $options      An array of query options
+     *
+     * @return ExchangeRate
+     */
+    public function quote($currencyPair, \DateTimeInterface $date = null, array $options = [])
+    {
+        $exchangeQueryBuilder = new ExchangeRateQueryBuilder($currencyPair);
+
+        if (null !== $date) {
+            $exchangeQueryBuilder->setDate($date);
         }
 
-        if (!$this->provider->support($exchangeQuery)) {
-            throw new UnsupportedExchangeQueryException($exchangeQuery);
+        foreach ($options as $name => $value) {
+            $exchangeQueryBuilder->addOption($name, $value);
         }
 
-        if (null === $this->cacheItemPool || $exchangeQuery->getOption('cache_disabled')) {
-            return $this->provider->get($exchangeQuery);
-        }
+        $query = $exchangeQueryBuilder->build();
 
-        $item = $this->cacheItemPool->getItem($currencyPair->toHash());
-
-        if (!$exchangeQuery->getOption('refresh') && $item->isHit()) {
-            return $item->get();
-        }
-
-        $rate = $this->provider->get($exchangeQuery);
-
-        $item->set($rate);
-        $item->expiresAfter($exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null));
-
-        $this->cacheItemPool->save($item);
-
-        return $rate;
+        return $this->exchangeRateProvider->getExchangeRate($query);
     }
 }

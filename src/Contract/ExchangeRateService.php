@@ -35,4 +35,11 @@ interface ExchangeRateService
      * @return bool
      */
     public function support(ExchangeRateQuery $exchangeQuery);
+
+    /**
+     * Gets the unique service name.
+     *
+     * @return string
+     */
+    public function getName();
 }

@@ -16,6 +16,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use Swap\Contract\ExchangeRateService;
+use Swap\Service\Traits\GetName;
 
 /**
  * Base class for providers.
@@ -24,6 +25,8 @@ use Swap\Contract\ExchangeRateService;
  */
 abstract class Service implements ExchangeRateService
 {
+    use GetName;
+
     /**
      * The client.
      *

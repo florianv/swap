@@ -15,24 +15,42 @@ use Swap\Contract\ExchangeRateQuery;
 use Swap\Contract\ExchangeRateService;
 use Swap\Exception\ChainException;
 use Swap\Exception\InternalException;
+use Swap\Service\Traits\GetName;
 
 /**
- * A provider using other providers in a chain.
+ * A service using other services in a chain.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 class Chain implements ExchangeRateService
 {
-    private $providers;
+    use GetName;
 
     /**
-     * Creates a new chain provider.
+     * The services.
      *
-     * @param ExchangeRateService[] $providers
+     * @var array
      */
-    public function __construct(array $providers)
+    private $services;
+
+    /**
+     * Creates a new chain service.
+     *
+     * @param ExchangeRateService[] $services
+     */
+    public function __construct(array $services)
     {
-        $this->providers = $providers;
+        $this->services = $services;
+    }
+
+    /**
+     * Adds a service to the chain.
+     *
+     * @param ExchangeRateService $service
+     */
+    public function addService(ExchangeRateService $service)
+    {
+        $this->services[] = $service;
     }
 
     /**
@@ -42,9 +60,13 @@ class Chain implements ExchangeRateService
     {
         $exceptions = [];
 
-        foreach ($this->providers as $provider) {
+        foreach ($this->services as $service) {
+            if (!$service->support($exchangeQuery)) {
+                continue;
+            }
+
             try {
-                return $provider->get($exchangeQuery);
+                return $service->get($exchangeQuery);
             } catch (\Exception $e) {
                 if ($e instanceof InternalException) {
                     throw $e;
@@ -62,9 +84,9 @@ class Chain implements ExchangeRateService
      */
     public function support(ExchangeRateQuery $exchangeQuery)
     {
-        foreach ($this->providers as $provider) {
-            if (!$provider->support($exchangeQuery)) {
-                return false;
+        foreach ($this->services as $service) {
+            if ($service->support($exchangeQuery)) {
+                return true;
             }
         }
 

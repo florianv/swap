@@ -16,6 +16,7 @@ use Swap\Contract\ExchangeRateService;
 use Swap\Contract\HistoricalExchangeRateQuery;
 use Swap\Exception\InternalException;
 use Swap\ExchangeRate;
+use Swap\Service\Traits\GetName;
 
 /**
  * Provides rates from an array.
@@ -24,6 +25,13 @@ use Swap\ExchangeRate;
  */
 final class PhpArray implements ExchangeRateService
 {
+    use GetName;
+
+    /**
+     * The rates.
+     *
+     * @var ExchangeRate[]
+     */
     private $rates;
 
     /**

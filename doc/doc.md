@@ -12,92 +12,77 @@ composer require florianv/swap php-http/message php-http/guzzle6-adapter
 
 ## Usage
 
+### Without a framework
+
+### Creating
+
+Swap supports chaining exchange rates services in case the previous one fails.
+
+The code below will create a Swap instance with the `Fixer`, `Yahoo` and `Google` services added. It means rates
+will be first fetched from `Fixer`, then `Yahoo`, then `Google` in case of failure.
+
 ```php
-// Instantiate your Http Adapter
-$httpAdapter = new \Http\Adapter\Guzzle6\Client();
+use Swap\Swap;
 
-// Create the Yahoo Finance provider
-$yahooProvider = new \Swap\Provider\YahooFinanceProvider($httpAdapter);
-
-// Create Swap with the provider
-$swap = new \Swap\Swap($yahooProvider);
+$swap = Swap::create()
+    ->with('fixer')
+    ->with('yahoo')
+    ->with('google');
 ```
 
-### Exchange Query Builder
+Here is the complete list of supported services and options:
 
 ```php
-// Latest rate
-$query = (new ExchangeQueryBuilder('EUR/USD'))
-    ->build();
+use Swap\Swap;
 
-// Historical rates
-$query = (new ExchangeQueryBuilder('EUR/USD'))
-    ->setDate((new \DateTime())->modify('-15 days'))
-    ->build();
-
-// Overrides global caching ttl for this query
-$query = (new ExchangeQueryBuilder('EUR/USD'))
-    ->setCacheTtl(3600)
-    ->build();
-
-// Disable caching for this query
-$query = (new ExchangeQueryBuilder('EUR/USD'))
-    ->disableCache()
-    ->build();
-
-// Forces the rate to be refreshed from the provider
-$query = (new ExchangeQueryBuilder('EUR/USD'))
-    ->mustBeFresh()
-    ->build();
-
-$exchangeRate = $swap->execute($query);
+$swap = Swap::create()
+    ->with('central_bank_of_czech_republic')
+    ->with('central_bank_of_republic_turkey')
+    ->with('currencylayer', ['access_key' => 'secret', 'enterprise' => false])
+    ->with('european_central_bank')
+    ->with('fixer')
+    ->with('google')
+    ->with('national_bank_of_romania')
+    ->with('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
+    ->with('array', [['EUR/USD' => new ExchangeRate('1.5')]])
+    ->with('webservicex')
+    ->with('xignite', ['token' => 'token'])
+    ->with('yahoo');
 ```
 
 ### Quoting
 
+Swap allows you to get the latest exchange rates but historical ones as well. Please check this list to see currencies supported
+by your service and if it offers historical rates.
+
 To retrieve the latest exchange rate for a currency pair, you need to use the `quote()` method.
 
 ```php
+// Latest rate
 $rate = $swap->quote('EUR/USD');
 
-// 1.187220
-echo $rate;
-
-// 1.187220
+// 1.129
 echo $rate->getValue();
 
-// 15-01-11 21:30:00
-echo $rate->getDate()->format('Y-m-d H:i:s');
+// 2016-08-26
+echo $rate->getDate()->format('Y-m-d');
+
+// Historical rate
+$rate = $swap->quote('EUR/USD', (new DateTime())->modify('-15 days'));
 ```
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
-
-### Chaining providers
-
-It is possible to chain providers in order to use fallbacks in case the main providers don't support the currency or are unavailable.
-Simply create a `ChainProvider` wrapping the providers you want to chain.
-
-```php
-$chainProvider = new \Swap\Provider\ChainProvider([
-    new \Swap\Provider\YahooFinanceProvider($httpAdapter),
-    new \Swap\Provider\GoogleFinanceProvider($httpAdapter)
-]);
-```
-
-The rates will be first fetched using the Yahoo Finance provider and will fallback to Google Finance.
 
 ### Caching
 
 Swap provides a [PSR-6 Caching Interface](http://www.php-fig.org/psr/psr-6) integration allowing you to cache rates during a given time using the adapter of your choice.
 
-#### Example
-
 The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/apcu-adapter`.
 
 ```php
-$cachePool = new \Cache\Adapter\Apcu\ApcuCachePool();
+use Cache\Adapter\Apcu\ApcuCachePool;
 
-$swap = new \Swap\Swap($yahooProvider, $cachePool, 3600);
+$swap = Swap::create(new ApcuCachePool(), ['cache_ttl' => '3600']);
 ```
 
 All rates will now be cached in Apcu during 3600 seconds.

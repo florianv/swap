@@ -16,7 +16,7 @@ use Swap\ExchangeRateQuery;
 use Swap\CurrencyPair;
 use Swap\Service\PhpArray;
 
-class ArrayTest extends \PHPUnit_Framework_TestCase
+class PhpArrayTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
