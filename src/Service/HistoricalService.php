@@ -17,7 +17,7 @@ use Swap\Contract\HistoricalExchangeRateQuery;
 use Swap\Exception\UnsupportedCurrencyPairException;
 
 /**
- * Base class for historical providers.
+ * Base class for historical services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -26,15 +26,15 @@ abstract class HistoricalService extends Service
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($exchangeQuery instanceof HistoricalExchangeRateQuery) {
-            if ($rate = $this->getHistorical($exchangeQuery)) {
+            if ($rate = $this->getHistoricalExchangeRate($exchangeQuery)) {
                 return $rate;
             }
-        } elseif ($rate = $this->getLatest($exchangeQuery)) {
+        } elseif ($rate = $this->getLatestExchangeRate($exchangeQuery)) {
             return $rate;
         }
 
@@ -42,20 +42,20 @@ abstract class HistoricalService extends Service
     }
 
     /**
-     * Fetches the latest rate.
+     * Gets the latest rate.
      *
      * @param ExchangeRateQuery $exchangeQuery
      *
      * @return ExchangeRate|null
      */
-    abstract protected function getLatest(ExchangeRateQuery $exchangeQuery);
+    abstract protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery);
 
     /**
-     * Fetches an historical rate.
+     * Gets an historical rate.
      *
      * @param HistoricalExchangeRateQuery $exchangeQuery
      *
      * @return ExchangeRate|null
      */
-    abstract protected function getHistorical(HistoricalExchangeRateQuery $exchangeQuery);
+    abstract protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery);
 }

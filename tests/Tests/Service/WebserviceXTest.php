@@ -25,8 +25,8 @@ class WebserviceXTest extends ServiceTestCase
     {
         $provider = new WebserviceX($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertTrue($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
-        $this->assertFalse($provider->support(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+        $this->assertTrue($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
+        $this->assertFalse($provider->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     /**
@@ -38,7 +38,7 @@ class WebserviceXTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/WebserviceX/success.xml');
 
         $provider = new WebserviceX($this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertEquals('1.3608', $rate->getValue());
         $this->assertEquals(new \DateTime(), $rate->getDate());

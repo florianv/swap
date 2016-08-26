@@ -18,25 +18,8 @@ namespace Swap;
  */
 final class ExchangeRateQueryBuilder
 {
-    /**
-     * The currency pair.
-     *
-     * @var CurrencyPair
-     */
     private $currencyPair;
-
-    /**
-     * The date.
-     *
-     * @var \DateTimeInterface
-     */
     private $date;
-
-    /**
-     * The options.
-     *
-     * @var array
-     */
     private $options = [];
 
     /**

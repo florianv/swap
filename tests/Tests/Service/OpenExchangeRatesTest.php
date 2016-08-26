@@ -35,8 +35,8 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $provider = new OpenExchangeRates($this->getMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);
 
-        $this->assertFalse($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
-        $this->assertTrue($provider->support(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime())));
+        $this->assertFalse($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
+        $this->assertTrue($provider->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime())));
     }
 
     /**
@@ -49,7 +49,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/error.json');
 
         $provider = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
-        $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
     /**
@@ -63,7 +63,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
         $provider = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertEquals('0.726804', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
@@ -80,7 +80,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/success.json');
 
         $provider = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertEquals('0.726804', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
@@ -95,7 +95,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/historical_success.json');
 
         $provider = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
-        $rate = $provider->get(
+        $rate = $provider->getExchangeRate(
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), new \DateTime('2016-08-23'))
         );
 
@@ -115,7 +115,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/OpenExchangeRates/historical_success.json');
 
         $provider = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
-        $rate = $provider->get(
+        $rate = $provider->getExchangeRate(
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime('2016-08-23'))
         );
 
@@ -138,7 +138,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
         $provider = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
 
-        $provider->get(
+        $provider->getExchangeRate(
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), new \DateTime('1900-08-23'))
         );
     }
@@ -155,7 +155,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
         $provider = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
 
-        $provider->get(
+        $provider->getExchangeRate(
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/XXL'), new \DateTime('2016-08-23'))
         );
     }

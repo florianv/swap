@@ -31,38 +31,38 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerOne
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(true));
 
         $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
 
         $providerTwo
             ->expects($this->never())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(false));
 
         $chain = new Chain([$providerOne, $providerTwo]);
 
-        $this->assertTrue($chain->support(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
+        $this->assertTrue($chain->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
 
         // Not Supported
         $providerOne = $this->getMock('Swap\Contract\ExchangeRateService');
 
         $providerOne
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(false));
 
         $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
 
         $providerTwo
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(false));
 
         $chain = new Chain([$providerOne, $providerTwo]);
 
-        $this->assertFalse($chain->support(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
+        $this->assertFalse($chain->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
     }
 
     /**
@@ -77,12 +77,12 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerOne
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(true));
 
         $providerOne
             ->expects($this->once())
-            ->method('get')
+            ->method('getExchangeRate')
             ->with($pair)
             ->will($this->throwException(new Exception()));
 
@@ -90,12 +90,12 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerTwo
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(true));
 
         $providerTwo
             ->expects($this->once())
-            ->method('get')
+            ->method('getExchangeRate')
             ->with($pair)
             ->will($this->returnValue($rate));
 
@@ -103,15 +103,15 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerThree
             ->expects($this->never())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(true));
 
         $providerThree
             ->expects($this->never())
-            ->method('get');
+            ->method('getExchangeRate');
 
         $chain = new Chain([$providerOne, $providerTwo, $providerThree]);
-        $fetchedRate = $chain->get($pair);
+        $fetchedRate = $chain->getExchangeRate($pair);
 
         $this->assertSame($rate, $fetchedRate);
     }
@@ -126,31 +126,31 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerOne
             ->expects($this->once())
-            ->method('get')
+            ->method('getExchangeRate')
             ->will($this->throwException($exception));
 
         $providerOne
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(true));
 
         $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
 
         $providerTwo
             ->expects($this->once())
-            ->method('get')
+            ->method('getExchangeRate')
             ->will($this->throwException($exception));
 
         $providerTwo
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(true));
 
         $chain = new Chain([$providerOne, $providerTwo]);
         $caught = false;
 
         try {
-            $chain->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+            $chain->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
         } catch (ChainException $e) {
             $caught = true;
             $this->assertEquals([$exception, $exception], $e->getExceptions());
@@ -171,21 +171,21 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerOne
             ->expects($this->once())
-            ->method('support')
+            ->method('supportQuery')
             ->will($this->returnValue(true));
 
         $providerOne
             ->expects($this->once())
-            ->method('get')
+            ->method('getExchangeRate')
             ->will($this->throwException($internalException));
 
         $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
 
         $providerTwo
             ->expects($this->never())
-            ->method('get');
+            ->method('getExchangeRate');
 
         $chain = new Chain([$providerOne, $providerTwo]);
-        $chain->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $chain->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 }

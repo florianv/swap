@@ -24,7 +24,7 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
     public function it_does_not_support_all_queries()
     {
         $provider = new PhpArray([]);
-        $this->assertFalse($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
+        $this->assertFalse($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
     }
 
     /**
@@ -38,7 +38,7 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
             'EUR/USD' => [],
         ]);
 
-        $arrayProvider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 
     /**
@@ -50,7 +50,7 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
             'EUR/USD' => $rate = new ExchangeRate('1.50'),
         ]);
 
-        $this->assertSame($rate, $arrayProvider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
+        $this->assertSame($rate, $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
     }
 
     /**
@@ -64,9 +64,9 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
             'JPY/GBP' => 1,
         ]);
 
-        $eurUsd = $arrayProvider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
-        $usdGbp = $arrayProvider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP')));
-        $jpyGbp = $arrayProvider->get(new ExchangeRateQuery(CurrencyPair::createFromString('JPY/GBP')));
+        $eurUsd = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $usdGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP')));
+        $jpyGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('JPY/GBP')));
 
         $this->assertEquals('1.50', $eurUsd->getValue());
         $this->assertEquals('1.25', $usdGbp->getValue());

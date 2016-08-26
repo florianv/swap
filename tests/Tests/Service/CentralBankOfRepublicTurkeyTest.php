@@ -25,9 +25,9 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     {
         $provider = new CentralBankOfRepublicTurkey($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertFalse($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
-        $this->assertFalse($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
-        $this->assertFalse($provider->support(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'), new \DateTime())));
+        $this->assertFalse($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
+        $this->assertFalse($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
+        $this->assertFalse($provider->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'), new \DateTime())));
     }
 
     /**
@@ -40,7 +40,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
-        $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY')));
+        $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY')));
     }
 
     /**
@@ -52,7 +52,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $provider = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertSame('3.2083', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-03-15'), $rate->getDate());

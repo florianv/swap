@@ -12,7 +12,7 @@
 namespace Swap\Exception;
 
 /**
- * Exception thrown by a ChainProvider allowing to retrieve exceptions that occured in the chain.
+ * Exception thrown by the Chain Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */

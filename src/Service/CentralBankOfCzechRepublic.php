@@ -17,7 +17,7 @@ use Swap\Exception\UnsupportedCurrencyPairException;
 use Swap\ExchangeRate;
 
 /**
- * Central Bank of Czech Republic (CNB) provider.
+ * Central Bank of Czech Republic (CNB) Service.
  *
  * @author Petr Kramar <petr.kramar@perlur.cz>
  */
@@ -29,7 +29,7 @@ class CentralBankOfCzechRepublic extends Service
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request(self::URL);
@@ -55,7 +55,7 @@ class CentralBankOfCzechRepublic extends Service
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery
         && 'CZK' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();

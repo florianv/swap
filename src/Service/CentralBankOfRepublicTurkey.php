@@ -18,7 +18,7 @@ use Swap\ExchangeRate;
 use Swap\StringUtil;
 
 /**
- * Central Bank of Republic of Turkey (CBRT) provider.
+ * Central Bank of Republic of Turkey (CBRT) Service.
  *
  * @author Uğur Erkan <mail@ugurerkan.com>
  * @author Florian Voutzinos <florian@voutzinos.com>
@@ -30,7 +30,7 @@ class CentralBankOfRepublicTurkey extends Service
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeRateQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery)
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
         $content = $this->request(self::URL);
@@ -50,7 +50,7 @@ class CentralBankOfRepublicTurkey extends Service
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeRateQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeRateQuery)
     {
         return !$exchangeRateQuery instanceof HistoricalExchangeRateQuery
         && 'TRY' === $exchangeRateQuery->getCurrencyPair()->getQuoteCurrency();

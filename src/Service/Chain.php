@@ -56,17 +56,17 @@ class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $exceptions = [];
 
         foreach ($this->services as $service) {
-            if (!$service->support($exchangeQuery)) {
+            if (!$service->supportQuery($exchangeQuery)) {
                 continue;
             }
 
             try {
-                return $service->get($exchangeQuery);
+                return $service->getExchangeRate($exchangeQuery);
             } catch (\Exception $e) {
                 if ($e instanceof InternalException) {
                     throw $e;
@@ -82,10 +82,10 @@ class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         foreach ($this->services as $service) {
-            if ($service->support($exchangeQuery)) {
+            if ($service->supportQuery($exchangeQuery)) {
                 return true;
             }
         }

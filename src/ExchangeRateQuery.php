@@ -21,21 +21,7 @@ use Swap\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
  */
 class ExchangeRateQuery implements ExchangeRateQueryContract
 {
-    /**
-     * The currency pair.
-     *
-     * @var CurrencyPairContract
-     */
     private $currencyPair;
-
-    /**
-     * An array of option.
-     *
-     * - cache_ttl: The cache TTL for the exchange result (overrides global).
-     * - refresh:   Force refreshing the rate entry
-     *
-     * @var array
-     */
     private $options;
 
     /**

@@ -25,8 +25,8 @@ class YahooTest extends ServiceTestCase
     {
         $provider = new Yahoo($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertTrue($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
-        $this->assertFalse($provider->support(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+        $this->assertTrue($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
+        $this->assertFalse($provider->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     /**
@@ -39,7 +39,7 @@ class YahooTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/unsupported.json');
 
         $provider = new Yahoo($this->getHttpAdapterMock($url, $content));
-        $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL')));
+        $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL')));
     }
 
     /**
@@ -51,7 +51,7 @@ class YahooTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/success.json');
 
         $provider = new Yahoo($this->getHttpAdapterMock($url, $content));
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertSame('1.3758', $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-10 07:23:00'), $rate->getDate());
@@ -67,6 +67,6 @@ class YahooTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/YahooFinance/error.json');
 
         $provider = new Yahoo($this->getHttpAdapterMock($url, $content));
-        $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 }

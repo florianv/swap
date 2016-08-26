@@ -17,7 +17,7 @@ use Swap\ExchangeRate;
 use Swap\StringUtil;
 
 /**
- * WebserviceX provider.
+ * WebserviceX Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -28,7 +28,7 @@ class WebserviceX extends Service
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -41,7 +41,7 @@ class WebserviceX extends Service
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }

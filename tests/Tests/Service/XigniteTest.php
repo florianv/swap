@@ -36,8 +36,8 @@ class XigniteTest extends ServiceTestCase
     {
         $provider = new Xignite($this->getMock('Http\Client\HttpClient'), null, ['token' => 'token']);
 
-        $this->assertTrue($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
-        $this->assertTrue($provider->support(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+        $this->assertTrue($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
+        $this->assertTrue($provider->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     /**
@@ -52,7 +52,7 @@ class XigniteTest extends ServiceTestCase
         $caught = false;
 
         try {
-            $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('GBP/AWG')));
+            $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('GBP/AWG')));
         } catch (Exception $e) {
             $caught = true;
             $this->assertEquals('Error message', $e->getMessage());
@@ -70,7 +70,7 @@ class XigniteTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Xignite/success.json');
 
         $provider = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('GBP/AWG')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('GBP/AWG')));
 
         $this->assertEquals('2.982308', $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-11 21:22:00', new \DateTimeZone('UTC')), $rate->getDate());
@@ -86,7 +86,7 @@ class XigniteTest extends ServiceTestCase
 
         $date = \DateTime::createFromFormat('m/d/Y', '08/17/2016', new \DateTimeZone('UTC'));
         $provider = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
-        $rate = $provider->get(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $date));
+        $rate = $provider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $date));
 
         $this->assertEquals('1.130228', $rate->getValue());
         $this->assertEquals($date, $rate->getDate());

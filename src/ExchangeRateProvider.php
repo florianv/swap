@@ -46,12 +46,12 @@ class ExchangeRateProvider implements ExchangeRateProviderContract
             return new ExchangeRate(1);
         }
 
-        if (!$this->service->support($exchangeQuery)) {
+        if (!$this->service->supportQuery($exchangeQuery)) {
             throw new UnsupportedExchangeQueryException($exchangeQuery, $this->service);
         }
 
         if (null === $this->cacheItemPool) {
-            return $this->service->get($exchangeQuery);
+            return $this->service->getExchangeRate($exchangeQuery);
         }
 
         $item = $this->cacheItemPool->getItem($currencyPair->toHash());
@@ -60,7 +60,7 @@ class ExchangeRateProvider implements ExchangeRateProviderContract
             return $item->get();
         }
 
-        $rate = $this->service->get($exchangeQuery);
+        $rate = $this->service->getExchangeRate($exchangeQuery);
 
         $item->set($rate);
         $item->expiresAfter($exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null));

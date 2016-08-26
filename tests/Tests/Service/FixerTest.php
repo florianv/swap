@@ -24,8 +24,8 @@ class FixerTest extends ServiceTestCase
     {
         $provider = new Fixer($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertTrue($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
-        $this->assertTrue($provider->support(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+        $this->assertTrue($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
+        $this->assertTrue($provider->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     /**
@@ -38,7 +38,7 @@ class FixerTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Fixer/error.json');
 
         $provider = new Fixer($this->getHttpAdapterMock($uri, $content));
-        $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
     /**
@@ -50,7 +50,7 @@ class FixerTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/Fixer/latest.json');
 
         $provider = new Fixer($this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CHF')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CHF')));
 
         $this->assertEquals('1.0933', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-26'), $rate->getDate());
@@ -66,7 +66,7 @@ class FixerTest extends ServiceTestCase
         $date = new \DateTime('2000-01-03');
 
         $provider = new Fixer($this->getHttpAdapterMock($uri, $content));
-        $rate = $provider->get(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AUD'), $date));
+        $rate = $provider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AUD'), $date));
 
         $this->assertEquals('1.5209', $rate->getValue());
         $this->assertEquals($date, $rate->getDate());

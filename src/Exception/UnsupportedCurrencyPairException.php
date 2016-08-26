@@ -15,7 +15,7 @@ use Swap\Contract\CurrencyPair;
 use Swap\Contract\ExchangeRateService;
 
 /**
- * Exception thrown when a currency pair is not supported by a provider.
+ * Exception thrown when a currency pair is not supported by a service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -48,6 +48,11 @@ class UnsupportedCurrencyPairException extends Exception
         return $this->currencyPair;
     }
 
+    /**
+     * Gets the service.
+     *
+     * @return ExchangeRateService
+     */
     public function getService()
     {
         return $this->service;

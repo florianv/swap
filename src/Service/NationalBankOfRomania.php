@@ -18,7 +18,7 @@ use Swap\ExchangeRate;
 use Swap\StringUtil;
 
 /**
- * National Bank of Romania provider.
+ * National Bank of Romania Service.
  *
  * @author Mihai Zaharie <mihai@zaharie.ro>
  * @author Florian Voutzinos <florian@voutzinos.com>
@@ -30,7 +30,7 @@ class NationalBankOfRomania extends Service
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $content = $this->request(self::URL);
 
@@ -55,7 +55,7 @@ class NationalBankOfRomania extends Service
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery
         && 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();

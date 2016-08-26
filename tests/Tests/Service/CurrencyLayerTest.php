@@ -33,7 +33,7 @@ class CurrencyLayerTest extends ServiceTestCase
     public function it_does_not_support_all_queries()
     {
         $provider = new CurrencyLayer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
-        $this->assertFalse($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
+        $this->assertFalse($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 
     /**
@@ -46,7 +46,7 @@ class CurrencyLayerTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/error.json');
 
         $provider = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
-        $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
     /**
@@ -60,7 +60,7 @@ class CurrencyLayerTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/success.json');
 
         $provider = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertEquals('0.726804', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
@@ -77,7 +77,7 @@ class CurrencyLayerTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Provider/CurrencyLayer/success.json');
 
         $provider = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertEquals('0.726804', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
@@ -95,7 +95,7 @@ class CurrencyLayerTest extends ServiceTestCase
         $expectedDate->setTimestamp(1430870399);
 
         $provider = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
-        $rate = $provider->get(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), $date));
+        $rate = $provider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), $date));
 
         $this->assertEquals('3.673069', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
@@ -113,7 +113,7 @@ class CurrencyLayerTest extends ServiceTestCase
         $expectedDate->setTimestamp(1430870399);
 
         $provider = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
-        $rate = $provider->get(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), $date));
+        $rate = $provider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), $date));
 
         $this->assertEquals('3.673069', $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());

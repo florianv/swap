@@ -19,7 +19,7 @@ use Swap\Contract\ExchangeRateService;
 use Swap\Service\Traits\GetName;
 
 /**
- * Base class for providers.
+ * Base class for services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */

@@ -58,9 +58,9 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     {
         $provider = new CentralBankOfCzechRepublic($this->getMock('Http\Client\HttpClient'));
 
-        $this->assertFalse($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('CZK/EUR'))));
-        $this->assertFalse($provider->support(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'))));
-        $this->assertFalse($provider->support(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'), new \DateTime())));
+        $this->assertFalse($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('CZK/EUR'))));
+        $this->assertFalse($provider->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'))));
+        $this->assertFalse($provider->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'), new \DateTime())));
     }
 
     /**
@@ -69,7 +69,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     public function itFetchesAEurRate()
     {
         $provider = $this->createProvider();
-        $rate = $provider->get(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CZK')));
+        $rate = $provider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CZK')));
 
         $this->assertSame('27.035', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-04-05'), $rate->getDate());
@@ -80,7 +80,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
      */
     public function itFetchesAPhpRate()
     {
-        $rate = $this->createProvider()->get(new ExchangeRateQuery(CurrencyPair::createFromString('PHP/CZK')));
+        $rate = $this->createProvider()->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('PHP/CZK')));
         $this->assertSame('0.51384', $rate->getValue());
     }
 
@@ -89,7 +89,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
      */
     public function itFetchesAIdrRate()
     {
-        $rate = $this->createProvider()->get(new ExchangeRateQuery(CurrencyPair::createFromString('IDR/CZK')));
+        $rate = $this->createProvider()->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('IDR/CZK')));
         $this->assertSame('0.001798', $rate->getValue());
     }
 

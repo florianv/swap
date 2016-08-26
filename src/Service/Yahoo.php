@@ -19,7 +19,7 @@ use Swap\ExchangeRate;
 use Swap\StringUtil;
 
 /**
- * YahooFinance provider.
+ * Yahoo Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -30,7 +30,7 @@ class Yahoo extends Service
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -61,7 +61,7 @@ class Yahoo extends Service
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }

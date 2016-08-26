@@ -18,7 +18,7 @@ use Swap\ExchangeRate;
 use Swap\StringUtil;
 
 /**
- * Xignite provider.
+ * Xignite Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -40,7 +40,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatest(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -70,7 +70,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistorical(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $symbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
@@ -100,7 +100,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return true;
     }

@@ -12,29 +12,20 @@
 namespace Swap\Contract;
 
 /**
- * Contract for exchange rate service providers.
+ * Contract for exchange rate services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-interface ExchangeRateService
+interface ExchangeRateService extends ExchangeRateProvider
 {
     /**
-     * Gets the exchange rate for the query.
-     *
-     * @param ExchangeRateQuery $exchangeQuery
-     *
-     * @return ExchangeRate
-     */
-    public function get(ExchangeRateQuery $exchangeQuery);
-
-    /**
-     * Tells if it supports the exchange query.
+     * Tells the service supports the exchange rate query.
      *
      * @param ExchangeRateQuery $exchangeQuery
      *
      * @return bool
      */
-    public function support(ExchangeRateQuery $exchangeQuery);
+    public function supportQuery(ExchangeRateQuery $exchangeQuery);
 
     /**
      * Gets the unique service name.

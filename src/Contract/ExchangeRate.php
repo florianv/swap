@@ -3,7 +3,7 @@
 namespace Swap\Contract;
 
 /**
- * Represents a rate.
+ * Represents an exchange rate.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */

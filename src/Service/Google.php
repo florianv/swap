@@ -17,7 +17,7 @@ use Swap\Exception\Exception;
 use Swap\ExchangeRate;
 
 /**
- * Google Finance provider.
+ * Google Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -28,7 +28,7 @@ class Google extends Service
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
@@ -66,7 +66,7 @@ class Google extends Service
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }

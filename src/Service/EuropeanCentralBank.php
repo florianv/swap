@@ -19,7 +19,7 @@ use Swap\ExchangeRate;
 use Swap\StringUtil;
 
 /**
- * European Central Bank provider.
+ * European Central Bank Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -31,7 +31,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatest(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $content = $this->request(self::DAILY_URL);
 
@@ -53,7 +53,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistorical(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
     {
         $content = $this->request(self::HISTORICAL_URL);
 
@@ -79,7 +79,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }

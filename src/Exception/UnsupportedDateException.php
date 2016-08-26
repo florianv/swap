@@ -14,7 +14,7 @@ namespace Swap\Exception;
 use Swap\Contract\ExchangeRateService;
 
 /**
- * Exception thrown when a date is not supported by a provider.
+ * Exception thrown when a date is not supported by a service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -36,11 +36,21 @@ class UnsupportedDateException extends Exception
         $this->service = $service;
     }
 
+    /**
+     * Gets the date.
+     *
+     * @return \DateTimeInterface
+     */
     public function getDate()
     {
         return $this->date;
     }
 
+    /**
+     * Gets the service.
+     *
+     * @return ExchangeRateService
+     */
     public function getService()
     {
         return $this->service;

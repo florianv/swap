@@ -12,7 +12,7 @@
 namespace Swap\Exception;
 
 /**
- * For internal exceptions only that are not caught by the ChainProvider.
+ * For internal exceptions only that are not caught by the Chain Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */

@@ -19,7 +19,7 @@ use Swap\ExchangeRate;
 use Swap\StringUtil;
 
 /**
- * Currency Layer provider.
+ * Currency Layer Service.
  *
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  * @author Florian Voutzinos <florian@voutzinos.com>
@@ -48,7 +48,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatest(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -73,7 +73,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistorical(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
     {
         if ($this->options['enterprise']) {
             $url = sprintf(
@@ -96,7 +96,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }

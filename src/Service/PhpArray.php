@@ -19,7 +19,7 @@ use Swap\ExchangeRate;
 use Swap\Service\Traits\GetName;
 
 /**
- * Provides rates from an array.
+ * Service that retrieves rates from an array.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -47,7 +47,7 @@ final class PhpArray implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function get(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $rate = $this->rates[$currencyPair->__toString()];
@@ -67,7 +67,7 @@ final class PhpArray implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function support(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
