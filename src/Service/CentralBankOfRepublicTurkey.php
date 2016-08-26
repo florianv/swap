@@ -20,9 +20,8 @@ use Swap\StringUtil;
 /**
  * Central Bank of Republic of Turkey (CBRT) provider.
  *
- * @link http://tcmb.gov.tr
- *
  * @author Uğur Erkan <mail@ugurerkan.com>
+ * @author Florian Voutzinos <florian@voutzinos.com>
  */
 class CentralBankOfRepublicTurkey extends Service
 {

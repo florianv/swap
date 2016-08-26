@@ -21,6 +21,7 @@ use Swap\StringUtil;
  * National Bank of Romania provider.
  *
  * @author Mihai Zaharie <mihai@zaharie.ro>
+ * @author Florian Voutzinos <florian@voutzinos.com>
  */
 class NationalBankOfRomania extends Service
 {

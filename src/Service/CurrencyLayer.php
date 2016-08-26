@@ -22,6 +22,7 @@ use Swap\StringUtil;
  * Currency Layer provider.
  *
  * @author Pascal Hofmann <mail@pascalhofmann.de>
+ * @author Florian Voutzinos <florian@voutzinos.com>
  */
 class CurrencyLayer extends HistoricalService
 {
