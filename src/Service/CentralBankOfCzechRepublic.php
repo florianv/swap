@@ -49,7 +49,7 @@ class CentralBankOfCzechRepublic extends Service
             }
         }
 
-        throw new UnsupportedCurrencyPairException($currencyPair);
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
     /**

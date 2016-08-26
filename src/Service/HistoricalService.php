@@ -38,7 +38,7 @@ abstract class HistoricalService extends Service
             return $rate;
         }
 
-        throw new UnsupportedCurrencyPairException($currencyPair);
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
     /**

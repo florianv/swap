@@ -31,10 +31,8 @@ class ExchangeRateQuery implements ExchangeRateQueryContract
     /**
      * An array of option.
      *
-     * - cache_ttl:     The cache TTL for the exchange result (overrides global).
-     * - cache_disabled Disable the cache for this query
-     * - refresh:       Whether to refresh the Exchange Result even if not expired in cache.
-     *                  This will also clear the runtime cache that comes with some providers.
+     * - cache_ttl: The cache TTL for the exchange result (overrides global).
+     * - refresh:   Force refreshing the rate entry
      *
      * @var array
      */

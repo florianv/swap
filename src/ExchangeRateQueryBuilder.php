@@ -64,44 +64,6 @@ final class ExchangeRateQueryBuilder
     }
 
     /**
-     * Sets the cache ttl.
-     *
-     * @return $this
-     */
-    public function disableCache()
-    {
-        $this->options['cache_disabled'] = true;
-
-        return $this;
-    }
-
-    /**
-     * Sets the cache ttl.
-     *
-     * @param string $ttl
-     *
-     * @return $this
-     */
-    public function setCacheTtl($ttl)
-    {
-        $this->options['cache_ttl'] = $ttl;
-
-        return $this;
-    }
-
-    /**
-     * Forces the result to be "fresh" (not cached).
-     *
-     * @return $this
-     */
-    public function mustBeFresh()
-    {
-        $this->options['refresh'] = true;
-
-        return $this;
-    }
-
-    /**
      * Adds an option.
      *
      * @param string $name

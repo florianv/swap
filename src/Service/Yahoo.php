@@ -49,7 +49,7 @@ class Yahoo extends Service
         $data = $json['query']['results']['rate'];
 
         if ('0.00' === $data['Rate'] || 'N/A' === $data['Date']) {
-            throw new UnsupportedCurrencyPairException($currencyPair);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
         $dateString = $data['Date'].' '.$data['Time'];

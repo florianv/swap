@@ -26,25 +26,6 @@ class ChainTest extends \PHPUnit_Framework_TestCase
      */
     public function it_does_not_support_all_queries()
     {
-        // Not supported
-        $providerOne = $this->getMock('Swap\Contract\ExchangeRateService');
-
-        $providerOne
-            ->expects($this->once())
-            ->method('support')
-            ->will($this->returnValue(true));
-
-        $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
-
-        $providerTwo
-            ->expects($this->once())
-            ->method('support')
-            ->will($this->returnValue(false));
-
-        $chain = new Chain([$providerOne, $providerTwo]);
-
-        $this->assertFalse($chain->support(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
-
         // Supported
         $providerOne = $this->getMock('Swap\Contract\ExchangeRateService');
 
@@ -56,13 +37,32 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
 
         $providerTwo
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('support')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue(false));
 
         $chain = new Chain([$providerOne, $providerTwo]);
 
         $this->assertTrue($chain->support(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
+
+        // Not Supported
+        $providerOne = $this->getMock('Swap\Contract\ExchangeRateService');
+
+        $providerOne
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(false));
+
+        $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
+
+        $providerTwo
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(false));
+
+        $chain = new Chain([$providerOne, $providerTwo]);
+
+        $this->assertFalse($chain->support(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
     }
 
     /**
@@ -77,6 +77,11 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerOne
             ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
+
+        $providerOne
+            ->expects($this->once())
             ->method('get')
             ->with($pair)
             ->will($this->throwException(new Exception()));
@@ -85,11 +90,21 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $providerTwo
             ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
+
+        $providerTwo
+            ->expects($this->once())
             ->method('get')
             ->with($pair)
             ->will($this->returnValue($rate));
 
         $providerThree = $this->getMock('Swap\Contract\ExchangeRateService');
+
+        $providerThree
+            ->expects($this->never())
+            ->method('support')
+            ->will($this->returnValue(true));
 
         $providerThree
             ->expects($this->never())
@@ -114,12 +129,22 @@ class ChainTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->throwException($exception));
 
+        $providerOne
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
+
         $providerTwo = $this->getMock('Swap\Contract\ExchangeRateService');
 
         $providerTwo
             ->expects($this->once())
             ->method('get')
             ->will($this->throwException($exception));
+
+        $providerTwo
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
 
         $chain = new Chain([$providerOne, $providerTwo]);
         $caught = false;
@@ -143,6 +168,12 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $internalException = new InternalException();
 
         $providerOne = $this->getMock('Swap\Contract\ExchangeRateService');
+
+        $providerOne
+            ->expects($this->once())
+            ->method('support')
+            ->will($this->returnValue(true));
+
         $providerOne
             ->expects($this->once())
             ->method('get')

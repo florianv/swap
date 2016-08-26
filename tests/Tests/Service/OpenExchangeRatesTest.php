@@ -146,7 +146,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     /**
      * @test
      * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "USD/XXL" is not supported by the provider.
+     * @expectedExceptionMessage The currency pair "USD/XXL" is not supported by the service "Swap\Service\OpenExchangeRates".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {

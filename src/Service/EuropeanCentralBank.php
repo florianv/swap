@@ -42,7 +42,7 @@ class EuropeanCentralBank extends HistoricalService
         $elements = $element->xpath('//xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
 
         if (empty($elements)) {
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair());
+            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
         $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
@@ -70,7 +70,7 @@ class EuropeanCentralBank extends HistoricalService
                 throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
             }
 
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair());
+            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
         return new ExchangeRate((string) $elements[0]['rate'], $exchangeQuery->getDate());

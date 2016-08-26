@@ -21,7 +21,6 @@ class ExchangeRateProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \Swap\Exception\UnsupportedExchangeQueryException
-     * @expectedExceptionMessage The exchange query "EUR/USD" is not supported by the provider.
      */
     public function it_throws_an_exception_when_provider_does_not_support_query()
     {
@@ -256,30 +255,6 @@ class ExchangeRateProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getItem')
             ->with($pair->toHash())
             ->will($this->returnValue($item));
-
-        $swap = new ExchangeRateProvider($provider, $pool);
-        $swap->getExchangeRate($ExchangeRateQuery);
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_use_cache_if_disabled()
-    {
-        $ExchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_disabled' => true]);
-
-        $provider = $this->getMock('Swap\Contract\ExchangeRateService');
-
-        $provider
-            ->expects($this->any())
-            ->method('support')
-            ->will($this->returnValue(true));
-
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->never())
-            ->method('getItem');
 
         $swap = new ExchangeRateProvider($provider, $pool);
         $swap->getExchangeRate($ExchangeRateQuery);

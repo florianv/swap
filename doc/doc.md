@@ -59,7 +59,7 @@ To retrieve the latest exchange rate for a currency pair, you need to use the `q
 
 ```php
 // Latest rate
-$rate = $swap->quote('EUR/USD');
+$rate = $swap->latest('EUR/USD');
 
 // 1.129
 echo $rate->getValue();
@@ -68,7 +68,7 @@ echo $rate->getValue();
 echo $rate->getDate()->format('Y-m-d');
 
 // Historical rate
-$rate = $swap->quote('EUR/USD', (new DateTime())->modify('-15 days'));
+$rate = $swap->historical('EUR/USD', (new DateTime())->modify('-15 days'));
 ```
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
@@ -86,3 +86,13 @@ $swap = Swap::create(new ApcuCachePool(), ['cache_ttl' => '3600']);
 ```
 
 All rates will now be cached in Apcu during 3600 seconds.
+
+You can also control the cache per currency query:
+
+```php
+// Overrides the cache ttl for this query
+$rate = $swap->latest('EUR/USD', ['cache_ttl' => 60]);
+
+// Gets a refreshed rate
+$rate = $swap->latest('EUR/USD', ['refresh' => true]);
+```

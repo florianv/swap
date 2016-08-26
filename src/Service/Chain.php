@@ -90,6 +90,6 @@ class Chain implements ExchangeRateService
             }
         }
 
-        return true;
+        return false;
     }
 }

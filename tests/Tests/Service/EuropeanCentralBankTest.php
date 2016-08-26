@@ -31,7 +31,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     /**
      * @test
      * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "EUR/XXL" is not supported by the provider.
+     * @expectedExceptionMessage The currency pair "EUR/XXL" is not supported by the service "Swap\Service\EuropeanCentralBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
@@ -77,7 +77,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     /**
      * @test
      * @expectedException \Swap\Exception\UnsupportedDateException
-     * @expectedExceptionMessage The date "2015-08-23" is not supported by the provider.
+     * @expectedExceptionMessage The date "2015-08-23" is not supported by the service "Swap\Service\EuropeanCentralBank".
      */
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
@@ -91,7 +91,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     /**
      * @test
      * @expectedException \Swap\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "EUR/XXL" is not supported by the provider.
+     * @expectedExceptionMessage The currency pair "EUR/XXL" is not supported by the service "Swap\Service\EuropeanCentralBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {

@@ -95,4 +95,31 @@ class Swap
 
         return $this->exchangeRateProvider->getExchangeRate($query);
     }
+
+    /**
+     * Quotes a currency pair.
+     *
+     * @param string $currencyPair The currency pair like "EUR/USD"
+     * @param array  $options      An array of query options
+     *
+     * @return ExchangeRate
+     */
+    public function latest($currencyPair, array $options = [])
+    {
+        return $this->quote($currencyPair, null, $options);
+    }
+
+    /**
+     * Quotes a currency pair.
+     *
+     * @param string             $currencyPair The currency pair like "EUR/USD"
+     * @param \DateTimeInterface $date         An optional date for historical rates
+     * @param array              $options      An array of query options
+     *
+     * @return ExchangeRate
+     */
+    public function historical($currencyPair, \DateTimeInterface $date, array $options = [])
+    {
+        return $this->quote($currencyPair, $date, $options);
+    }
 }

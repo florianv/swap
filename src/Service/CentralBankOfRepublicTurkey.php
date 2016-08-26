@@ -44,7 +44,7 @@ class CentralBankOfRepublicTurkey extends Service
             return new ExchangeRate((string) $elements[0], $date);
         }
 
-        throw new UnsupportedCurrencyPairException($currencyPair);
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
     /**

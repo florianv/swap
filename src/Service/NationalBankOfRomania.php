@@ -42,7 +42,7 @@ class NationalBankOfRomania extends Service
         $elements = $element->xpath('//xmlns:Rate[@currency="'.$currencyPair->getQuoteCurrency().'"]');
 
         if (empty($elements)) {
-            throw new UnsupportedCurrencyPairException($currencyPair);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
         $element = $elements[0];
