@@ -10,6 +10,11 @@
 
 namespace Swap\Service;
 
+use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\RequestFactory;
+
 /**
  * Helps building services.
  *
@@ -18,6 +23,51 @@ namespace Swap\Service;
 class ServiceFactory
 {
     /**
+     * The client.
+     *
+     * @var HttpClient
+     */
+    private $httpClient;
+
+    /**
+     * The request factory.
+     *
+     * @var RequestFactory
+     */
+    private $requestFactory;
+
+    /**
+     * @param HttpClient|null     $httpClient
+     * @param RequestFactory|null $requestFactory
+     * @param array               $options
+     */
+    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, array $options = [])
+    {
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+    }
+
+    /**
+     * Sets the http client.
+     *
+     * @param HttpClient $httpClient
+     */
+    public function setHttpClient(HttpClient $httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    /**
+     * Sets the request factory.
+     *
+     * @param RequestFactory $requestFactory
+     */
+    public function setRequestFactory(RequestFactory $requestFactory)
+    {
+        $this->requestFactory = $requestFactory;
+    }
+
+    /**
      * Creates a new service.
      *
      * @param string $serviceName
@@ -25,7 +75,7 @@ class ServiceFactory
      *
      * @return \Swap\Contract\ExchangeRateService
      */
-    public static function createService($serviceName, array $args = [])
+    public function createService($serviceName, array $args = [])
     {
         $services = self::getServices();
 
@@ -36,7 +86,7 @@ class ServiceFactory
         $class = $services[$serviceName];
 
         if (is_subclass_of($class, Service::class)) {
-            return new $class(null, null, $args);
+            return new $class($this->httpClient, $this->requestFactory, $args);
         }
 
         $r = new \ReflectionClass($class);

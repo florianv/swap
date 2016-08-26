@@ -11,6 +11,8 @@
 
 namespace Swap;
 
+use Http\Client\HttpClient;
+use Http\Message\RequestFactory;
 use Psr\Cache\CacheItemPoolInterface;
 use Swap\Service\Chain;
 use Swap\Service\ServiceFactory;
@@ -23,23 +25,27 @@ use Swap\Service\ServiceFactory;
  */
 class Swap
 {
-    /**
-     * The service.
-     *
-     * @var Chain
-     */
+    private $httpClient;
+    private $requestFactory;
     private $service;
+    private $exchangeRateProvider;
+    private $serviceFactory;
 
     /**
-     * Creates a new Swaap.
+     * Creates a new Swap.
      *
+     * @param HttpClient             $httpClient
+     * @param RequestFactory         $requestFactory
      * @param CacheItemPoolInterface $cacheItemPool
      * @param array                  $options
      */
-    private function __construct(CacheItemPoolInterface $cacheItemPool = null, array $options = [])
+    private function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
     {
+        $this->httpClient = $httpClient;
+        $this->requestFactory = $requestFactory;
         $this->service = new Chain([]);
         $this->exchangeRateProvider = new ExchangeRateProvider($this->service, $cacheItemPool, $options);
+        $this->serviceFactory = new ServiceFactory($httpClient, $requestFactory, $options);
     }
 
     /**
@@ -52,7 +58,22 @@ class Swap
      */
     public static function create(CacheItemPoolInterface $cacheItemPool = null, array $options = [])
     {
-        return new static($cacheItemPool, $options);
+        return new static(null, null, $cacheItemPool, $options);
+    }
+
+    /**
+     * Factory method using a custom client.
+     *
+     * @param HttpClient             $httpClient
+     * @param RequestFactory         $requestFactory
+     * @param CacheItemPoolInterface $cacheItemPool
+     * @param array                  $options
+     *
+     * @return Swap
+     */
+    public function createWithClient(HttpClient $httpClient, RequestFactory $requestFactory = null, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
+    {
+        return new static($httpClient, $requestFactory, $cacheItemPool, $options);
     }
 
     /**
@@ -65,7 +86,7 @@ class Swap
      */
     public function with($serviceName, array $options = [])
     {
-        $this->service->addService(ServiceFactory::createService($serviceName, $options));
+        $this->service->addService($this->serviceFactory->createService($serviceName, $options));
 
         return $this;
     }

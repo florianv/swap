@@ -48,10 +48,7 @@ $swap = Swap::create()
 
 ### Quoting
 
-Swap allows you to get the latest exchange rates but historical ones as well. Please check this list to see currencies supported
-by your service and if it offers historical rates.
-
-To retrieve the latest exchange rate for a currency pair, you need to use the `quote()` method.
+Swap allows you to get the latest exchange rates and historical ones:
 
 ```php
 // Latest rate
@@ -121,11 +118,10 @@ use Swap\Swap;
 $pool = new ArrayCachePool();
 $streamFactory = new GuzzleStreamFactory();
 $cachePlugin = new CachePlugin($pool, $streamFactory);
-$httpAdapter = new PluginClient(new GuzzleClient(), [$cachePlugin]);
+$client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
-$yahooProvider = new EuropeanCentralBankProvider($httpAdapter);
-
-$swap = new Swap($yahooProvider);
+$swap = Swap::createWithClient($client)
+    ->with('fixer');
 
 // A http request is sent
 $rate = $swap->quote('EUR/USD');
