@@ -16,7 +16,7 @@ use Swap\ExchangeRateQuery;
 use Swap\CurrencyPair;
 use Swap\ExchangeRateProvider;
 
-class SwapTest extends \PHPUnit_Framework_TestCase
+class ExchangeRateProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

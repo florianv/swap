@@ -64,7 +64,7 @@ class ServiceFactory
             'array' => PhpArray::class,
             'webservicex' => WebserviceX::class,
             'xignite' => Xignite::class,
-            'yahoo' => Yahoo::class
+            'yahoo' => Yahoo::class,
         ];
     }
 }
