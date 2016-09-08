@@ -22,4 +22,4 @@ before_script:
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
-  - bin/phpunit --coverage-text
+  - composer test
