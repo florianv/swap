@@ -11,174 +11,40 @@
 
 namespace Swap\Tests;
 
-use Swap\Model\CurrencyPair;
-use Swap\Model\Rate;
+use Exchanger\Contract\ExchangeRateQuery;
+use Exchanger\Contract\ExchangeRateProvider;
+use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Swap\Swap;
 
 class SwapTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function it_quotes_a_pair()
+    public function testLatest()
     {
-        $provider = $this->getMock('Swap\ProviderInterface');
-        $rate = new Rate('1', new \DateTime());
+        $exchangeRateProvider = $this->getMock(ExchangeRateProvider::class);
 
-        $provider
+        $exchangeRateProvider
             ->expects($this->once())
-            ->method('fetchRate')
-            ->will($this->returnValue($rate));
+            ->method('getExchangeRate')
+            ->with($this->callback(function ($exchangeRateQuery) {
+                return $exchangeRateQuery instanceof ExchangeRateQuery;
+            }));
 
-        $swap = new Swap($provider);
-
-        $this->assertSame($rate, $swap->quote('EUR/USD'));
+        $swap = new Swap($exchangeRateProvider);
+        $swap->latest('EUR/USD');
     }
 
-    /**
-     * @test
-     */
-    public function it_quotes_an_identical_pair()
+    public function testHistorical()
     {
-        $provider = $this->getMock('Swap\ProviderInterface');
-        $pair = new CurrencyPair('EUR', 'EUR');
+        $exchangeRateProvider = $this->getMock(ExchangeRateProvider::class);
 
-        $swap = new Swap($provider);
-        $rate = $swap->quote($pair);
-
-        $this->assertSame('1', $rate->getValue());
-        $this->assertInstanceOf('\DateTime', $rate->getDate());
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_cache_identical_pairs()
-    {
-        $pair = new CurrencyPair('EUR', 'EUR');
-        $provider = $this->getMock('Swap\ProviderInterface');
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->never())
-            ->method('getItem');
-
-        $swap = new Swap($provider, $pool);
-        $rate1 = $swap->quote($pair);
-        $rate2 = $swap->quote($pair);
-
-        $this->assertNotSame($rate1, $rate2, 'Identical pairs are not cached');
-    }
-
-    /**
-     * @test
-     */
-    public function it_returns_null_if_rate_absent_in_cache()
-    {
-        $pair = new CurrencyPair('EUR', 'USD');
-
-        $provider = $this->getMock('Swap\ProviderInterface');
-
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
-
-        $item
+        $exchangeRateProvider
             ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(false));
+            ->method('getExchangeRate')
+            ->with($this->callback(function ($exchangeRateQuery) {
+                return $exchangeRateQuery instanceof HistoricalExchangeRateQuery;
+            }));
 
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->with($pair->toHash())
-            ->will($this->returnValue($item));
-
-        $swap = new Swap($provider, $pool);
-        $this->assertNull($swap->quote($pair));
-    }
-
-    /**
-     * @test
-     */
-    public function it_fetches_a_rate_from_cache()
-    {
-        $pair = new CurrencyPair('EUR', 'USD');
-        $rate = new Rate('1', new \DateTime());
-
-        $provider = $this->getMock('Swap\ProviderInterface');
-
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
-
-        $item
-            ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(true));
-
-        $item
-            ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($rate));
-
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->with($pair->toHash())
-            ->will($this->returnValue($item));
-
-        $swap = new Swap($provider, $pool);
-        $this->assertSame($rate, $swap->quote($pair));
-    }
-
-    /**
-     * @test
-     */
-    public function it_caches_a_rate()
-    {
-        $pair = new CurrencyPair('EUR', 'USD');
-        $rate = new Rate('1', new \DateTime());
-        $ttl = 3600;
-
-        $provider = $this->getMock('Swap\ProviderInterface');
-
-        $provider
-            ->expects($this->once())
-            ->method('fetchRate')
-            ->will($this->returnValue($rate));
-
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
-
-        $item
-            ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(false));
-
-        $item
-            ->expects($this->once())
-            ->method('set')
-            ->with($rate);
-
-        $item
-            ->expects($this->once())
-            ->method('expiresAfter')
-            ->with($ttl);
-
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->with($pair->toHash())
-            ->will($this->returnValue($item));
-
-        $pool
-            ->expects($this->once())
-            ->method('save')
-            ->with($item);
-
-        $swap = new Swap($provider, $pool, $ttl);
-        $swap->quote($pair);
+        $swap = new Swap($exchangeRateProvider);
+        $swap->historical('EUR/USD', new \DateTime());
     }
 }

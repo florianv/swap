@@ -11,62 +11,83 @@
 
 namespace Swap;
 
-use Psr\Cache\CacheItemPoolInterface;
-use Swap\Model\CurrencyPair;
-use Swap\Model\Rate;
+use Exchanger\Contract\ExchangeRateProvider;
+use Exchanger\ExchangeRateQueryBuilder;
 
 /**
- * An implementation of Swap.
+ * Swap is an easy to use facade to retrieve exchange rates from various services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Swap implements SwapInterface
+class Swap
 {
-    private $provider;
-    private $cacheItemPool;
-    private $cacheTtl;
+    /**
+     * The exchange rate provider.
+     *
+     * @var ExchangeRateProvider
+     */
+    private $exchangeRateProvider;
 
-    public function __construct(ProviderInterface $provider, CacheItemPoolInterface $cacheItemPool = null, $cacheTtl = 0)
+    /**
+     * Creates a new Swap.
+     *
+     * @param ExchangeRateProvider $exchangeRateProvider
+     */
+    public function __construct(ExchangeRateProvider $exchangeRateProvider)
     {
-        $this->provider = $provider;
-        $this->cacheItemPool = $cacheItemPool;
-        $this->cacheTtl = $cacheTtl;
+        $this->exchangeRateProvider = $exchangeRateProvider;
     }
 
     /**
-     * {@inheritdoc}
+     * Quotes a currency pair.
+     *
+     * @param string $currencyPair The currency pair like "EUR/USD"
+     * @param array  $options      An array of query options
+     *
+     * @return \Exchanger\ExchangeRate
      */
-    public function quote($currencyPair)
+    public function latest($currencyPair, array $options = [])
     {
-        if (is_string($currencyPair)) {
-            $currencyPair = CurrencyPair::createFromString($currencyPair);
-        } elseif (!$currencyPair instanceof CurrencyPair) {
-            throw new \InvalidArgumentException(
-                'The currency pair must be either a string or an instance of CurrencyPair'
-            );
+        return $this->quote($currencyPair, null, $options);
+    }
+
+    /**
+     * Quotes a currency pair.
+     *
+     * @param string             $currencyPair The currency pair like "EUR/USD"
+     * @param \DateTimeInterface $date         An optional date for historical rates
+     * @param array              $options      An array of query options
+     *
+     * @return \Exchanger\ExchangeRate
+     */
+    public function historical($currencyPair, \DateTimeInterface $date, array $options = [])
+    {
+        return $this->quote($currencyPair, $date, $options);
+    }
+
+    /**
+     * Quotes a currency pair.
+     *
+     * @param string             $currencyPair The currency pair like "EUR/USD"
+     * @param \DateTimeInterface $date         An optional date for historical rates
+     * @param array              $options      An array of query options
+     *
+     * @return \Exchanger\ExchangeRate
+     */
+    private function quote($currencyPair, \DateTimeInterface $date = null, array $options = [])
+    {
+        $exchangeQueryBuilder = new ExchangeRateQueryBuilder($currencyPair);
+
+        if (null !== $date) {
+            $exchangeQueryBuilder->setDate($date);
         }
 
-        if ($currencyPair->isIdentical()) {
-            return new Rate(1);
+        foreach ($options as $name => $value) {
+            $exchangeQueryBuilder->addOption($name, $value);
         }
 
-        if (null === $this->cacheItemPool) {
-            return $this->provider->fetchRate($currencyPair);
-        }
+        $query = $exchangeQueryBuilder->build();
 
-        $item = $this->cacheItemPool->getItem($currencyPair->toHash());
-
-        if ($item->isHit()) {
-            return $item->get();
-        }
-
-        $rate = $this->provider->fetchRate($currencyPair);
-
-        $item->set($rate);
-        $item->expiresAfter($this->cacheTtl);
-
-        $this->cacheItemPool->save($item);
-
-        return $rate;
+        return $this->exchangeRateProvider->getExchangeRate($query);
     }
 }
