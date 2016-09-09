@@ -61,6 +61,16 @@ class Builder
     private $cacheItemPool;
 
     /**
+     * Constructor.
+     *
+     * @param array $options
+     */
+    public function __construct(array $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
      * Adds a service.
      *
      * @param string $serviceName

@@ -12,13 +12,29 @@ composer require florianv/swap php-http/message php-http/guzzle6-adapter
 
 ## Configuration
 
-In order to start working with `Swap`, you need to configure which service(s) you want to use.
-Here is the complete list of supported services:
+Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
+
+Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to Yahoo in case of failure. We would write the following:
 
 ```php
-use Swap\Swap;
+use Swap\Builder;
 
-$swap = Swap::create()
+$swap = (new Builder())
+    ->with('fixer')
+    ->with('yahoo')
+    ->build();
+```
+
+As you can see, you can use the `with()` method to add a service.
+
+You can add as many services as you want, they will be called in a chain, in case of failure.
+
+Here is the complete list of supported services and their possible configurations:
+
+```php
+use Swap\Builder;
+
+$swap = (new Builder())
     ->with('central_bank_of_czech_republic')
     ->with('central_bank_of_republic_turkey')
     ->with('currencylayer', ['access_key' => 'secret', 'enterprise' => false])
@@ -31,11 +47,8 @@ $swap = Swap::create()
     ->with('webservicex')
     ->with('xignite', ['token' => 'token'])
     ->with('yahoo');
+    ->build();
 ```
-
-As you can see, you can use the `with()` method to add a service to `Swap`.
-
-You can add as many services as you want, they will be called in a chain, in case of failure.
 
 ## Usage
 
@@ -63,22 +76,28 @@ $rate = $swap->historical('EUR/USD', (new DateTime())->modify('-15 days'));
 
 `Swap` provides a [PSR-6 Caching Interface](http://www.php-fig.org/psr/psr-6) integration allowing you to cache rates during a given time using the adapter of your choice.
 
-The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/apcu-adapter`.
+The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation.
+ 
+```bash
+ $ composer require cache/apcu-adapter
+ ```
 
 ```php
 use Cache\Adapter\Apcu\ApcuCachePool;
 
-$swap = Swap::create(new ApcuCachePool(), ['cache_ttl' => '3600']);
+$swap = (new Builder(['cache_ttl' => 60]))
+    ->withCacheItemPool(new ApcuCachePool())
+    ->build();
 ```
 
-All rates will now be cached in Apcu during 3600 seconds.
+All rates will now be cached in Apcu during 60 seconds.
 
-### Query Cache Control
+### Cache options
 
-You can also control the cache per currency query:
+You can override `Swap` caching per request:
 
 ```php
-// Overrides the cache ttl for this query
+// Overrides the global cache ttl to 60 seconds
 $rate = $swap->latest('EUR/USD', ['cache_ttl' => 60]);
 $rate = $swap->historical('EUR/USD', $date, ['cache_ttl' => 60]);
 
@@ -89,13 +108,19 @@ $rate = $swap->historical('EUR/USD', $date, ['refresh' => true]);
 
 ### Requests Caching
 
-By default, Swap queries the provider for each rate you request, but some providers like the `EuropeanCentralBankProvider`
-return the same response no matter the requested currency pair. It means performances can be improved when using these providers
-and when quoting multiple pairs during the same request.
+By default, `Swap` queries the service for each rate you request, but some services like `Fixer` sends a whole file containing
+rates for each base currency. 
+
+It means that if you are requesting multiple rates using the same base currency like `EUR/USD`, then `EUR/GBP`, you may want
+to cache these responses in order to improve performances.
 
 #### Example
 
-Install the PHP HTTP Cache plugin and the PHP Cache Array adapter `composer require php-http/cache-plugin cache/array-adapter`.
+Install the PHP HTTP Cache plugin and the PHP Cache Array adapter.
+
+```bash
+$ composer require php-http/cache-plugin cache/array-adapter
+```
 
 Modify the way you create your HTTP Client by decorating it with a `PluginClient` using the `Array` cache:
 
@@ -105,22 +130,22 @@ use Http\Client\Common\Plugin\CachePlugin;
 use Http\Message\StreamFactory\GuzzleStreamFactory;
 use Http\Adapter\Guzzle6\Client as GuzzleClient;
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Swap\Provider\EuropeanCentralBankProvider;
-use Swap\Swap;
+use Swap\Builder;
 
 $pool = new ArrayCachePool();
 $streamFactory = new GuzzleStreamFactory();
 $cachePlugin = new CachePlugin($pool, $streamFactory);
 $client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
-$swap = Swap::createWithClient($client)
-    ->with('fixer');
+$swap = (new Builder())
+    ->with('fixer')
+    ->build();
 
 // A http request is sent
-$rate = $swap->quote('EUR/USD');
+$rate = $swap->latest('EUR/USD');
 
 // A new request won't be sent
-$rate = $swap->quote('EUR/GBP');
+$rate = $swap->latest('EUR/GBP');
 ```
 
 ### Creating a Service
@@ -133,11 +158,11 @@ otherwise use the `Service` class.
 In the following example, we are creating a `Constant` service that returns a constant rate value.
 
 ```php
-use Exchanger\Swap\ServiceRegistry;
 use Exchanger\Service\Service;
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\Swap\Swap;
 use Exchanger\ExchangeRate;
+use Swap\Service\Registry;
+use Swap\Builder;
 
 class ConstantService extends Service
 {
@@ -185,10 +210,12 @@ class ConstantService extends Service
 }
 
 // Register the service so it's available using Swap::with()
-ServiceRegistry::register('constant', ConstantService::class);
+Registry::register('constant', ConstantService::class);
 
 // Now you can use the with() method with your service name and pass your options
-$swap = Swap::create()->with('constant', ['value' => 10]);
+$swap = (new Builder())
+    ->with('constant', ['value' => 10])
+    ->build();
 
 // 10
 echo $swap->latest('EUR/USD')->getValue();
