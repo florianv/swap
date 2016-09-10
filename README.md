@@ -1,4 +1,4 @@
-<img src="doc/logo.png" width="200px" align="left"/>
+<img src="https://github.com/florianv/swap/blob/master/doc/logo.png" width="200px" align="left"/>
 > Currency exchange rates library for PHP
 
 [![Build status](http://img.shields.io/travis/florianv/swap.svg?style=flat-square)](https://travis-ci.org/florianv/swap)
@@ -6,15 +6,42 @@
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/florianv/swap.svg?style=flat-square)](https://scrutinizer-ci.com/g/florianv/swap)
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 
-Swap allows you to retrieve currency exchange rates from various services such as Fixer or Yahoo and optionally cache the results.
-It is integrated to other libraries such as [`moneyphp/money`](https://github.com/moneyphp/money) and provides
+**Swap** allows you to retrieve currency exchange rates from various services such as [Fixer](http://fixer.io) or [Yahoo](https://finance.yahoo.com/) and optionally cache the results.
+It is integrated to other libraries like [`moneyphp/money`](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
 <br />
 
+## QuickStart
+
+```bash
+$ composer require florianv/swap php-http/message php-http/guzzle6-adapter
+```
+
+```php
+use Swap\Builder;
+
+// Build Swap with Fixer.io
+$swap = (new Builder())
+    ->with('fixer')
+    ->build();
+    
+// Get the latest EUR/USD rate
+$rate = $swap->latest('EUR/USD');
+
+// 1.129
+$rate->getValue();
+
+// 2016-08-26
+$rate->getDate()->format('Y-m-d');
+
+// Get the EUR/USD rate 15 days ago
+$rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
+```
+
 ## Documentation
 
-The documentation can be found [here](https://github.com/florianv/swap/blob/master/doc/doc.md).
+The complete documentation can be found [here](https://github.com/florianv/swap/blob/master/doc/readme.md).
 
 ## Services
 
@@ -24,10 +51,10 @@ Here is the list of the currently implemented services.
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
 | [Fixer](http://fixer.io) | * | * | Yes |
 | [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
-| [Google Finance](http://www.google.com/finance) | * | * | No |
+| [Google](http://www.google.com/finance) | * | * | No |
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
 | [Xignite](https://www.xignite.com) | * | * | Yes |
-| [Yahoo Finance](https://finance.yahoo.com) | * | * | No |
+| [Yahoo](https://finance.yahoo.com) | * | * | No |
 | [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * | No |
 | [National Bank of Romania](http://www.bnr.ro) | RON | * | No |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |

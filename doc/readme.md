@@ -2,9 +2,12 @@
 
 ## Installation
 
-Swap is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) which provides the http layer used to send requests to exchange rate services. This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
+Swap is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) 
+which provides the http layer used to send requests to exchange rate services. 
+This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
 
-Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). Below is an example using Guzzle6:
+Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). 
+Below is an example using [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html):
 
 ```bash
 composer require florianv/swap php-http/message php-http/guzzle6-adapter
@@ -14,7 +17,7 @@ composer require florianv/swap php-http/message php-http/guzzle6-adapter
 
 Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
 
-Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to Yahoo in case of failure. We would write the following:
+Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to [Yahoo](https://finance.yahoo.com) in case of failure. We would write the following:
 
 ```php
 use Swap\Builder;
@@ -25,34 +28,13 @@ $swap = (new Builder())
     ->build();
 ```
 
-As you can see, you can use the `with()` method to add a service.
+As you can see, you can use the `with()` method to add a service. You can add as many as you want, they will be called in a chain, in case of failure.
 
-You can add as many services as you want, they will be called in a chain, in case of failure.
-
-Here is the complete list of supported services and their possible configurations:
-
-```php
-use Swap\Builder;
-
-$swap = (new Builder())
-    ->with('central_bank_of_czech_republic')
-    ->with('central_bank_of_republic_turkey')
-    ->with('currencylayer', ['access_key' => 'secret', 'enterprise' => false])
-    ->with('european_central_bank')
-    ->with('fixer')
-    ->with('google')
-    ->with('national_bank_of_romania')
-    ->with('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
-    ->with('array', [['EUR/USD' => new ExchangeRate('1.5')]])
-    ->with('webservicex')
-    ->with('xignite', ['token' => 'token'])
-    ->with('yahoo');
-    ->build();
-```
+> You can consult the list of the supported services and their options [here](#supported-services)
 
 ## Usage
 
-In order to get rates, you can use the `latest()` or `historical()` methods:
+In order to get rates, you can use the `latest()` or `historical()` methods on `Swap`:
 
 ```php
 // Latest rate
@@ -65,7 +47,7 @@ echo $rate->getValue();
 echo $rate->getDate()->format('Y-m-d');
 
 // Historical rate
-$rate = $swap->historical('EUR/USD', (new DateTime())->modify('-15 days'));
+$rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 ```
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
@@ -92,7 +74,7 @@ $swap = (new Builder(['cache_ttl' => 60]))
 
 All rates will now be cached in Apcu during 60 seconds.
 
-### Cache options
+### Cache Options
 
 You can override `Swap` caching per request:
 
@@ -209,7 +191,7 @@ class ConstantService extends Service
     }
 }
 
-// Register the service so it's available using Swap::with()
+// Register the service so it's available using Builder::with()
 Registry::register('constant', ConstantService::class);
 
 // Now you can use the with() method with your service name and pass your options
@@ -219,4 +201,27 @@ $swap = (new Builder())
 
 // 10
 echo $swap->latest('EUR/USD')->getValue();
+```
+
+## Supported Services
+
+Here is the complete list of supported services and their possible configurations:
+
+```php
+use Swap\Builder;
+
+$swap = (new Builder())
+    ->with('central_bank_of_czech_republic')
+    ->with('central_bank_of_republic_turkey')
+    ->with('currencylayer', ['access_key' => 'secret', 'enterprise' => false])
+    ->with('european_central_bank')
+    ->with('fixer')
+    ->with('google')
+    ->with('national_bank_of_romania')
+    ->with('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
+    ->with('array', [['EUR/USD' => new ExchangeRate('1.5')]])
+    ->with('webservicex')
+    ->with('xignite', ['token' => 'token'])
+    ->with('yahoo');
+    ->build();
 ```
