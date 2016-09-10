@@ -5,7 +5,7 @@
     <title>Swap by florianv</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -19,168 +19,145 @@
     </section>
 
     <section class="main-content">
-      <h1>
-<a id="swap----" class="anchor" href="#swap----" aria-hidden="true"><span class="octicon octicon-link"></span></a>Swap <a href="https://travis-ci.org/florianv/swap"><img src="http://img.shields.io/travis/florianv/swap.svg?style=flat" alt="Build status"></a> <a href="https://packagist.org/packages/florianv/swap"><img src="http://img.shields.io/packagist/v/florianv/swap.svg?style=flat" alt="Version"></a> <a href="https://packagist.org/packages/florianv/swap"><img src="http://img.shields.io/badge/php-5.4+-ff69b4.svg" alt="PHP Version"></a> <a href="https://packagist.org/packages/florianv/swap"><img src="https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat" alt="Total Downloads"></a>
-</h1>
-
-<blockquote>
-<p>Exchange rates library for PHP</p>
-</blockquote>
+      <p><strong>Swap</strong> allows you to retrieve currency exchange rates from various services such as <a href="http://fixer.io">Fixer</a> or <a href="https://finance.yahoo.com/">Yahoo</a> and optionally cache the results.
+It is integrated to other libraries like <a href="https://github.com/moneyphp/money"><code>moneyphp/money</code></a> and provides
+a <a href="https://github.com/florianv/FlorianvSwapBundle">Symfony Bundle</a> and a <a href="https://github.com/florianv/laravel-swap">Laravel Package</a>.</p>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="quickstart" class="anchor" href="#quickstart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>QuickStart</h2>
 
-<div class="highlight highlight-bash"><pre>$ composer require florianv/swap</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ composer require florianv/swap php-http/message php-http/guzzle6-adapter</pre></div>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Swap\Builder</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Build Swap with Fixer.io</span></span>
+<span class="pl-s1"><span class="pl-smi">$swap</span> <span class="pl-k">=</span> (<span class="pl-k">new</span> <span class="pl-c1">Builder</span>())</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>with(<span class="pl-s"><span class="pl-pds">'</span>fixer<span class="pl-pds">'</span></span>)</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>build();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Get the latest EUR/USD rate</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span> <span class="pl-k">=</span> <span class="pl-smi">$swap</span><span class="pl-k">-&gt;</span>latest(<span class="pl-s"><span class="pl-pds">'</span>EUR/USD<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// 1.129</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span><span class="pl-k">-&gt;</span>getValue();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// 2016-08-26</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span><span class="pl-k">-&gt;</span>getDate()<span class="pl-k">-&gt;</span>format(<span class="pl-s"><span class="pl-pds">'</span>Y-m-d<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Get the EUR/USD rate 15 days ago</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span> <span class="pl-k">=</span> <span class="pl-smi">$swap</span><span class="pl-k">-&gt;</span>historical(<span class="pl-s"><span class="pl-pds">'</span>EUR/USD<span class="pl-pds">'</span></span>, (<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>())<span class="pl-k">-&gt;</span>modify(<span class="pl-s"><span class="pl-pds">'</span>-15 days<span class="pl-pds">'</span></span>));</span></pre></div>
 
 <h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h2>
 
-<p>First, you need to create an HTTP adapter provided by the <a href="https://github.com/egeloen/ivory-http-adapter">egeloen/ivory-http-adapter</a>
-library.</p>
-
-<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-smi">$httpAdapter</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Ivory\HttpAdapter\</span><span class="pl-c1">FileGetContentsHttpAdapter</span>();</span></pre></div>
-
-<p>Then, you can create a provider and add it to Swap:</p>
-
-<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-c">// Create the Yahoo Finance provider</span></span>
-<span class="pl-s1"><span class="pl-smi">$yahooProvider</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Swap\Provider\</span><span class="pl-c1">YahooFinanceProvider</span>(<span class="pl-smi">$httpAdapter</span>);</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-c">// Create Swap with the provider</span></span>
-<span class="pl-s1"><span class="pl-smi">$swap</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Swap\</span><span class="pl-c1">Swap</span>(<span class="pl-smi">$yahooProvider</span>);</span></pre></div>
-
-<h3>
-<a id="quoting" class="anchor" href="#quoting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quoting</h3>
-
-<p>To retrieve the latest exchange rate for a currency pair, you need to use the <code>quote()</code> method.</p>
-
-<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-smi">$rate</span> <span class="pl-k">=</span> <span class="pl-smi">$swap</span><span class="pl-k">-&gt;</span>quote(<span class="pl-s"><span class="pl-pds">'</span>EUR/USD<span class="pl-pds">'</span></span>);</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-c">// 1.187220</span></span>
-<span class="pl-s1"><span class="pl-c1">echo</span> <span class="pl-smi">$rate</span>;</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-c">// 1.187220</span></span>
-<span class="pl-s1"><span class="pl-c1">echo</span> <span class="pl-smi">$rate</span><span class="pl-k">-&gt;</span>getValue();</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-c">// 15-01-11 21:30:00</span></span>
-<span class="pl-s1"><span class="pl-c1">echo</span> <span class="pl-smi">$rate</span><span class="pl-k">-&gt;</span>getDate()<span class="pl-k">-&gt;</span>format(<span class="pl-s"><span class="pl-pds">'</span>Y-m-d H:i:s<span class="pl-pds">'</span></span>);</span></pre></div>
-
-<blockquote>
-<p>Currencies are expressed as their <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a> code.</p>
-</blockquote>
-
-<h3>
-<a id="chaining-providers" class="anchor" href="#chaining-providers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Chaining providers</h3>
-
-<p>It is possible to chain providers in order to use fallbacks in case the main providers don't support the currency or are unavailable.
-Simply create a <code>ChainProvider</code> wrapping the providers you want to chain.</p>
-
-<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-smi">$chainProvider</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Swap\Provider\</span><span class="pl-c1">ChainProvider</span>([</span>
-<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">\Swap\Provider\</span><span class="pl-c1">YahooFinanceProvider</span>(<span class="pl-smi">$httpAdapter</span>),</span>
-<span class="pl-s1">    <span class="pl-k">new</span> <span class="pl-c1">\Swap\Provider\</span><span class="pl-c1">GoogleFinanceProvider</span>(<span class="pl-smi">$httpAdapter</span>)</span>
-<span class="pl-s1">]);</span></pre></div>
-
-<p>The rates will be first fetched using the Yahoo Finance provider and will fallback to Google Finance.</p>
-
-<h3>
-<a id="caching" class="anchor" href="#caching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Caching</h3>
-
-<p>For performance reasons you might want to cache the rates during a given time.</p>
-
-<h4>
-<a id="doctrine-cache" class="anchor" href="#doctrine-cache" aria-hidden="true"><span class="octicon octicon-link"></span></a>Doctrine Cache</h4>
-
-<h5>
-<a id="installation-1" class="anchor" href="#installation-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h5>
-
-<div class="highlight highlight-bash"><pre>$ composer require doctrine/cache</pre></div>
-
-<h5>
-<a id="usage-1" class="anchor" href="#usage-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h5>
-
-<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-c">// Create the cache adapter</span></span>
-<span class="pl-s1"><span class="pl-smi">$cache</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Swap\Cache\</span><span class="pl-c1">DoctrineCache</span>(<span class="pl-k">new</span> <span class="pl-c1">\Doctrine\Common\Cache\</span><span class="pl-c1">ApcCache</span>(), <span class="pl-c1">3600</span>);</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-c">// Pass the cache to Swap</span></span>
-<span class="pl-s1"><span class="pl-smi">$swap</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Swap\</span><span class="pl-c1">Swap</span>(<span class="pl-smi">$provider</span>, <span class="pl-smi">$cache</span>);</span></pre></div>
-
-<p>All rates will now be cached in APC during 3600 seconds.</p>
-
-<h4>
-<a id="illuminate-cache" class="anchor" href="#illuminate-cache" aria-hidden="true"><span class="octicon octicon-link"></span></a>Illuminate Cache</h4>
-
-<h5>
-<a id="installation-2" class="anchor" href="#installation-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h5>
-
-<div class="highlight highlight-bash"><pre>$ composer require illuminate/cache</pre></div>
-
-<h5>
-<a id="usage-2" class="anchor" href="#usage-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h5>
-
-<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-c">// Create the cache adapter</span></span>
-<span class="pl-s1"><span class="pl-smi">$store</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Illuminate\Cache\</span><span class="pl-c1">ApcStore</span>(<span class="pl-k">new</span> <span class="pl-c1">\Illuminate\Cache\</span><span class="pl-c1">ApcWrapper</span>());</span>
-<span class="pl-s1"><span class="pl-smi">$cache</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Swap\Cache\</span><span class="pl-c1">IlluminateCache</span>(<span class="pl-smi">$store</span>, <span class="pl-c1">60</span>);</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-c">// Pass the cache to Swap</span></span>
-<span class="pl-s1"><span class="pl-smi">$swap</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Swap\</span><span class="pl-c1">Swap</span>(<span class="pl-smi">$provider</span>, <span class="pl-smi">$cache</span>);</span></pre></div>
-
-<p>All rates will now be cached in APC during 60 minutes.</p>
-
-<h3>
-<a id="currency-codes" class="anchor" href="#currency-codes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Currency Codes</h3>
-
-<p>Swap provides an enumeration of currency codes so you can use autocompletion to avoid typos.</p>
-
-<div class="highlight highlight-php"><pre><span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">\Swap\Util\CurrencyCodes</span>;</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-c">// Retrieving the EUR/USD rate</span></span>
-<span class="pl-s1"><span class="pl-smi">$rate</span> <span class="pl-k">=</span> <span class="pl-smi">$swap</span><span class="pl-k">-&gt;</span>quote(<span class="pl-k">new</span> <span class="pl-c1">\Swap\Model\</span><span class="pl-c1">CurrencyPair</span>(</span>
-<span class="pl-s1">    <span class="pl-c1">CurrencyCodes</span><span class="pl-k">::</span><span class="pl-c1">ISO_EUR</span>,</span>
-<span class="pl-s1">    <span class="pl-c1">CurrencyCodes</span><span class="pl-k">::</span><span class="pl-c1">ISO_USD</span></span>
-<span class="pl-s1">));</span></pre></div>
+<p>The complete documentation can be found <a href="https://github.com/florianv/swap/blob/master/doc/readme.md">here</a>.</p>
 
 <h2>
-<a id="providers" class="anchor" href="#providers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Providers</h2>
+<a id="services" class="anchor" href="#services" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Services</h2>
+
+<p>Here is the list of the currently implemented services.</p>
+
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Base Currency</th>
+<th>Quote Currency</th>
+<th>Historical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://fixer.io">Fixer</a></td>
+<td>*</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a></td>
+<td>EUR</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="http://www.google.com/finance">Google</a></td>
+<td>*</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="https://openexchangerates.org">Open Exchange Rates</a></td>
+<td>USD (free), * (paid)</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="https://www.xignite.com">Xignite</a></td>
+<td>*</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="https://finance.yahoo.com">Yahoo</a></td>
+<td>*</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.webservicex.net/ws/default.aspx">WebserviceX</a></td>
+<td>*</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.bnr.ro">National Bank of Romania</a></td>
+<td>RON</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.tcmb.gov.tr">Central Bank of the Republic of Turkey</a></td>
+<td>*</td>
+<td>TRY</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.cnb.cz">Central Bank of the Czech Republic</a></td>
+<td>*</td>
+<td>CZK</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="https://currencylayer.com">currencylayer</a></td>
+<td>USD (free), * (paid)</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="integrations" class="anchor" href="#integrations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Integrations</h2>
 
 <ul>
-<li>
-<a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a>
-Supports only EUR as base currency.</li>
-<li>
-<a href="http://www.google.com/finance">Google Finance</a>
-Supports multiple currencies as base and quote currencies.</li>
-<li>
-<a href="https://openexchangerates.org">Open Exchange Rates</a>
-Supports only USD as base currency for the free version and multiple ones for the enterprise version.</li>
-<li>
-<a href="https://www.xignite.com">Xignite</a>
-You must have access to the <code>XigniteGlobalCurrencies</code> API.
-Supports multiple currencies as base and quote currencies.</li>
-<li>
-<a href="https://finance.yahoo.com/">Yahoo Finance</a>
-Supports multiple currencies as base and quote currencies.</li>
-<li>
-<a href="http://www.webservicex.net/ws/default.aspx">WebserviceX</a>
-Supports multiple currencies as base and quote currencies.</li>
-<li>
-<a href="http://www.bnr.ro">National Bank of Romania</a>
-Supports only RON as base currency.</li>
-<li>
-<code>Array</code>
-Retrieves rates from a PHP array</li>
+<li>A Symfony Bundle <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>
+</li>
+<li>A Laravel Package <a href="https://github.com/florianv/laravel-swap">florianv/laravel-swap</a>
+</li>
 </ul>
 
 <h2>
-<a id="integrations" class="anchor" href="#integrations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Integrations</h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Credits</h2>
 
 <ul>
-<li>A Symfony2 bundle <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>.</li>
-<li>A Laravel 5 package <a href="https://github.com/florianv/laravel-swap">florianv/laravel-swap</a>.</li>
+<li><a href="https://github.com/florianv">Florian Voutzinos</a></li>
+<li><a href="https://github.com/florianv/swap/contributors">All Contributors</a></li>
 </ul>
 
 <h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
-<p><a href="https://github.com/florianv/swap/blob/master/LICENSE">MIT</a></p>
+<p>The MIT License (MIT). Please see <a href="https://github.com/florianv/swap/blob/master/LICENSE">LICENSE</a> for more information.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/florianv/swap">Swap</a> is maintained by <a href="https://github.com/florianv">florianv</a>.</span>
@@ -193,4 +170,3 @@ Retrieves rates from a PHP array</li>
   
   </body>
 </html>
-
