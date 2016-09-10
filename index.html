@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Swap by florianv</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Swap</h1>
+      <h2 class="project-tagline">Currency exchange rates library</h2>
+      <a href="https://github.com/florianv/swap" class="btn">View on GitHub</a>
+      <a href="https://github.com/florianv/swap/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/florianv/swap/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><strong>Swap</strong> allows you to retrieve currency exchange rates from various services such as <a href="http://fixer.io">Fixer</a> or <a href="https://finance.yahoo.com/">Yahoo</a> and optionally cache the results.
+It is integrated to other libraries like <a href="https://github.com/moneyphp/money"><code>moneyphp/money</code></a> and provides
+a <a href="https://github.com/florianv/FlorianvSwapBundle">Symfony Bundle</a> and a <a href="https://github.com/florianv/laravel-swap">Laravel Package</a>.</p>
+
+<h2>
+<a id="quickstart" class="anchor" href="#quickstart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>QuickStart</h2>
+
+<div class="highlight highlight-source-shell"><pre>$ composer require florianv/swap php-http/message php-http/guzzle6-adapter</pre></div>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Swap\Builder</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Build Swap with Fixer.io</span></span>
+<span class="pl-s1"><span class="pl-smi">$swap</span> <span class="pl-k">=</span> (<span class="pl-k">new</span> <span class="pl-c1">Builder</span>())</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>with(<span class="pl-s"><span class="pl-pds">'</span>fixer<span class="pl-pds">'</span></span>)</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>build();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Get the latest EUR/USD rate</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span> <span class="pl-k">=</span> <span class="pl-smi">$swap</span><span class="pl-k">-&gt;</span>latest(<span class="pl-s"><span class="pl-pds">'</span>EUR/USD<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// 1.129</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span><span class="pl-k">-&gt;</span>getValue();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// 2016-08-26</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span><span class="pl-k">-&gt;</span>getDate()<span class="pl-k">-&gt;</span>format(<span class="pl-s"><span class="pl-pds">'</span>Y-m-d<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">// Get the EUR/USD rate 15 days ago</span></span>
+<span class="pl-s1"><span class="pl-smi">$rate</span> <span class="pl-k">=</span> <span class="pl-smi">$swap</span><span class="pl-k">-&gt;</span>historical(<span class="pl-s"><span class="pl-pds">'</span>EUR/USD<span class="pl-pds">'</span></span>, (<span class="pl-k">new</span> <span class="pl-c1">\DateTime</span>())<span class="pl-k">-&gt;</span>modify(<span class="pl-s"><span class="pl-pds">'</span>-15 days<span class="pl-pds">'</span></span>));</span></pre></div>
+
+<h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p>The complete documentation can be found <a href="https://github.com/florianv/swap/blob/master/doc/readme.md">here</a>.</p>
+
+<h2>
+<a id="services" class="anchor" href="#services" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Services</h2>
+
+<p>Here is the list of the currently implemented services.</p>
+
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Base Currency</th>
+<th>Quote Currency</th>
+<th>Historical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://fixer.io">Fixer</a></td>
+<td>*</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="http://www.ecb.europa.eu/home/html/index.en.html">European Central Bank</a></td>
+<td>EUR</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="http://www.google.com/finance">Google</a></td>
+<td>*</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="https://openexchangerates.org">Open Exchange Rates</a></td>
+<td>USD (free), * (paid)</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="https://www.xignite.com">Xignite</a></td>
+<td>*</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><a href="https://finance.yahoo.com">Yahoo</a></td>
+<td>*</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.webservicex.net/ws/default.aspx">WebserviceX</a></td>
+<td>*</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.bnr.ro">National Bank of Romania</a></td>
+<td>RON</td>
+<td>*</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.tcmb.gov.tr">Central Bank of the Republic of Turkey</a></td>
+<td>*</td>
+<td>TRY</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="http://www.cnb.cz">Central Bank of the Czech Republic</a></td>
+<td>*</td>
+<td>CZK</td>
+<td>No</td>
+</tr>
+<tr>
+<td><a href="https://currencylayer.com">currencylayer</a></td>
+<td>USD (free), * (paid)</td>
+<td>*</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="integrations" class="anchor" href="#integrations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Integrations</h2>
+
+<ul>
+<li>A Symfony Bundle <a href="https://github.com/florianv/FlorianvSwapBundle">FlorianvSwapBundle</a>
+</li>
+<li>A Laravel Package <a href="https://github.com/florianv/laravel-swap">florianv/laravel-swap</a>
+</li>
+</ul>
+
+<h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Credits</h2>
+
+<ul>
+<li><a href="https://github.com/florianv">Florian Voutzinos</a></li>
+<li><a href="https://github.com/florianv/swap/contributors">All Contributors</a></li>
+</ul>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>The MIT License (MIT). Please see <a href="https://github.com/florianv/swap/blob/master/LICENSE">LICENSE</a> for more information.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/florianv/swap">Swap</a> is maintained by <a href="https://github.com/florianv">florianv</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
