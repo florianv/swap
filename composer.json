@@ -19,7 +19,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Swap\\": "tests/"
+            "Swap\\Tests\\": "tests/"
         }
     },
     "require": {
