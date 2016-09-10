@@ -1,5 +1,17 @@
 # Documentation
 
+## Index
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Usage](#usage)
+* [Cache](#cache)
+ * [Rates Caching](#rates-caching)
+  * [Cache Options](#cache-options)
+ * [Requests Caching](#requests-caching)
+* [Service](#service)
+  * [Creating a Service](#creating-a-service)
+  * [Supported Services](#supported-services)  
+   
 ## Installation
 
 Swap is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) 
@@ -52,7 +64,7 @@ $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
 
-## Caching
+## Cache
 
 ### Rates Caching
 
@@ -129,6 +141,8 @@ $rate = $swap->latest('EUR/USD');
 // A new request won't be sent
 $rate = $swap->latest('EUR/GBP');
 ```
+
+## Service
 
 ### Creating a Service
 
