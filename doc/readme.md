@@ -35,12 +35,12 @@ Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->with('fixer')
-    ->with('yahoo')
+    ->add('fixer')
+    ->add('yahoo')
     ->build();
 ```
 
-As you can see, you can use the `with()` method to add a service. You can add as many as you want, they will be called in a chain, in case of failure.
+As you can see, you can use the `add()` method to add a service. You can add as many as you want, they will be called in a chain, in case of failure.
 
 > You can consult the list of the supported services and their options [here](#supported-services)
 
@@ -80,7 +80,7 @@ The following example uses the Apcu cache from [php-cache.com](http://php-cache.
 use Cache\Adapter\Apcu\ApcuCachePool;
 
 $swap = (new Builder(['cache_ttl' => 60]))
-    ->withCacheItemPool(new ApcuCachePool())
+    ->useCacheItemPool(new ApcuCachePool())
     ->build();
 ```
 
@@ -132,7 +132,7 @@ $cachePlugin = new CachePlugin($pool, $streamFactory);
 $client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
 $swap = (new Builder())
-    ->with('fixer')
+    ->add('fixer')
     ->build();
 
 // A http request is sent
@@ -205,12 +205,12 @@ class ConstantService extends Service
     }
 }
 
-// Register the service so it's available using Builder::with()
+// Register the service so it's available using Builder::add()
 Registry::register('constant', ConstantService::class);
 
-// Now you can use the with() method with your service name and pass your options
+// Now you can use the add() method add your service name and pass your options
 $swap = (new Builder())
-    ->with('constant', ['value' => 10])
+    ->add('constant', ['value' => 10])
     ->build();
 
 // 10
@@ -225,17 +225,17 @@ Here is the complete list of supported services and their possible configuration
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->with('central_bank_of_czech_republic')
-    ->with('central_bank_of_republic_turkey')
-    ->with('currencylayer', ['access_key' => 'secret', 'enterprise' => false])
-    ->with('european_central_bank')
-    ->with('fixer')
-    ->with('google')
-    ->with('national_bank_of_romania')
-    ->with('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
-    ->with('array', [['EUR/USD' => new ExchangeRate('1.5')]])
-    ->with('webservicex')
-    ->with('xignite', ['token' => 'token'])
-    ->with('yahoo');
+    ->add('central_bank_of_czech_republic')
+    ->add('central_bank_of_republic_turkey')
+    ->add('currencylayer', ['access_key' => 'secret', 'enterprise' => false])
+    ->add('european_central_bank')
+    ->add('fixer')
+    ->add('google')
+    ->add('national_bank_of_romania')
+    ->add('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
+    ->add('array', [['EUR/USD' => new ExchangeRate('1.5')]])
+    ->add('webservicex')
+    ->add('xignite', ['token' => 'token'])
+    ->add('yahoo');
     ->build();
 ```

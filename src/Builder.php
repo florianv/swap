@@ -65,7 +65,7 @@ class Builder
      *
      * @param array $options
      */
-    public function __construct(array $options)
+    public function __construct(array $options = [])
     {
         $this->options = $options;
     }
@@ -78,7 +78,7 @@ class Builder
      *
      * @return Builder
      */
-    public function with($serviceName, array $options = [])
+    public function add($serviceName, array $options = [])
     {
         $this->services[$serviceName] = $options;
 
@@ -92,7 +92,7 @@ class Builder
      *
      * @return Builder
      */
-    public function withHttpClient(HttpClient $httpClient)
+    public function useHttpClient(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
 
@@ -106,7 +106,7 @@ class Builder
      *
      * @return Builder
      */
-    public function withRequestFactory(RequestFactory $requestFactory)
+    public function useRequestFactory(RequestFactory $requestFactory)
     {
         $this->requestFactory = $requestFactory;
 
@@ -120,7 +120,7 @@ class Builder
      *
      * @return Builder
      */
-    public function withCacheItemPool(CacheItemPoolInterface $cacheItemPool)
+    public function useCacheItemPool(CacheItemPoolInterface $cacheItemPool)
     {
         $this->cacheItemPool = $cacheItemPool;
 
