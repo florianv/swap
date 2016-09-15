@@ -32,7 +32,7 @@ a <a href="https://github.com/florianv/FlorianvSwapBundle">Symfony Bundle</a> an
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-c">// Build Swap with Fixer.io</span></span>
 <span class="pl-s1"><span class="pl-smi">$swap</span> <span class="pl-k">=</span> (<span class="pl-k">new</span> <span class="pl-c1">Builder</span>())</span>
-<span class="pl-s1">    <span class="pl-k">-&gt;</span>with(<span class="pl-s"><span class="pl-pds">'</span>fixer<span class="pl-pds">'</span></span>)</span>
+<span class="pl-s1">    <span class="pl-k">-&gt;</span>add(<span class="pl-s"><span class="pl-pds">'</span>fixer<span class="pl-pds">'</span></span>)</span>
 <span class="pl-s1">    <span class="pl-k">-&gt;</span>build();</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-c">// Get the latest EUR/USD rate</span></span>
