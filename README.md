@@ -23,7 +23,7 @@ use Swap\Builder;
 
 // Build Swap with Fixer.io
 $swap = (new Builder())
-    ->with('fixer')
+    ->add('fixer')
     ->build();
     
 // Get the latest EUR/USD rate
