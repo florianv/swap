@@ -91,7 +91,7 @@ class Registry
         $services = [
             'central_bank_of_czech_republic' => CentralBankOfCzechRepublic::class,
             'central_bank_of_republic_turkey' => CentralBankOfRepublicTurkey::class,
-            'currencylayer' => CurrencyLayer::class,
+            'currency_layer' => CurrencyLayer::class,
             'european_central_bank' => EuropeanCentralBank::class,
             'fixer' => Fixer::class,
             'google' => Google::class,

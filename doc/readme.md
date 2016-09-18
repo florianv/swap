@@ -227,7 +227,7 @@ use Swap\Builder;
 $swap = (new Builder())
     ->add('central_bank_of_czech_republic')
     ->add('central_bank_of_republic_turkey')
-    ->add('currencylayer', ['access_key' => 'secret', 'enterprise' => false])
+    ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
     ->add('european_central_bank')
     ->add('fixer')
     ->add('google')
