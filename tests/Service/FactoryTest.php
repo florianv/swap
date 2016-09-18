@@ -44,7 +44,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         return [
             ['central_bank_of_czech_republic', CentralBankOfCzechRepublic::class],
             ['central_bank_of_republic_turkey', CentralBankOfRepublicTurkey::class],
-            ['currencylayer', CurrencyLayer::class, ['access_key' => 'access_key']],
+            ['currency_layer', CurrencyLayer::class, ['access_key' => 'access_key']],
             ['european_central_bank', EuropeanCentralBank::class],
             ['fixer', Fixer::class],
             ['google', Google::class],
