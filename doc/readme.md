@@ -95,9 +95,9 @@ You can override `Swap` caching per request:
 $rate = $swap->latest('EUR/USD', ['cache_ttl' => 60]);
 $rate = $swap->historical('EUR/USD', $date, ['cache_ttl' => 60]);
 
-// Gets a refreshed rate
-$rate = $swap->latest('EUR/USD', ['refresh' => true]);
-$rate = $swap->historical('EUR/USD', $date, ['refresh' => true]);
+// Disable the cache
+$rate = $swap->latest('EUR/USD', ['cache' => false]);
+$rate = $swap->historical('EUR/USD', $date, ['cache' => false]);
 ```
 
 ### Requests Caching
