@@ -24,7 +24,7 @@
     },
     "require": {
         "php": "^5.5|^7.0",
-        "florianv/exchanger": "^0.1.0"
+        "florianv/exchanger": "^0.2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
