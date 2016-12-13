@@ -70,4 +70,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals($callable, $registry->get('foo'));
     }
+
+    public function testGetAllServices()
+    {
+        $registry = new Registry();
+        $this->assertGreaterThan(2, count($registry->all()));
+    }
 }
