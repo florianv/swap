@@ -23,6 +23,7 @@ use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\Yahoo;
+use Exchanger\Service\RussianCentralBank;
 
 /**
  * Holds services.
@@ -101,6 +102,7 @@ class Registry
             'webservicex' => WebserviceX::class,
             'xignite' => Xignite::class,
             'yahoo' => Yahoo::class,
+            'russian_central_bank' => RussianCentralBank::class,
         ];
 
         foreach ($services as $name => $class) {

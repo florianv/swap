@@ -24,6 +24,7 @@ use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\Yahoo;
+use Exchanger\Service\RussianCentralBank;
 use Swap\Service\Factory;
 use Swap\Service\Registry;
 
@@ -54,6 +55,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ['webservicex', WebserviceX::class],
             ['xignite', Xignite::class, ['token' => 'token']],
             ['yahoo', Yahoo::class],
+            ['russian_central_bank', RussianCentralBank::class],
         ];
     }
 

@@ -236,6 +236,7 @@ $swap = (new Builder())
     ->add('array', [['EUR/USD' => new ExchangeRate('1.5')]])
     ->add('webservicex')
     ->add('xignite', ['token' => 'token'])
-    ->add('yahoo');
+    ->add('yahoo')
+    ->add('russian_central_bank')
     ->build();
 ```
