@@ -59,7 +59,8 @@ Here is the list of the currently implemented services.
 | [National Bank of Romania](http://www.bnr.ro) | RON | * | No |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |
 | [Central Bank of the Czech Republic](http://www.cnb.cz) | * | CZK | No |
-| [Currency Layer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| [Russian Central Bank](http://http://www.cbr.ru) | * | RUB | Yes |
+| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
 
 ## Integrations
 
