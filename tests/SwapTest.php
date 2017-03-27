@@ -20,7 +20,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 {
     public function testLatest()
     {
-        $exchangeRateProvider = $this->getMock(ExchangeRateProvider::class);
+        $exchangeRateProvider = $this->getMockBuilder(ExchangeRateProvider::class)->getMock();
 
         $exchangeRateProvider
             ->expects($this->once())
@@ -35,7 +35,7 @@ class SwapTest extends \PHPUnit_Framework_TestCase
 
     public function testHistorical()
     {
-        $exchangeRateProvider = $this->getMock(ExchangeRateProvider::class);
+        $exchangeRateProvider = $this->getMockBuilder(ExchangeRateProvider::class)->getMock();
 
         $exchangeRateProvider
             ->expects($this->once())
