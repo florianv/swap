@@ -72,6 +72,16 @@ class Registry
     }
 
     /**
+     * Returns all registered services
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return self::$services;
+    }
+
+    /**
      * Registers a new service.
      *
      * @param string          $name            The service name
