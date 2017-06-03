@@ -62,6 +62,7 @@ Here is the list of the currently implemented services.
 | [Central Bank of the Czech Republic](http://www.cnb.cz) | * | CZK | No |
 | [Russian Central Bank](http://http://www.cbr.ru) | * | RUB | Yes |
 | [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| Array | * | * | Yes |
 
 ## Integrations
 
