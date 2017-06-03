@@ -233,7 +233,20 @@ $swap = (new Builder())
     ->add('google')
     ->add('national_bank_of_romania')
     ->add('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
-    ->add('array', [['EUR/USD' => new ExchangeRate('1.5')]])
+    ->add('array', [
+        [
+            'EUR/USD' => new ExchangeRate('1.1'),
+            'EUR/GBP' => 1.5
+        ],
+        [
+            '2017-01-01' => [
+                'EUR/USD' => new ExchangeRate('1.5')
+            ],
+            '2017-01-03' => [
+                'EUR/GBP' => 1.3
+            ],
+        ]
+    ])
     ->add('webservicex')
     ->add('xignite', ['token' => 'token'])
     ->add('yahoo')
