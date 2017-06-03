@@ -14,6 +14,8 @@ $ composer require florianv/swap php-http/message php-http/guzzle6-adapter
 ```
 
 ```php
+<?php
+
 use Swap\Builder;
 
 // Build Swap with Fixer.io
