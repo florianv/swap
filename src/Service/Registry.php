@@ -13,6 +13,7 @@ namespace Swap\Service;
 
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
+use Exchanger\Service\Cryptonator;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Fixer;
@@ -103,6 +104,7 @@ class Registry
             'xignite' => Xignite::class,
             'yahoo' => Yahoo::class,
             'russian_central_bank' => RussianCentralBank::class,
+            'cryptonator' => Cryptonator::class,
         ];
 
         foreach ($services as $name => $class) {
