@@ -22,7 +22,7 @@ use Swap\Model\Rate;
  */
 class GoogleFinanceProvider extends AbstractProvider
 {
-    const URL = 'http://www.google.com/finance/converter?a=1&from=%s&to=%s';
+    const URL = 'https://finance.google.com/finance/converter?a=1&from=%s&to=%s';
 
     /**
      * {@inheritdoc}
