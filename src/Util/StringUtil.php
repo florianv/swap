@@ -71,6 +71,7 @@ final class StringUtil
 
         if (JSON_ERROR_NONE !== json_last_error()) {
             $last = json_last_error();
+
             throw new \RuntimeException(
                 'Unable to parse JSON data: '
                 .(isset($jsonErrors[$last]) ? $jsonErrors[$last] : 'Unknown error')

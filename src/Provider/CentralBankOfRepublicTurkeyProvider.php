@@ -20,7 +20,7 @@ use Swap\Util\StringUtil;
 /**
  * Central Bank of Republic of Turkey (CBRT) provider.
  *
- * @link http://tcmb.gov.tr
+ * @see http://tcmb.gov.tr
  *
  * @author Uğur Erkan <mail@ugurerkan.com>
  */
