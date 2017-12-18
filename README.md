@@ -7,7 +7,7 @@
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/florianv/swap.svg?style=flat-square)](https://scrutinizer-ci.com/g/florianv/swap)
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 
-**Swap** allows you to retrieve currency exchange rates from various services such as [Fixer](http://fixer.io) or [Yahoo](https://finance.yahoo.com/) and optionally cache the results.
+**Swap** allows you to retrieve currency exchange rates from various services such as [Fixer](http://fixer.io) or [Google](https://google.com/) and optionally cache the results.
 It is integrated to other libraries like [`moneyphp/money`](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
