@@ -55,7 +55,6 @@ Here is the list of the currently implemented services.
 | [Google](http://www.google.com/finance) | * | * | No |
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
 | [Xignite](https://www.xignite.com) | * | * | Yes |
-| [Yahoo](https://finance.yahoo.com) | * | * | No |
 | [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * | No |
 | [National Bank of Romania](http://www.bnr.ro) | RON | * | No |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |
