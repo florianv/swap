@@ -29,14 +29,14 @@ composer require florianv/swap php-http/message php-http/guzzle6-adapter
 
 Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
 
-Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to [Yahoo](https://finance.yahoo.com) in case of failure. We would write the following:
+Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to [Google](https://google.com) in case of failure. We would write the following:
 
 ```php
 use Swap\Builder;
 
 $swap = (new Builder())
     ->add('fixer')
-    ->add('yahoo')
+    ->add('google')
     ->build();
 ```
 
@@ -249,7 +249,6 @@ $swap = (new Builder())
     ])
     ->add('webservicex')
     ->add('xignite', ['token' => 'token'])
-    ->add('yahoo')
     ->add('russian_central_bank')
     ->add('cryptonator')
     ->build();
