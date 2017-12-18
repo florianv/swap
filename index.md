@@ -51,13 +51,14 @@ Here is the list of the currently implemented services.
 | [Google](http://www.google.com/finance) | * | * | No |
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
 | [Xignite](https://www.xignite.com) | * | * | Yes |
-| [Yahoo](https://finance.yahoo.com) | * | * | No |
 | [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * | No |
 | [National Bank of Romania](http://www.bnr.ro) | RON | * | No |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |
 | [Central Bank of the Czech Republic](http://www.cnb.cz) | * | CZK | No |
 | [Russian Central Bank](http://http://www.cbr.ru) | * | RUB | Yes |
 | [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| [Cryptonator](https://www.cryptonator.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies)  | No |
+| Array | * | * | Yes |
 
 ## Integrations
 
