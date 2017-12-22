@@ -14,9 +14,11 @@ namespace Swap\Tests\Service;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\Cryptonator;
+use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Fixer;
+use Exchanger\Service\Forge;
 use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
@@ -45,9 +47,11 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
         return [
             ['central_bank_of_czech_republic', CentralBankOfCzechRepublic::class],
             ['central_bank_of_republic_turkey', CentralBankOfRepublicTurkey::class],
+            ['currency_data_feed', CurrencyDataFeed::class],
             ['currency_layer', CurrencyLayer::class],
             ['european_central_bank', EuropeanCentralBank::class],
             ['fixer', Fixer::class],
+            ['forge', Forge::class],
             ['google', Google::class],
             ['national_bank_of_romania', NationalBankOfRomania::class],
             ['open_exchange_rates', OpenExchangeRates::class],
