@@ -132,6 +132,7 @@ $cachePlugin = new CachePlugin($pool, $streamFactory);
 $client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
 $swap = (new Builder())
+    ->useHttpClient($client);
     ->add('fixer')
     ->build();
 
