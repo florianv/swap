@@ -15,9 +15,11 @@ use Exchanger\ExchangeRate;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\Cryptonator;
+use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Fixer;
+use Exchanger\Service\Forge;
 use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
@@ -46,9 +48,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         return [
             ['central_bank_of_czech_republic', CentralBankOfCzechRepublic::class],
             ['central_bank_of_republic_turkey', CentralBankOfRepublicTurkey::class],
+            ['currency_data_feed', CurrencyDataFeed::class, ['api_key' => 'api_key']],
             ['currency_layer', CurrencyLayer::class, ['access_key' => 'access_key']],
             ['european_central_bank', EuropeanCentralBank::class],
             ['fixer', Fixer::class],
+            ['forge', Forge::class, ['api_key' => 'api_key']],
             ['google', Google::class],
             ['national_bank_of_romania', NationalBankOfRomania::class],
             ['open_exchange_rates', OpenExchangeRates::class, ['app_id' => 'app_id']],
