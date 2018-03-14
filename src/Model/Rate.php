@@ -27,10 +27,10 @@ final class Rate
      * @param string         $value The rate value
      * @param \DateTime|null $date  The date at which this rate was calculated
      */
-    public function __construct($value, \DateTime $date = null)
+    public function __construct($value, $date = null)
     {
         $this->value = (string) $value;
-        $this->date = $date ?: new \DateTime();
+        $this->date = ($date instanceof \DateTime)?: new \DateTime();
     }
 
     /**
