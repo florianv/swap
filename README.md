@@ -24,7 +24,7 @@ use Swap\Builder;
 
 // Build Swap with Fixer.io
 $swap = (new Builder())
-    ->add('fixer')
+    ->add('fixer', ['access_key' => 'your-access-key'])
     ->build();
     
 // Get the latest EUR/USD rate
@@ -48,23 +48,23 @@ The complete documentation can be found [here](https://github.com/florianv/swap/
 
 Here is the list of the currently implemented services.
 
-| Service | Base Currency | Quote Currency | Historical |
-|---------------------------------------------------------------------------|----------------------|----------------|----------------|
-| [Fixer](http://fixer.io) | * | * | Yes |
-| [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
-| [Google](http://www.google.com/finance) | * | * | No |
+| Service | Registry Alias | Base Currency | Quote Currency | Historical |
+|----------------------------------------------------------------|---------------|----------------------|----------------|----------------|
+| [Fixer](http://fixer.io) | `fixer` | * | * | Yes |
+| [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | `european_central_bank` | EUR | * | Yes |
+| [Google](http://www.google.com/finance) | `google` | * | * | No |
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
-| [Xignite](https://www.xignite.com) | * | * | Yes |
-| [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * | No |
-| [National Bank of Romania](http://www.bnr.ro) | RON | * | No |
-| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |
-| [Central Bank of the Czech Republic](http://www.cnb.cz) | * | CZK | No |
-| [Russian Central Bank](http://http://www.cbr.ru) | * | RUB | Yes |
-| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
-| [Cryptonator](https://www.cryptonator.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies)  | No |
-| [1Forge](https://1forge.com) | * (free but limited or paid) | * (free but limited or paid) | No |
-| [CurrencyDataFeed](https://currencydatafeed.com) | * (free but limited or paid) | * (free but limited or paid) | No |
-| Array | * | * | Yes |
+| [Xignite](https://www.xignite.com) | `xignite` | * | * | Yes |
+| [WebserviceX](http://www.webservicex.net/ws/default.aspx) | `webservicex` | * | * | No |
+| [National Bank of Romania](http://www.bnr.ro) | `national_bank_of_romania` | RON | * | No |
+| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | `central_bank_of_republic_turkey` | * | TRY | No |
+| [Central Bank of the Czech Republic](http://www.cnb.cz) | `central_bank_of_czech_republic` | * | CZK | No |
+| [Russian Central Bank](http://http://www.cbr.ru) | `russian_central_bank` | * | RUB | Yes |
+| [currencylayer](https://currencylayer.com) | `currency_layer` | USD (free), * (paid) | * | Yes |
+| [Cryptonator](https://www.cryptonator.com) | `cryptonator` | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies)  | No |
+| [1Forge](https://1forge.com) | `forge` | * (free but limited or paid) | * (free but limited or paid) | No |
+| [CurrencyDataFeed](https://currencydatafeed.com) | `currency_data_feed` | * (free but limited or paid) | * (free but limited or paid) | No |
+| Array | `array` | * | * | Yes |
 
 ## Integrations
 

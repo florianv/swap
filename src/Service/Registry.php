@@ -93,22 +93,22 @@ class Registry
     private function registerServices()
     {
         $services = [
+            'array' => PhpArray::class,
             'central_bank_of_czech_republic' => CentralBankOfCzechRepublic::class,
             'central_bank_of_republic_turkey' => CentralBankOfRepublicTurkey::class,
             'currency_layer' => CurrencyLayer::class,
             'currency_data_feed' => CurrencyDataFeed::class,
+            'cryptonator' => Cryptonator::class,
             'european_central_bank' => EuropeanCentralBank::class,
             'fixer' => Fixer::class,
             'forge' => Forge::class,
             'google' => Google::class,
             'national_bank_of_romania' => NationalBankOfRomania::class,
             'open_exchange_rates' => OpenExchangeRates::class,
-            'array' => PhpArray::class,
+            'russian_central_bank' => RussianCentralBank::class,
             'webservicex' => WebserviceX::class,
             'xignite' => Xignite::class,
             'yahoo' => Yahoo::class,
-            'russian_central_bank' => RussianCentralBank::class,
-            'cryptonator' => Cryptonator::class,
         ];
 
         foreach ($services as $name => $class) {
