@@ -35,7 +35,7 @@ Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->add('fixer')
+    ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('google')
     ->build();
 ```
@@ -133,7 +133,7 @@ $client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
 $swap = (new Builder())
     ->useHttpClient($client);
-    ->add('fixer')
+    ->add('fixer', ['access_key' => 'your-access-key'])
     ->build();
 
 // A http request is sent
@@ -231,7 +231,7 @@ $swap = (new Builder())
     ->add('currency_data_feed', ['api_key' => 'secret'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
     ->add('european_central_bank')
-    ->add('fixer')
+    ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('forge', ['api_key' => 'secret'])
     ->add('google')
     ->add('national_bank_of_romania')
