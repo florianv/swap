@@ -51,7 +51,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ['currency_data_feed', CurrencyDataFeed::class, ['api_key' => 'api_key']],
             ['currency_layer', CurrencyLayer::class, ['access_key' => 'access_key']],
             ['european_central_bank', EuropeanCentralBank::class],
-            ['fixer', Fixer::class],
+            ['fixer', Fixer::class, ['access_key' => 'access_key']],
             ['forge', Forge::class, ['api_key' => 'api_key']],
             ['google', Google::class],
             ['national_bank_of_romania', NationalBankOfRomania::class],

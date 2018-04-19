@@ -23,10 +23,10 @@ use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
+use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\Yahoo;
-use Exchanger\Service\RussianCentralBank;
 use Swap\Service\Registry;
 
 class RegistryTest extends \PHPUnit_Framework_TestCase
@@ -45,8 +45,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     public function serviceProviders()
     {
         return [
+            ['array', PhpArray::class],
             ['central_bank_of_czech_republic', CentralBankOfCzechRepublic::class],
             ['central_bank_of_republic_turkey', CentralBankOfRepublicTurkey::class],
+            ['cryptonator', Cryptonator::class],
             ['currency_data_feed', CurrencyDataFeed::class],
             ['currency_layer', CurrencyLayer::class],
             ['european_central_bank', EuropeanCentralBank::class],
@@ -55,12 +57,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
             ['google', Google::class],
             ['national_bank_of_romania', NationalBankOfRomania::class],
             ['open_exchange_rates', OpenExchangeRates::class],
-            ['array', PhpArray::class],
+            ['russian_central_bank', RussianCentralBank::class],
             ['webservicex', WebserviceX::class],
             ['xignite', Xignite::class],
             ['yahoo', Yahoo::class],
-            ['russian_central_bank', RussianCentralBank::class],
-            ['cryptonator', Cryptonator::class],
         ];
     }
 
