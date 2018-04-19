@@ -25,7 +25,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Swap::class, $builder->build());
 
         $builder = new Builder();
-        $builder->add('fixer');
+        $builder->add('fixer', ['access_key' => 'access_key']);
         $builder->add('open_exchange_rates', ['app_id' => 'secret']);
         $this->assertInstanceOf(Swap::class, $builder->build());
     }
