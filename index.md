@@ -7,8 +7,6 @@
 It is integrated to other libraries like [`moneyphp/money`](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
-<br />
-
 ## QuickStart
 
 ```bash
