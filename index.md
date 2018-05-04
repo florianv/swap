@@ -44,7 +44,7 @@ $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 
 The documentation for the current branch can be found [here](https://github.com/florianv/swap/blob/master/doc/readme.md).
 
-## Sponsors :heart_eyes: 
+## Sponsors
 
 We are proudly supported by the following echange rate providers offering *free plans up to 1,000 requests per day*:
 
