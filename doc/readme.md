@@ -11,7 +11,7 @@
 * [Service](#service)
   * [Creating a Service](#creating-a-service)
   * [Supported Services](#supported-services)  
-  * [Sponsors](#sponsors)
+ * [Sponsors](#sponsors)
   
 ## Installation
 
@@ -264,7 +264,7 @@ $swap = (new Builder())
     ->build();
 ```
 
-### Sponsors
+## Sponsors
 
 We are proudly supported by the following echange rate providers offering *free plans up to 1,000 requests per day*:
 
