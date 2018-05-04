@@ -45,7 +45,7 @@ $swap = (new Builder())
 
 As you can see, you can use the `add()` method to add a service. You can add as many as you want, they will be called in a chain, in case of failure.
 
-We recommand to use one of the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
+We recommend to use one of the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
 
 The complete list of all supported services is available [here](#supported-services).
 
