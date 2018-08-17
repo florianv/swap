@@ -53,7 +53,7 @@ The documentation for the current branch can be found [here](https://github.com/
 
 ## Sponsors :heart_eyes: 
 
-We are proudly supported by the following echange rate providers offering *free plans up to 1,000 requests per day*:
+We are proudly supported by the following exchange rate providers offering *free plans up to 1,000 requests per day*:
 
 <img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/> **[Fixer](https://fixer.io)**
 
