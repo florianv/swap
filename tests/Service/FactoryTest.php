@@ -67,7 +67,7 @@ class FactoryTest extends TestCase
         Registry::register('foo', OpenExchangeRates::class);
 
         // Default service
-        Registry::register('bar', PhpArray::class);
+        Registry::register('bar', EuropeanCentralBank::class);
 
         // Callback
         $service = new PhpArray([], []);
@@ -78,7 +78,7 @@ class FactoryTest extends TestCase
         $factory = new Factory();
 
         $this->assertInstanceOf(OpenExchangeRates::class, $factory->create('foo', ['app_id' => 'app_id']));
-        $this->assertInstanceOf(PhpArray::class, $factory->create('bar'));
+        $this->assertInstanceOf(EuropeanCentralBank::class, $factory->create('bar'));
         $this->assertSame($service, $factory->create('baz'));
     }
 }
