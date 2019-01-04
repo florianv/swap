@@ -49,7 +49,7 @@ $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 
 ## Documentation
 
-The documentation for the current branch can be found [here](https://github.com/florianv/swap/blob/master/doc/readme.md).
+The documentation for the current branch can be found [here](https://github.com/florianv/swap/blob/3.x/doc/readme.md).
 
 ## Sponsors :heart_eyes: 
 
@@ -105,4 +105,4 @@ Here is the list of the currently implemented services:
 
 ## License
 
-The MIT License (MIT). Please see [LICENSE](https://github.com/florianv/swap/blob/master/LICENSE) for more information.
+The MIT License (MIT). Please see [LICENSE](https://github.com/florianv/swap/blob/3.x/LICENSE) for more information.
