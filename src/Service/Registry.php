@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Swap.
  *
@@ -20,13 +22,11 @@ use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\Forge;
-use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
-use Exchanger\Service\Yahoo;
 use Exchanger\Service\RussianCentralBank;
 
 /**
@@ -34,7 +34,7 @@ use Exchanger\Service\RussianCentralBank;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Registry
+final class Registry
 {
     /**
      * The registered services.
@@ -58,7 +58,7 @@ class Registry
      *
      * @return bool
      */
-    public function has($name)
+    public function has(string $name): bool
     {
         return isset(self::$services[$name]);
     }
@@ -70,7 +70,7 @@ class Registry
      *
      * @return string|null
      */
-    public function get($name)
+    public function get(string $name)
     {
         return isset(self::$services[$name]) ? self::$services[$name] : null;
     }
@@ -83,7 +83,7 @@ class Registry
      *
      * @throws \InvalidArgumentException
      */
-    public static function register($name, $classOrCallable)
+    public static function register(string $name, $classOrCallable): void
     {
         self::$services[$name] = $classOrCallable;
     }
@@ -91,7 +91,7 @@ class Registry
     /**
      * Registers the core services.
      */
-    private function registerServices()
+    private function registerServices(): void
     {
         $services = [
             'array' => PhpArray::class,
@@ -104,13 +104,11 @@ class Registry
             'european_central_bank' => EuropeanCentralBank::class,
             'fixer' => Fixer::class,
             'forge' => Forge::class,
-            'google' => Google::class,
             'national_bank_of_romania' => NationalBankOfRomania::class,
             'open_exchange_rates' => OpenExchangeRates::class,
             'russian_central_bank' => RussianCentralBank::class,
             'webservicex' => WebserviceX::class,
             'xignite' => Xignite::class,
-            'yahoo' => Yahoo::class,
         ];
 
         foreach ($services as $name => $class) {

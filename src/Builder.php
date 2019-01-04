@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Swap.
  *
@@ -15,7 +17,7 @@ use Exchanger\Exchanger;
 use Exchanger\Service\Chain;
 use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
-use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
 use Swap\Service\Factory;
 
 /**
@@ -23,7 +25,7 @@ use Swap\Service\Factory;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Builder
+final class Builder
 {
     /**
      * The services.
@@ -54,11 +56,11 @@ class Builder
     private $requestFactory;
 
     /**
-     * The cache item pool.
+     * The cache.
      *
-     * @var CacheItemPoolInterface
+     * @var CacheInterface
      */
-    private $cacheItemPool;
+    private $cache;
 
     /**
      * Constructor.
@@ -78,7 +80,7 @@ class Builder
      *
      * @return Builder
      */
-    public function add($serviceName, array $options = [])
+    public function add(string $serviceName, array $options = []): self
     {
         $this->services[$serviceName] = $options;
 
@@ -92,7 +94,7 @@ class Builder
      *
      * @return Builder
      */
-    public function useHttpClient(HttpClient $httpClient)
+    public function useHttpClient(HttpClient $httpClient): self
     {
         $this->httpClient = $httpClient;
 
@@ -106,7 +108,7 @@ class Builder
      *
      * @return Builder
      */
-    public function useRequestFactory(RequestFactory $requestFactory)
+    public function useRequestFactory(RequestFactory $requestFactory): self
     {
         $this->requestFactory = $requestFactory;
 
@@ -114,15 +116,15 @@ class Builder
     }
 
     /**
-     * Uses the given cache item pool.
+     * Uses the given simple cache.
      *
-     * @param CacheItemPoolInterface $cacheItemPool
+     * @param CacheInterface $cache
      *
      * @return Builder
      */
-    public function useCacheItemPool(CacheItemPoolInterface $cacheItemPool)
+    public function useSimpleCache(CacheInterface $cache): self
     {
-        $this->cacheItemPool = $cacheItemPool;
+        $this->cache = $cache;
 
         return $this;
     }
@@ -132,7 +134,7 @@ class Builder
      *
      * @return Swap
      */
-    public function build()
+    public function build(): Swap
     {
         $serviceFactory = new Factory($this->httpClient, $this->requestFactory);
         $services = [];
@@ -142,7 +144,7 @@ class Builder
         }
 
         $service = new Chain($services);
-        $exchanger = new Exchanger($service, $this->cacheItemPool, $this->options);
+        $exchanger = new Exchanger($service, $this->cache, $this->options);
 
         return new Swap($exchanger);
     }

@@ -20,17 +20,16 @@ use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\Forge;
-use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
 use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
-use Exchanger\Service\Yahoo;
+use PHPUnit\Framework\TestCase;
 use Swap\Service\Registry;
 
-class RegistryTest extends \PHPUnit_Framework_TestCase
+class RegistryTest extends TestCase
 {
     /**
      * @dataProvider serviceProviders
@@ -56,13 +55,11 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
             ['european_central_bank', EuropeanCentralBank::class],
             ['fixer', Fixer::class],
             ['forge', Forge::class],
-            ['google', Google::class],
             ['national_bank_of_romania', NationalBankOfRomania::class],
             ['open_exchange_rates', OpenExchangeRates::class],
             ['russian_central_bank', RussianCentralBank::class],
             ['webservicex', WebserviceX::class],
             ['xignite', Xignite::class],
-            ['yahoo', Yahoo::class],
         ];
     }
 

@@ -11,10 +11,11 @@
 
 namespace Swap\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Swap\Builder;
 use Swap\Swap;
 
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends TestCase
 {
     public function testBuild()
     {
