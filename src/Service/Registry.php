@@ -14,6 +14,7 @@ namespace Swap\Service;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\Cryptonator;
+use Exchanger\Service\CurrencyConverterApi;
 use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\EuropeanCentralBank;
@@ -96,6 +97,7 @@ class Registry
             'array' => PhpArray::class,
             'central_bank_of_czech_republic' => CentralBankOfCzechRepublic::class,
             'central_bank_of_republic_turkey' => CentralBankOfRepublicTurkey::class,
+            'currency_converter' => CurrencyConverterApi::class,
             'currency_layer' => CurrencyLayer::class,
             'currency_data_feed' => CurrencyDataFeed::class,
             'cryptonator' => Cryptonator::class,

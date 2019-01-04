@@ -1,6 +1,14 @@
-# CHANGELOG for 3.0
+# CHANGELOG for 3.x
 
-This log contains the important changes for the 3.0 version.
+This log contains the important changes for the 3.x versions.
+
+- Added CurrencyConverterApi service
+- Fixed Fixer service which now requires an access_key
+- Added Forge service
+- Added CurrencyDataFeed service
+- Supported historical rates in National Bank Of Romania
+- Support crypto currencies via Cryptonator
+- New Russian Central Bank service
 
 - e5234ea Added a .gitattributes file
 - 24ba8f3 Use Httplug instead of egeloen
