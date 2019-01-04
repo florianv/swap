@@ -245,6 +245,7 @@ $swap = (new Builder())
     ->add('google')
     ->add('cryptonator')
     ->add('currency_data_feed', ['api_key' => 'secret'])
+    ->add('currency_converter', ['access_key' => 'secret', 'enterprise' => false])
     ->add('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
     ->add('xignite', ['token' => 'token'])
     ->add('array', [
