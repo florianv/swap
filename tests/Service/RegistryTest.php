@@ -11,23 +11,9 @@
 
 namespace Swap\Tests\Service;
 
-use Exchanger\Service\CentralBankOfCzechRepublic;
-use Exchanger\Service\CentralBankOfRepublicTurkey;
-use Exchanger\Service\Cryptonator;
-use Exchanger\Service\CurrencyConverterApi;
-use Exchanger\Service\CurrencyDataFeed;
-use Exchanger\Service\CurrencyLayer;
-use Exchanger\Service\EuropeanCentralBank;
-use Exchanger\Service\Fixer;
-use Exchanger\Service\Forge;
-use Exchanger\Service\NationalBankOfRomania;
-use Exchanger\Service\OpenExchangeRates;
-use Exchanger\Service\PhpArray;
-use Exchanger\Service\RussianCentralBank;
-use Exchanger\Service\WebserviceX;
-use Exchanger\Service\Xignite;
 use PHPUnit\Framework\TestCase;
 use Swap\Service\Registry;
+use Exchanger\Service\Registry as ExchangerRegistry;
 
 class RegistryTest extends TestCase
 {
@@ -44,23 +30,12 @@ class RegistryTest extends TestCase
 
     public function serviceProviders()
     {
-        return [
-            ['array', PhpArray::class],
-            ['central_bank_of_czech_republic', CentralBankOfCzechRepublic::class],
-            ['central_bank_of_republic_turkey', CentralBankOfRepublicTurkey::class],
-            ['cryptonator', Cryptonator::class],
-            ['currency_converter', CurrencyConverterApi::class],
-            ['currency_data_feed', CurrencyDataFeed::class],
-            ['currency_layer', CurrencyLayer::class],
-            ['european_central_bank', EuropeanCentralBank::class],
-            ['fixer', Fixer::class],
-            ['forge', Forge::class],
-            ['national_bank_of_romania', NationalBankOfRomania::class],
-            ['open_exchange_rates', OpenExchangeRates::class],
-            ['russian_central_bank', RussianCentralBank::class],
-            ['webservicex', WebserviceX::class],
-            ['xignite', Xignite::class],
-        ];
+        $data = [];
+        $services = ExchangerRegistry::getServices();
+
+        foreach ($services as $name => $class) {
+            $data[] = [$name, $class];
+        }
     }
 
     public function testRegister()
