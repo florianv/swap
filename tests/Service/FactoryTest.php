@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Swap.
  *
@@ -11,7 +13,6 @@
 
 namespace Swap\Tests\Service;
 
-use Exchanger\ExchangeRate;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\Cryptonator;
@@ -20,25 +21,25 @@ use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\Forge;
-use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
-use Exchanger\Service\Yahoo;
 use Exchanger\Service\RussianCentralBank;
+use Http\Mock\Client;
+use PHPUnit\Framework\TestCase;
 use Swap\Service\Factory;
 use Swap\Service\Registry;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends TestCase
 {
     /**
      * @dataProvider servicesProvider
      */
     public function testCoreServices($name, $class, array $options = [])
     {
-        $factory = new Factory();
+        $factory = new Factory(new Client());
 
         $this->assertInstanceOf($class, $factory->create($name, $options));
     }
@@ -53,13 +54,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ['european_central_bank', EuropeanCentralBank::class],
             ['fixer', Fixer::class, ['access_key' => 'access_key']],
             ['forge', Forge::class, ['api_key' => 'api_key']],
-            ['google', Google::class],
             ['national_bank_of_romania', NationalBankOfRomania::class],
             ['open_exchange_rates', OpenExchangeRates::class, ['app_id' => 'app_id']],
-            ['array', PhpArray::class, [['EUR/USD' => new ExchangeRate('10')]]],
+            ['array', PhpArray::class, [['EUR/USD' => 1.0]]],
             ['webservicex', WebserviceX::class],
             ['xignite', Xignite::class, ['token' => 'token']],
-            ['yahoo', Yahoo::class],
             ['russian_central_bank', RussianCentralBank::class],
             ['cryptonator', Cryptonator::class],
         ];
@@ -71,18 +70,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         Registry::register('foo', OpenExchangeRates::class);
 
         // Default service
-        Registry::register('bar', Google::class);
+        Registry::register('bar', EuropeanCentralBank::class);
 
         // Callback
-        $service = new Google();
+        $service = new PhpArray([], []);
         Registry::register('baz', function () use ($service) {
             return $service;
         });
 
-        $factory = new Factory();
+        $factory = new Factory(new Client());
 
         $this->assertInstanceOf(OpenExchangeRates::class, $factory->create('foo', ['app_id' => 'app_id']));
-        $this->assertInstanceOf(Google::class, $factory->create('bar'));
+        $this->assertInstanceOf(EuropeanCentralBank::class, $factory->create('bar'));
         $this->assertSame($service, $factory->create('baz'));
     }
 }

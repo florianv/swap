@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Swap.
  *
@@ -11,7 +13,7 @@
 
 namespace Swap\Service;
 
-use Exchanger\Service\Service;
+use Exchanger\Service\HttpService;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
@@ -22,7 +24,7 @@ use Http\Message\RequestFactory;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Factory
+final class Factory
 {
     /**
      * The client.
@@ -61,7 +63,7 @@ class Factory
      *
      * @param HttpClient $httpClient
      */
-    public function setHttpClient(HttpClient $httpClient)
+    public function setHttpClient(HttpClient $httpClient): void
     {
         $this->httpClient = $httpClient;
     }
@@ -71,7 +73,7 @@ class Factory
      *
      * @param RequestFactory $requestFactory
      */
-    public function setRequestFactory(RequestFactory $requestFactory)
+    public function setRequestFactory(RequestFactory $requestFactory): void
     {
         $this->requestFactory = $requestFactory;
     }
@@ -84,7 +86,7 @@ class Factory
      *
      * @return \Exchanger\Contract\ExchangeRateService
      */
-    public function create($serviceName, array $args = [])
+    public function create(string $serviceName, array $args = [])
     {
         if (!$this->registry->has($serviceName)) {
             throw new \InvalidArgumentException(sprintf('The service "%s" is not registered.', $serviceName));
@@ -96,7 +98,7 @@ class Factory
             return call_user_func($classOrCallable);
         }
 
-        if (is_subclass_of($classOrCallable, Service::class)) {
+        if (is_subclass_of($classOrCallable, HttpService::class)) {
             return new $classOrCallable($this->httpClient, $this->requestFactory, $args);
         }
 

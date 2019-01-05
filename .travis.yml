@@ -9,13 +9,11 @@ env:
 matrix:
     fast_finish: true
     include:
-        - php: 5.5
+        - php: 7.1
           env: PREFER="--prefer-lowest"
-        - php: 5.5
-        - php: 5.6
-        - php: 7.0
         - php: 7.1
         - php: 7.2
+        - php: 7.3
 
 cache:
   directories:
