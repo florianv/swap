@@ -27,6 +27,7 @@ use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
+use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use Swap\Service\Factory;
 use Swap\Service\Registry;
@@ -38,7 +39,7 @@ class FactoryTest extends TestCase
      */
     public function testCoreServices($name, $class, array $options = [])
     {
-        $factory = new Factory();
+        $factory = new Factory(new Client());
 
         $this->assertInstanceOf($class, $factory->create($name, $options));
     }
@@ -77,7 +78,7 @@ class FactoryTest extends TestCase
             return $service;
         });
 
-        $factory = new Factory();
+        $factory = new Factory(new Client());
 
         $this->assertInstanceOf(OpenExchangeRates::class, $factory->create('foo', ['app_id' => 'app_id']));
         $this->assertInstanceOf(EuropeanCentralBank::class, $factory->create('bar'));
