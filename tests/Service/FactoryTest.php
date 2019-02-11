@@ -84,4 +84,32 @@ class FactoryTest extends TestCase
         $this->assertInstanceOf(EuropeanCentralBank::class, $factory->create('bar'));
         $this->assertSame($service, $factory->create('baz'));
     }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface
+     */
+    public function testConstructInvalidClient()
+    {
+        $factory = new Factory(new \stdClass());
+    }
+
+    /**
+     * @expectedException \Http\Discovery\NotFoundException
+     * @expectedExceptionMessage No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation"
+     */
+    public function testWithNullAsClient()
+    {
+        $factory = new Factory();
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface
+     */
+    public function testSetInvalidClient()
+    {
+        $factory = new Factory(new Client());
+        $factory->setHttpClient(new \stdClass());
+    }
 }

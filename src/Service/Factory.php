@@ -16,8 +16,10 @@ namespace Swap\Service;
 use Exchanger\Service\HttpService;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Http\Client\ClientInterface;
 use Http\Message\RequestFactory;
+use Psr\Http\Message\RequestFactoryInterface;
 
 /**
  * Helps building services.
@@ -48,32 +50,44 @@ final class Factory
     private $registry;
 
     /**
-     * @param HttpClient|null     $httpClient
-     * @param RequestFactory|null $requestFactory
+     * @param HttpClient|ClientInterface|null $httpClient
+     * @param RequestFactoryInterface|null    $requestFactory
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null)
+    public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null)
     {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        if (null === $httpClient) {
+            $httpClient = HttpClientDiscovery::find();
+        } else {
+            if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
+                throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
+            }
+        }
+
+        $this->httpClient = $httpClient;
+        $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
         $this->registry = new Registry();
     }
 
     /**
      * Sets the http client.
      *
-     * @param HttpClient $httpClient
+     * @param HttpClient|ClientInterface $httpClient
      */
-    public function setHttpClient(HttpClient $httpClient): void
+    public function setHttpClient($httpClient): void
     {
+        if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
+            throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
+        }
+
         $this->httpClient = $httpClient;
     }
 
     /**
      * Sets the request factory.
      *
-     * @param RequestFactory $requestFactory
+     * @param RequestFactoryInterface $requestFactory
      */
-    public function setRequestFactory(RequestFactory $requestFactory): void
+    public function setRequestFactory(RequestFactoryInterface $requestFactory): void
     {
         $this->requestFactory = $requestFactory;
     }
@@ -89,7 +103,7 @@ final class Factory
     public function create(string $serviceName, array $args = [])
     {
         if (!$this->registry->has($serviceName)) {
-            throw new \InvalidArgumentException(sprintf('The service "%s" is not registered.', $serviceName));
+            throw new \LogicException(sprintf('The service "%s" is not registered.', $serviceName));
         }
 
         $classOrCallable = $this->registry->get($serviceName);
