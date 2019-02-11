@@ -53,7 +53,7 @@ final class Factory
      * @param HttpClient|ClientInterface|null $httpClient
      * @param RequestFactoryInterface|null    $requestFactory
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactoryInterface $requestFactory = null)
+    public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null)
     {
         if (null === $httpClient) {
             $httpClient = HttpClientDiscovery::find();
@@ -103,7 +103,7 @@ final class Factory
     public function create(string $serviceName, array $args = [])
     {
         if (!$this->registry->has($serviceName)) {
-            throw new \InvalidArgumentException(sprintf('The service "%s" is not registered.', $serviceName));
+            throw new \LogicException(sprintf('The service "%s" is not registered.', $serviceName));
         }
 
         $classOrCallable = $this->registry->get($serviceName);
