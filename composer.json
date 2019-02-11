@@ -22,13 +22,13 @@
     },
     "require": {
         "php": "^7.1.3",
-        "florianv/exchanger": "dev-master"
+        "florianv/exchanger": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5",
         "php-http/mock-client": "^1.0",
         "php-http/message": "^1.0",
-        "nyholm/psr7": "^0.2.2"
+        "nyholm/psr7": "^1.0"
     },
     "scripts": {
         "test": "vendor/bin/phpunit"
