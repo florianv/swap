@@ -19,6 +19,8 @@ use Http\Client\HttpClient;
 use Http\Message\RequestFactory;
 use Psr\SimpleCache\CacheInterface;
 use Swap\Service\Factory;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 /**
  * Helps building Swap.
@@ -90,12 +92,16 @@ final class Builder
     /**
      * Uses the given http client.
      *
-     * @param HttpClient $httpClient
+     * @param HttpClient|ClientInterface $httpClient
      *
      * @return Builder
      */
-    public function useHttpClient(HttpClient $httpClient): self
+    public function useHttpClient($httpClient): self
     {
+        if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
+            throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
+        }
+
         $this->httpClient = $httpClient;
 
         return $this;
@@ -104,11 +110,11 @@ final class Builder
     /**
      * Uses the given request factory.
      *
-     * @param RequestFactory $requestFactory
+     * @param RequestFactoryInterface $requestFactory
      *
      * @return Builder
      */
-    public function useRequestFactory(RequestFactory $requestFactory): self
+    public function useRequestFactory(RequestFactoryInterface $requestFactory): self
     {
         $this->requestFactory = $requestFactory;
 

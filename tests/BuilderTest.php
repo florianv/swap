@@ -39,4 +39,14 @@ class BuilderTest extends TestCase
         $builder->add('open_exchange_rates', ['app_id' => 'secret']);
         $this->assertInstanceOf(Swap::class, $builder->build());
     }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface
+     */
+    public function testUseInvalidClient()
+    {
+        $builder = new Builder();
+        $builder->useHttpClient(new \stdClass());
+    }
 }
