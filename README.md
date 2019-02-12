@@ -12,7 +12,7 @@ a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Larave
 ## QuickStart
 
 ```bash
-$ composer require florianv/swap php-http/message php-http/guzzle6-adapter ^1.0
+$ composer require php-http/curl-client nyholm/psr7 php-http/message florianv/swap
 ```
 
 ```php
