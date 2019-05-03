@@ -80,6 +80,7 @@ Here is the list of the currently implemented services:
 | [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
 | [1Forge](https://1forge.com) | * (free but limited or paid) | * (free but limited or paid) | No |
 | [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
+| [Exchange Rates Api](https://exchangeratesapi.io/) | * | * | Yes |
 | [National Bank of Romania](http://www.bnr.ro) | RON | * | Yes |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | Yes |
 | [Central Bank of the Czech Republic](https://www.cnb.cz) | * | CZK | Yes |
