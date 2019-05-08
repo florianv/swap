@@ -33,8 +33,7 @@ composer require php-http/curl-client nyholm/psr7 php-http/message florianv/swap
 
 Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
 
-Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to [currencylayer](https://currencylayer.com), and then
-[1Forge](https://1forge.com) in case of failure. We would write the following:
+Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to [currencylayer](https://currencylayer.com) in case of failure. We would write the following:
 
 ```php
 use Swap\Builder;
@@ -42,7 +41,6 @@ use Swap\Builder;
 $swap = (new Builder())
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
-    ->add('forge', ['api_key' => 'secret'])
     ->build();
 ```
 
@@ -188,7 +186,6 @@ $swap = (new Builder())
     ->useHttpClient($client)
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
-    ->add('forge', ['api_key' => 'secret'])
     ->build();
 
 // A http request is sent
@@ -330,7 +327,6 @@ use Swap\Builder;
 $swap = (new Builder())
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
-    ->add('forge', ['api_key' => 'secret'])
     ->add('european_central_bank')
     ->add('exchange_rates_api')
     ->add('national_bank_of_romania')
@@ -338,6 +334,7 @@ $swap = (new Builder())
     ->add('central_bank_of_czech_republic')
     ->add('russian_central_bank')
     ->add('webservicex')
+    ->add('forge', ['api_key' => 'secret'])
     ->add('cryptonator')
     ->add('currency_data_feed', ['api_key' => 'secret'])
     ->add('currency_converter', ['access_key' => 'secret', 'enterprise' => false])
@@ -373,8 +370,3 @@ They provide real-time rates and historical data, however, EUR is the only avail
 
 Currencylayer provides reliable exchange rates and currency conversions for your business up to 168 world currencies.
 They provide real-time rates and historical data, however, USD is the only available base currency on the free plan.
-
-<img src="https://s3.amazonaws.com/swap.assets/1forge_icon.png" height="20px" width="20px"/> **[1Forge](https://1forge.com)**
-
-1Forge provides Forex and Cryptocurrency quotes for over 700 unique currency pairs. 
-They provide the fastest price updates available of any provider, however, they don’t support smaller currencies or historical data.
