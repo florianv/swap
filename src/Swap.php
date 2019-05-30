@@ -22,7 +22,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Swap
+class Swap
 {
     /**
      * The exchange rate provider.
