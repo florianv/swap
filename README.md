@@ -83,7 +83,6 @@ Here is the list of the currently implemented services:
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
 | [Xignite](https://www.xignite.com) | * | * | Yes |
 | [Currency Converter API](https://www.currencyconverterapi.com) | * | * | Yes (free but limited or paid) |
-| Array | * | * | Yes |
 
 ## Integrations
 
