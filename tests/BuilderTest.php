@@ -13,31 +13,47 @@ declare(strict_types=1);
 
 namespace Swap\Tests;
 
-use Http\Mock\Client;
+use Exchanger\Contract\ExchangeRateService;
+use Exchanger\CurrencyPair;
+use Exchanger\ExchangeRate;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
 use Swap\Builder;
 use Swap\Swap;
 
 class BuilderTest extends TestCase
 {
-    public function testBuild()
+    /**
+     * @var Builder
+     */
+    private $builder;
+
+    protected function setUp()
     {
-        $builder = new Builder();
-        $builder->useHttpClient(new Client());
+        parent::setUp();
 
-        $this->assertInstanceOf(Swap::class, $builder->build());
+        $this->builder = new Builder();
+        $this->builder->useHttpClient($this->createMock(ClientInterface::class));
+    }
 
+    public function testBuildNoServicesAdded()
+    {
+        $this->assertInstanceOf(Swap::class, $this->builder->build());
+    }
+
+    public function testBuildSomeOptionsAdded()
+    {
         $builder = new Builder(['cache_ttl']);
-        $builder->useHttpClient(new Client());
+        $builder->useHttpClient($this->createMock(ClientInterface::class));
 
         $this->assertInstanceOf(Swap::class, $builder->build());
+    }
 
-        $builder = new Builder();
-        $builder->useHttpClient(new Client());
-
-        $builder->add('fixer', ['access_key' => 'access_key']);
-        $builder->add('open_exchange_rates', ['app_id' => 'secret']);
-        $this->assertInstanceOf(Swap::class, $builder->build());
+    public function testBuildMultipleServicesAdded()
+    {
+        $this->builder->add('fixer', ['access_key' => 'access_key']);
+        $this->builder->add('open_exchange_rates', ['app_id' => 'secret']);
+        $this->assertInstanceOf(Swap::class, $this->builder->build());
     }
 
     /**
@@ -48,5 +64,33 @@ class BuilderTest extends TestCase
     {
         $builder = new Builder();
         $builder->useHttpClient(new \stdClass());
+    }
+
+    public function testAddServiceDirectly()
+    {
+        $mockExchangeRateService = $this->createMock(ExchangeRateService::class);
+
+        $this->builder->addExchangeRateService($mockExchangeRateService);
+
+        $swap = $this->builder->build();
+
+        $mockExchangeRateService
+            ->method('supportQuery')
+            ->willReturn(true);
+
+        $rate = new ExchangeRate(
+            new CurrencyPair('EUR', 'USD'),
+            0.8,
+            new \DateTimeImmutable(),
+            'myprovider'
+        );
+
+        $mockExchangeRateService->expects($this->once())
+            ->method('getExchangeRate')
+            ->willReturn($rate);
+
+        $retrievedRate = $swap->latest('EUR/USD');
+
+        $this->assertSame($rate, $retrievedRate);
     }
 }

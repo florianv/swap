@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Swap;
 
+use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Exchanger;
 use Exchanger\Service\Chain;
 use Http\Client\HttpClient;
-use Http\Message\RequestFactory;
 use Psr\SimpleCache\CacheInterface;
 use Swap\Service\Factory;
 use Psr\Http\Client\ClientInterface;
@@ -53,7 +53,7 @@ final class Builder
     /**
      * The request factory.
      *
-     * @var RequestFactory
+     * @var RequestFactoryInterface
      */
     private $requestFactory;
 
@@ -75,7 +75,7 @@ final class Builder
     }
 
     /**
-     * Adds a service.
+     * Adds a service by service name.
      *
      * @param string $serviceName
      * @param array  $options
@@ -85,6 +85,20 @@ final class Builder
     public function add(string $serviceName, array $options = []): self
     {
         $this->services[$serviceName] = $options;
+
+        return $this;
+    }
+
+    /**
+     * Add a service by service instance.
+     *
+     * @param ExchangeRateService $exchangeRateService
+     *
+     * @return Builder
+     */
+    public function addExchangeRateService(ExchangeRateService $exchangeRateService): self
+    {
+        $this->services[spl_object_hash($exchangeRateService)] = $exchangeRateService;
 
         return $this;
     }
@@ -143,10 +157,17 @@ final class Builder
     public function build(): Swap
     {
         $serviceFactory = new Factory($this->httpClient, $this->requestFactory);
+
+        /** @var ExchangeRateService[] $services */
         $services = [];
 
-        foreach ($this->services as $name => $options) {
-            $services[] = $serviceFactory->create($name, $options);
+        foreach ($this->services as $name => $optionsOrService) {
+            /** @var array|ExchangeRateService $optionsOrService */
+            if ($optionsOrService instanceof ExchangeRateService) {
+                $services[] = $optionsOrService;
+            } else {
+                $services[] = $serviceFactory->create($name, $optionsOrService);
+            }
         }
 
         $service = new Chain($services);

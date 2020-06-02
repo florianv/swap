@@ -92,6 +92,8 @@ Here is the list of the currently implemented services:
 | [Currency Converter API](https://www.currencyconverterapi.com) | * | * | Yes (free but limited or paid) |
 | Array | * | * | Yes |
 
+Additionally, you can add your own services as long as they implement the `ExchangeRateService` interface.
+
 ## Integrations
 
 - A Symfony Bundle [FlorianvSwapBundle](https://github.com/florianv/FlorianvSwapBundle)
