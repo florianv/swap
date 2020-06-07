@@ -156,23 +156,28 @@ final class Builder
      */
     public function build(): Swap
     {
-        $serviceFactory = new Factory($this->httpClient, $this->requestFactory);
+        $service = new Chain($this->generateServices());
+        $exchanger = new Exchanger($service, $this->cache, $this->options);
 
-        /** @var ExchangeRateService[] $services */
-        $services = [];
+        return new Swap($exchanger);
+    }
+
+    /**
+     * Create all the services on demand. 
+     *
+     * @return \Generator|ExchangeRateService[]
+     */
+    private function generateServices(): \Generator
+    {
+        $serviceFactory = new Factory($this->httpClient, $this->requestFactory);
 
         foreach ($this->services as $name => $optionsOrService) {
             /** @var array|ExchangeRateService $optionsOrService */
             if ($optionsOrService instanceof ExchangeRateService) {
-                $services[] = $optionsOrService;
+                yield $optionsOrService;
             } else {
-                $services[] = $serviceFactory->create($name, $optionsOrService);
+                yield $serviceFactory->create($name, $optionsOrService);
             }
         }
-
-        $service = new Chain($services);
-        $exchanger = new Exchanger($service, $this->cache, $this->options);
-
-        return new Swap($exchanger);
     }
 }
