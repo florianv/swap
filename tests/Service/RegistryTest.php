@@ -38,6 +38,8 @@ class RegistryTest extends TestCase
         foreach ($services as $name => $class) {
             $data[] = [$name, $class];
         }
+
+        return $data;
     }
 
     public function testRegister()
