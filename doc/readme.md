@@ -342,6 +342,7 @@ $swap = (new Builder())
     ->add('currency_converter', ['access_key' => 'secret', 'enterprise' => false])
     ->add('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
     ->add('xignite', ['token' => 'token'])
+    ->add('xchangeapi', ['api-key' => 'secret'])
     ->add('array', [
         [
             'EUR/USD' => 1.1,

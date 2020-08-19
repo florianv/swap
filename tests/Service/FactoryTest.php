@@ -27,6 +27,7 @@ use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
+use Exchanger\Service\XchangeApi;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use Swap\Service\Factory;
@@ -61,6 +62,7 @@ class FactoryTest extends TestCase
             ['xignite', Xignite::class, ['token' => 'token']],
             ['russian_central_bank', RussianCentralBank::class],
             ['cryptonator', Cryptonator::class],
+            ['xchangeapi', XchangeApi::class, ['api-key' => 'api-key']]
         ];
     }
 
