@@ -63,7 +63,7 @@ class FactoryTest extends TestCase
             ['xignite', Xignite::class, ['token' => 'token']],
             ['russian_central_bank', RussianCentralBank::class],
             ['cryptonator', Cryptonator::class],
-            ['xchangeapi', XchangeApi::class, ['api-key' => 'api-key']]
+            ['xchangeapi', XchangeApi::class, ['api-key' => 'api-key']],
         ];
     }
 
