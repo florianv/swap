@@ -28,7 +28,7 @@ class BuilderTest extends TestCase
      */
     private $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -56,12 +56,12 @@ class BuilderTest extends TestCase
         $this->assertInstanceOf(Swap::class, $this->builder->build());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface
-     */
     public function testUseInvalidClient()
     {
+        $this->expectException(\LogicException::class);
+        $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $builder = new Builder();
         $builder->useHttpClient(new \stdClass());
     }

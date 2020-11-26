@@ -28,6 +28,7 @@ use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\XchangeApi;
+use Http\Discovery\NotFoundException;
 use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
 use Swap\Service\Factory;
@@ -87,30 +88,30 @@ class FactoryTest extends TestCase
         $this->assertSame($service, $factory->create('baz'));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface
-     */
     public function testConstructInvalidClient()
     {
+        $this->expectException(\LogicException::class);
+        $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $factory = new Factory(new \stdClass());
     }
 
-    /**
-     * @expectedException \Http\Discovery\NotFoundException
-     * @expectedExceptionMessage No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation"
-     */
     public function testWithNullAsClient()
     {
+        $this->expectException(NotFoundException::class);
+        $expectedExceptionMessage = 'No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation"';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $factory = new Factory();
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface
-     */
     public function testSetInvalidClient()
     {
+        $this->expectException(\LogicException::class);
+        $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $factory = new Factory(new Client());
         $factory->setHttpClient(new \stdClass());
     }
