@@ -9,13 +9,18 @@ Swap allows you to retrieve currency exchange rates from various services such a
 and optionally cache the results. It is integrated to other libraries like [moneyphp/money](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
-## Sponsors :heart_eyes: 
+## Sponsors
 
-We are proudly supported by the following exchange rate providers offering *free plans*:
-
-<img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/> **[Fixer](https://fixer.io)**
-
-<img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" height="20px" width="20px"/> **[currencylayer](https://currencylayer.com)**
+<table>
+   <tr>
+      <td><img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/> **[Fixer](https://fixer.io)**</td>
+      <td>Fixer is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+   </tr>
+   <tr>
+     <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" height="20px" width="20px"/> **[currencylayer](https://currencylayer.com)**</td>
+     <td>Currencylayer provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
+   </tr>
+</table>
 
 ## QuickStart
 
