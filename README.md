@@ -9,6 +9,14 @@ Swap allows you to retrieve currency exchange rates from various services such a
 and optionally cache the results. It is integrated to other libraries like [moneyphp/money](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
+## Sponsors :heart_eyes: 
+
+We are proudly supported by the following exchange rate providers offering *free plans*:
+
+<img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/> **[Fixer](https://fixer.io)**
+
+<img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" height="20px" width="20px"/> **[currencylayer](https://currencylayer.com)**
+
 ## QuickStart
 
 ```bash
@@ -47,20 +55,6 @@ $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 ## Documentation
 
 The documentation for the current branch can be found [here](https://github.com/florianv/swap/blob/master/doc/readme.md).
-
-## Sponsors :heart_eyes: 
-
-We are proudly supported by the following exchange rate providers offering *free plans up to 1,000 requests per day*:
-
-<img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/> **[Fixer](https://fixer.io)**
-
-Fixer is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.
-They provide real-time rates and historical data, however, EUR is the only available base currency on the free plan.
-
-<img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" height="20px" width="20px"/> **[currencylayer](https://currencylayer.com)**
-
-Currencylayer provides reliable exchange rates and currency conversions for your business up to 168 world currencies.
-They provide real-time rates and historical data, however, USD is the only available base currency on the free plan.
 
 ## Services
 
