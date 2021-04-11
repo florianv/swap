@@ -13,12 +13,12 @@ a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Larave
 
 <table>
    <tr>
-      <td><img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/><a href="https://fixer.io">Fixer</a></td>
-      <td>Fixer is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+      <td><img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/></td>
+      <td><a href="https://fixer.io">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
    </tr>
    <tr>
-     <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" height="20px" width="20px"/> <a href="https://currencylayer.com">currencylayer</a></td>
-     <td>Currencylayer provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
+     <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" height="20px" width="20px"/></td>
+     <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
 </table>
 
