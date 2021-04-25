@@ -43,6 +43,9 @@ $swap = (new Builder())
      
     // Use the currencylayer.com service as first fallback
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
+    
+    // Use the exchangeratesapi.io service as second fallback
+    ->add('exchange_rates_api', ['access_key' => 'secret'])
      
 ->build();
     

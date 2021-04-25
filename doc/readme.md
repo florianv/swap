@@ -203,6 +203,7 @@ $swap = (new Builder())
     ->useHttpClient($client)
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
+    ->add('exchange_rates_api', ['access_key' => 'secret'])
     ->build();
 
 // A http request is sent
