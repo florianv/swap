@@ -11,6 +11,10 @@
      <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" width="50px"/></td>
      <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
+   <tr>
+     <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
+     <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+   </tr>    
 </table>
 
 ## Index
@@ -53,6 +57,7 @@ use Swap\Builder;
 $swap = (new Builder())
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
+    ->add('exchange_rates_api', ['access_key' => 'secret'])
     ->build();
 ```
 
@@ -339,10 +344,10 @@ use Swap\Builder;
 $swap = (new Builder())
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
+    ->add('exchange_rates_api', ['access_key' => 'secret'])
     ->add('coin_layer', ['access_key' => 'secret', 'paid' => false])
     ->add('european_central_bank')
     ->add('abstract_api', ['api_key' => 'secret'])
-    ->add('exchange_rates_api')
     ->add('national_bank_of_romania')
     ->add('central_bank_of_republic_turkey')
     ->add('central_bank_of_czech_republic')
