@@ -77,7 +77,7 @@ Here is the list of the currently implemented services:
 | [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
 | [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
 | [exchangeratesapi](https://exchangeratesapi.io) | USD (free), * (paid) | * | Yes |
-| [Abstract](https://www.abstractapi.com) | * | * | No |
+| [Abstract](https://www.abstractapi.com) | * | * | Yes |
 | [coinlayer](https://coinlayer.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies) | Yes |
 | [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [National Bank of Romania](http://www.bnr.ro) | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | Yes |
