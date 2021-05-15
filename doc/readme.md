@@ -14,6 +14,10 @@
    <tr>
      <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
      <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+   </tr>  
+   <tr>
+     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba27ede983917dbff22f_favicon.png" width="50px"/></td>
+     <td><a href="https://www.abstractapi.com/">abstractapi</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
    </tr>    
 </table>
 
@@ -58,6 +62,7 @@ $swap = (new Builder())
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
     ->add('exchange_rates_api', ['access_key' => 'secret'])
+    ->add('abstract_api', ['api_key' => 'secret'])
     ->build();
 ```
 
@@ -204,6 +209,7 @@ $swap = (new Builder())
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
     ->add('exchange_rates_api', ['access_key' => 'secret'])
+    ->add('abstract_api', ['api_key' => 'secret'])
     ->build();
 
 // A http request is sent
@@ -346,9 +352,9 @@ $swap = (new Builder())
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
     ->add('exchange_rates_api', ['access_key' => 'secret'])
+    ->add('abstract_api', ['api_key' => 'secret'])
     ->add('coin_layer', ['access_key' => 'secret', 'paid' => false])
     ->add('european_central_bank')
-    ->add('abstract_api', ['api_key' => 'secret'])
     ->add('national_bank_of_romania')
     ->add('central_bank_of_republic_turkey')
     ->add('central_bank_of_czech_republic')
