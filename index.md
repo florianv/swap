@@ -1,6 +1,6 @@
-Swap allows you to retrieve currency exchange rates from various services such as **[Fixer](https://fixer.io)**, 
-**[currencylayer](https://currencylayer.com)** or **[exchangeratesapi](https://exchangeratesapi.io)** and optionally cache the results. 
-It is integrated to other libraries like [moneyphp/money](https://github.com/moneyphp/money) and provides 
+Swap allows you to retrieve currency exchange rates from various services such as **[Fixer](https://fixer.io)**, **[currencylayer](https://currencylayer.com)**, 
+**[exchangeratesapi](https://exchangeratesapi.io)** or **[Abstract](https://www.abstractapi.com)** and optionally cache the results. 
+It is integrated to other libraries like [moneyphp/money](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
 ## Sponsors
@@ -17,6 +17,10 @@ a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Larave
    <tr>
      <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
      <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+   </tr>  
+   <tr>
+     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba27ede983917dbff22f_favicon.png" width="50px"/></td>
+     <td><a href="https://www.abstractapi.com/">Abstract</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
    </tr>    
 </table>
 
@@ -40,6 +44,9 @@ $swap = (new Builder())
      
     // Use the exchangeratesapi.io service as second fallback
     ->add('exchange_rates_api', ['access_key' => 'secret'])
+    
+    // Use the abstractapi.com service as third fallback
+    ->add('abstract_api', ['api_key' => 'secret'])
 ->build();
     
 // Get the latest EUR/USD rate
