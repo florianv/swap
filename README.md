@@ -27,7 +27,7 @@ a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Larave
    </tr>   
    <tr>
      <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba27ede983917dbff22f_favicon.png" width="50px"/></td>
-     <td><a href="https://www.abstractapi.com/">abstractapi</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
+     <td><a href="https://www.abstractapi.com/">Abstract</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
    </tr>  
 </table>
 
@@ -52,8 +52,8 @@ $swap = (new Builder())
     // Use the exchangeratesapi.io service as second fallback
     ->add('exchange_rates_api', ['access_key' => 'secret'])
      
-    // Use the exchangeratesapi.io service as second fallback
-    ->add('exchange_rates_api', ['access_key' => 'secret'])
+    // Use the abstractapi.com service as third fallback
+    ->add('abstract_api', ['api_key' => 'secret'])
 ->build();
     
 // Get the latest EUR/USD rate
