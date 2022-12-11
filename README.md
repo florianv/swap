@@ -69,7 +69,7 @@ $rate->getDate()->format('Y-m-d');
 $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 ```
 
-> We recommend to use the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
+> We recommend to use the [services that support our project](#sponsors), providing a free plan up to 100 requests per month.
 
 ## Documentation
 
