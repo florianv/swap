@@ -4,21 +4,21 @@
 
 <table>
    <tr>
-      <td><img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" width="50px"/></td>
-      <td><a href="https://fixer.io">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+      <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
+      <td><a href="https://apilayer.com/marketplace/fixer-api">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
    </tr>
    <tr>
-     <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" width="50px"/></td>
-     <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
+     <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
+     <td><a href="https://apilayer.com/marketplace/currency_data-api">Currency Data</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
    <tr>
-     <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
-     <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
-   </tr>  
+     <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
+     <td><a href="https://apilayer.com/marketplace/exchangerates_data-api">Exchange Rates Data</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+   </tr>   
    <tr>
-     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba27ede983917dbff22f_favicon.png" width="50px"/></td>
+     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba29feeeb05d69160e7b_webclip.png" width="50px"/></td>
      <td><a href="https://www.abstractapi.com/">Abstract</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
-   </tr>    
+   </tr>  
 </table>
 
 ## Index
@@ -53,22 +53,23 @@ composer require php-http/curl-client nyholm/psr7 php-http/message florianv/swap
 
 Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
 
-Let's say we want to use the [Fixer.io](http://fixer.io) service and fallback to [currencylayer](https://currencylayer.com) in case of failure. We would write the following:
+Let's say we want to use the [Fixer](https://apilayer.com/marketplace/fixer-api) service and fallback to [Currency Data](https://apilayer.com/marketplace/currency_data-api) in case of failure. 
+We would write the following:
 
 ```php
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->add('fixer', ['access_key' => 'your-access-key'])
-    ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
-    ->add('exchange_rates_api', ['access_key' => 'secret'])
-    ->add('abstract_api', ['api_key' => 'secret'])
-    ->build();
+    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api'])
+    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
+    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
+    ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
+->build();
 ```
 
 As you can see, you can use the `add()` method to add a service. You can add as many as you want, they will be called in a chain, in case of failure.
 
-We recommend to use one of the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
+We recommend to use one of the [services that support our project](#sponsors), providing a free plan up to 100 requests per month.
 
 The complete list of all supported services is available [here](#supported-services).
 
@@ -206,10 +207,10 @@ $client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
 $swap = (new Builder())
     ->useHttpClient($client)
-    ->add('fixer', ['access_key' => 'your-access-key'])
-    ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
-    ->add('exchange_rates_api', ['access_key' => 'secret'])
-    ->add('abstract_api', ['api_key' => 'secret'])
+    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api'])
+    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
+    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
+    ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
     ->build();
 
 // A http request is sent
@@ -349,11 +350,14 @@ Here is the complete list of supported services and their possible configuration
 use Swap\Builder;
 
 $swap = (new Builder())
+    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api'])
+    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
+    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
+    ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
+    ->add('coin_layer', ['access_key' => 'secret', 'paid' => false])
     ->add('fixer', ['access_key' => 'your-access-key'])
     ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
     ->add('exchange_rates_api', ['access_key' => 'secret'])
-    ->add('abstract_api', ['api_key' => 'secret'])
-    ->add('coin_layer', ['access_key' => 'secret', 'paid' => false])
     ->add('european_central_bank')
     ->add('national_bank_of_romania')
     ->add('central_bank_of_republic_turkey')
