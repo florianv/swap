@@ -1,4 +1,4 @@
-Swap allows you to retrieve currency exchange rates from various services such as **[Fixer](https://apilayer.com/marketplace/fixer-api)**, **[Currency Data](https://apilayer.com/marketplace/currency_data-api)**,
+Swap allows you to retrieve currency exchange rates from various services such as **[Fixer](https://fixer.io/)**, **[Currency Data](https://apilayer.com/marketplace/currency_data-api)**,
 **[Exchange Rates Data](https://apilayer.com/marketplace/exchangerates_data-api)** or **[Abstract](https://www.abstractapi.com)** and optionally cache the results.
 It is integrated to other libraries like [moneyphp/money](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
@@ -8,7 +8,7 @@ a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Larave
 <table>
    <tr>
       <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://apilayer.com/marketplace/fixer-api">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+      <td><a href="https://fixer.io/">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
    </tr>
    <tr>
      <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
@@ -36,7 +36,7 @@ use Swap\Builder;
 // Build Swap
 $swap = (new Builder())
     // Use the Fixer service as first level provider
-    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api'])
+    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
      
     // Use the Currency Data service as first fallback
     ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
@@ -73,7 +73,7 @@ Here is the list of the currently implemented services:
 
 | Service | Base Currency | Quote Currency | Historical |
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
-| [Fixer](https://apilayer.com/marketplace/fixer-api) | EUR (free, no SSL), * (paid) | * | Yes |
+| [Fixer](https://fixer.io/) | EUR (free, no SSL), * (paid) | * | Yes |
 | [Currency Data](https://apilayer.com/marketplace/currency_data-api) | USD (free), * (paid) | * | Yes |
 | [Exchange Rates Data](https://apilayer.com/marketplace/exchangerates_data-api) | USD (free), * (paid) | * | Yes |
 | [Abstract](https://www.abstractapi.com) | * | * | Yes |
