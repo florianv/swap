@@ -5,7 +5,7 @@
 <table>
    <tr>
       <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://apilayer.com/marketplace/fixer-api">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+      <td><a href="https://fixer.io/">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
    </tr>
    <tr>
      <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
@@ -53,14 +53,14 @@ composer require php-http/curl-client nyholm/psr7 php-http/message florianv/swap
 
 Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
 
-Let's say we want to use the [Fixer](https://apilayer.com/marketplace/fixer-api) service and fallback to [Currency Data](https://apilayer.com/marketplace/currency_data-api) in case of failure. 
+Let's say we want to use the [Fixer](https://fixer.io/) service and fallback to [Currency Data](https://apilayer.com/marketplace/currency_data-api) in case of failure. 
 We would write the following:
 
 ```php
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api'])
+    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
     ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
     ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
     ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
@@ -207,7 +207,7 @@ $client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
 $swap = (new Builder())
     ->useHttpClient($client)
-    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api'])
+    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
     ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
     ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
     ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
@@ -350,7 +350,7 @@ Here is the complete list of supported services and their possible configuration
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api'])
+    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
     ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
     ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
     ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
