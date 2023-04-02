@@ -28,7 +28,11 @@
         "phpunit/phpunit": "^7 || ^8 || ^9",
         "php-http/mock-client": "^1.0",
         "php-http/message": "^1.7",
-        "nyholm/psr7": "^1.0"
+        "nyholm/psr7": "^1.0",
+        "php-http/discovery": "^1.0"
+    },
+    "suggest": {
+        "php-http/discovery": "If you are not using `useHttpClient` but instead want to auto-discover HttpClient"
     },
     "scripts": {
         "test": "vendor/bin/phpunit"
