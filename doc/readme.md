@@ -9,11 +9,11 @@
    </tr>
    <tr>
      <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
-     <td><a href="https://apilayer.com/marketplace/currency_data-api">Currency Data</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
+     <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
    <tr>
      <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
-     <td><a href="https://apilayer.com/marketplace/exchangerates_data-api">Exchange Rates Data</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+     <td><a href="https://exchangeratesapi.io/">exchangerates</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
    </tr>   
    <tr>
      <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba29feeeb05d69160e7b_webclip.png" width="50px"/></td>
@@ -53,7 +53,7 @@ composer require php-http/curl-client nyholm/psr7 php-http/message florianv/swap
 
 Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
 
-Let's say we want to use the [Fixer](https://fixer.io/) service and fallback to [Currency Data](https://apilayer.com/marketplace/currency_data-api) in case of failure. 
+Let's say we want to use the [Fixer](https://fixer.io/) service and fallback to [currencylayer](https://currencylayer.com) in case of failure. 
 We would write the following:
 
 ```php
@@ -61,8 +61,8 @@ use Swap\Builder;
 
 $swap = (new Builder())
     ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
-    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
-    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
+    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://currencylayer.com'])
+    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://exchangeratesapi.io/'])
     ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
 ->build();
 ```
@@ -208,8 +208,8 @@ $client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 $swap = (new Builder())
     ->useHttpClient($client)
     ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
-    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
-    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
+    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://currencylayer.com'])
+    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://exchangeratesapi.io/'])
     ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
     ->build();
 
@@ -351,8 +351,8 @@ use Swap\Builder;
 
 $swap = (new Builder())
     ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
-    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api'])
-    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api'])
+    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://currencylayer.com'])
+    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://exchangeratesapi.io/'])
     ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
     ->add('coin_layer', ['access_key' => 'secret', 'paid' => false])
     ->add('fixer', ['access_key' => 'your-access-key'])
