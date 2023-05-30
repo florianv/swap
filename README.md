@@ -5,8 +5,8 @@
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/florianv/swap.svg?style=flat-square)](https://scrutinizer-ci.com/g/florianv/swap)
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 
-Swap allows you to retrieve currency exchange rates from various services such as **[Fixer](https://fixer.io/)**, **[currencylayer](https://currencylayer.com)**,
-**[exchangerates](https://exchangeratesapi.io/)** or **[Abstract](https://www.abstractapi.com)** and optionally cache the results. 
+Swap allows you to retrieve currency exchange rates from various services such as **[Fixer](https://fixer.io/)**, **[Currency Data](https://currencylayer.com)**,
+**[Exchange Rates Data](https://exchangeratesapi.io/)** or **[Abstract](https://www.abstractapi.com)** and optionally cache the results. 
 It is integrated to other libraries like [moneyphp/money](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
@@ -82,12 +82,12 @@ Here is the list of the currently implemented services:
 | Service | Base Currency | Quote Currency | Historical |
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
 | [Fixer](https://fixer.io/) | EUR (free, no SSL), * (paid) | * | Yes |
-| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
-| [exchangerates](https://exchangeratesapi.io/) | USD (free), * (paid) | * | Yes |
+| [Currency Data](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| [Exchange Rates Data](https://exchangeratesapi.io/) | USD (free), * (paid) | * | Yes |
 | [Abstract](https://www.abstractapi.com) | * | * | Yes |
 | [coinlayer](https://coinlayer.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies) | Yes |
 | [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
-| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| [Currency Data](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
 | [exchangeratesapi](https://exchangeratesapi.io) | USD (free), * (paid) | * | Yes |
 | [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [National Bank of Georgia](https://nbg.gov.ge) | * | GEL | Yes |
