@@ -15,7 +15,7 @@ namespace Swap\Service;
 
 use Exchanger\Service\HttpService;
 use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Http\Message\RequestFactory;
@@ -56,7 +56,7 @@ final class Factory
     public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null)
     {
         if (null === $httpClient) {
-            $httpClient = HttpClientDiscovery::find();
+            $httpClient = Psr18ClientDiscovery::find();
         } else {
             if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
                 throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
