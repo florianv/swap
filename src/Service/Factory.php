@@ -53,7 +53,7 @@ final class Factory
      * @param HttpClient|ClientInterface|null $httpClient
      * @param RequestFactoryInterface|null    $requestFactory
      */
-    public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null)
+    public function __construct($httpClient = null, ?RequestFactoryInterface $requestFactory = null)
     {
         if (null === $httpClient) {
             $httpClient = Psr18ClientDiscovery::find();
