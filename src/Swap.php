@@ -77,7 +77,7 @@ class Swap
      *
      * @return ExchangeRateContract
      */
-    private function quote(string $currencyPair, \DateTimeInterface $date = null, array $options = []): ExchangeRateContract
+    private function quote(string $currencyPair, ?\DateTimeInterface $date = null, array $options = []): ExchangeRateContract
     {
         $exchangeQueryBuilder = new ExchangeRateQueryBuilder($currencyPair);
 
