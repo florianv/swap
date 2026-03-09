@@ -13,16 +13,17 @@ declare(strict_types=1);
 
 namespace Swap\Tests\Service;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Swap\Service\Registry;
 use Exchanger\Service\Registry as ExchangerRegistry;
 
 class RegistryTest extends TestCase
 {
-    /**
-     * @dataProvider serviceProviders
-     */
-    public function testCoreServices($name, $class)
+    #[Test]
+    #[DataProvider('serviceProviders')]
+    public function coreServices($name, $class)
     {
         $registry = new Registry();
 
@@ -30,7 +31,7 @@ class RegistryTest extends TestCase
         $this->assertEquals($class, $registry->get($name));
     }
 
-    public function serviceProviders()
+    public static function serviceProviders(): array
     {
         $data = [];
         $services = ExchangerRegistry::getServices();
@@ -42,7 +43,8 @@ class RegistryTest extends TestCase
         return $data;
     }
 
-    public function testRegister()
+    #[Test]
+    public function register()
     {
         $registry = new Registry();
 

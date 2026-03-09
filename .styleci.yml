@@ -1,6 +1,0 @@
-preset: symfony
-
-finder:
-    path:
-        - "src"
-        - "tests"
