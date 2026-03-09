@@ -1,7 +1,13 @@
 {
     "name": "florianv/swap",
     "description": "Exchange rates library for PHP",
-    "keywords": ["currency", "money", "rate", "conversion", "exchange rates"],
+    "keywords": [
+        "currency",
+        "money",
+        "rate",
+        "conversion",
+        "exchange rates"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -34,7 +40,10 @@
         "roave/backward-compatibility-check": "^8.9"
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "psalm": "vendor/bin/psalm --no-progress",
+        "cs:fix": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --quiet",
+        "cs:check": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --verbose --dry-run"
     },
     "extra": {
         "branch-alias": {
