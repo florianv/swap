@@ -102,9 +102,11 @@ class FactoryTest extends TestCase
     #[Test]
     public function withNullAsClientUsesDiscovery()
     {
+        // php-http/mock-client (dev dep) provides client-implementation,
+        // so PSR-18 discovery succeeds and Factory can create services.
         $factory = new Factory();
 
-        $this->assertInstanceOf(Factory::class, $factory);
+        $this->assertInstanceOf(EuropeanCentralBank::class, $factory->create('european_central_bank'));
     }
 
     #[Test]

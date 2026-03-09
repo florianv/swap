@@ -50,6 +50,11 @@
             "dev-master": "4.0-dev"
         }
     },
+    "suggest": {
+        "php-http/discovery": "Auto-discover PSR-18 HTTP client and PSR-17 request factory",
+        "symfony/http-client": "PSR-18 HTTP client implementation",
+        "nyholm/psr7": "PSR-17 HTTP factory implementation"
+    },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true
