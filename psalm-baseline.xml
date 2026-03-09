@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.15.1@28dc127af1b5aecd52314f6f645bafc10d0e11f9">
+  <file src="src/Builder.php">
+    <DeprecatedInterface>
+      <code><![CDATA[HttpClient]]></code>
+    </DeprecatedInterface>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$name]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment>
+      <code><![CDATA[$optionsOrService]]></code>
+    </MixedAssignment>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$cache]]></code>
+      <code><![CDATA[$httpClient]]></code>
+      <code><![CDATA[$requestFactory]]></code>
+    </PropertyNotSetInConstructor>
+    <PropertyTypeCoercion>
+      <code><![CDATA[$httpClient]]></code>
+    </PropertyTypeCoercion>
+    <UnusedClass>
+      <code><![CDATA[Builder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Service/Factory.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$classOrCallable]]></code>
+    </ArgumentTypeCoercion>
+    <DeprecatedInterface>
+      <code><![CDATA[HttpClient]]></code>
+      <code><![CDATA[RequestFactory]]></code>
+    </DeprecatedInterface>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$requestFactory]]></code>
+      <code><![CDATA[$requestFactory ?: Psr17FactoryDiscovery::findRequestFactory()]]></code>
+    </InvalidPropertyAssignmentValue>
+    <LessSpecificReturnStatement>
+      <code><![CDATA[$r->newInstanceArgs($args)]]></code>
+    </LessSpecificReturnStatement>
+    <MixedReturnStatement>
+      <code><![CDATA[call_user_func($classOrCallable)]]></code>
+    </MixedReturnStatement>
+    <PossiblyNullArgument>
+      <code><![CDATA[$classOrCallable]]></code>
+    </PossiblyNullArgument>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[setHttpClient]]></code>
+      <code><![CDATA[setRequestFactory]]></code>
+    </PossiblyUnusedMethod>
+    <PropertyTypeCoercion>
+      <code><![CDATA[$httpClient]]></code>
+      <code><![CDATA[$httpClient]]></code>
+    </PropertyTypeCoercion>
+    <UnsafeInstantiation>
+      <code><![CDATA[new $classOrCallable($this->httpClient, $this->requestFactory, $args)]]></code>
+    </UnsafeInstantiation>
+  </file>
+  <file src="src/Service/Registry.php">
+    <MixedArgument>
+      <code><![CDATA[$class]]></code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$name]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment>
+      <code><![CDATA[$class]]></code>
+    </MixedAssignment>
+    <MixedReturnStatement>
+      <code><![CDATA[isset(self::$services[$name]) ? self::$services[$name] : null]]></code>
+      <code><![CDATA[isset(self::$services[$name]) ? self::$services[$name] : null]]></code>
+    </MixedReturnStatement>
+  </file>
+  <file src="src/Swap.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Swap]]></code>
+    </ClassMustBeFinal>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$name]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[historical]]></code>
+      <code><![CDATA[latest]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+</files>
