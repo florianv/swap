@@ -16,6 +16,7 @@ namespace Swap\Tests;
 use Exchanger\Contract\ExchangeRateService;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRate;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Swap\Builder;
@@ -36,12 +37,14 @@ class BuilderTest extends TestCase
         $this->builder->useHttpClient($this->createMock(ClientInterface::class));
     }
 
-    public function testBuildNoServicesAdded()
+    #[Test]
+    public function buildNoServicesAdded()
     {
         $this->assertInstanceOf(Swap::class, $this->builder->build());
     }
 
-    public function testBuildSomeOptionsAdded()
+    #[Test]
+    public function buildSomeOptionsAdded()
     {
         $builder = new Builder(['cache_ttl']);
         $builder->useHttpClient($this->createMock(ClientInterface::class));
@@ -49,14 +52,16 @@ class BuilderTest extends TestCase
         $this->assertInstanceOf(Swap::class, $builder->build());
     }
 
-    public function testBuildMultipleServicesAdded()
+    #[Test]
+    public function buildMultipleServicesAdded()
     {
         $this->builder->add('fixer', ['access_key' => 'access_key']);
         $this->builder->add('open_exchange_rates', ['app_id' => 'secret']);
         $this->assertInstanceOf(Swap::class, $this->builder->build());
     }
 
-    public function testUseInvalidClient()
+    #[Test]
+    public function useInvalidClient()
     {
         $this->expectException(\LogicException::class);
         $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
@@ -66,7 +71,8 @@ class BuilderTest extends TestCase
         $builder->useHttpClient(new \stdClass());
     }
 
-    public function testAddServiceDirectly()
+    #[Test]
+    public function addServiceDirectly()
     {
         $mockExchangeRateService = $this->createMock(ExchangeRateService::class);
 

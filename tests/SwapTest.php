@@ -16,12 +16,14 @@ namespace Swap\Tests;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\ExchangeRateProvider;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Swap\Swap;
 
 class SwapTest extends TestCase
 {
-    public function testLatest()
+    #[Test]
+    public function latest()
     {
         $exchangeRateProvider = $this->createMock(ExchangeRateProvider::class);
 
@@ -36,7 +38,8 @@ class SwapTest extends TestCase
         $swap->latest('EUR/USD');
     }
 
-    public function testHistorical()
+    #[Test]
+    public function historical()
     {
         $exchangeRateProvider = $this->createMock(ExchangeRateProvider::class);
 

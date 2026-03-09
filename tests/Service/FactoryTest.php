@@ -28,25 +28,25 @@ use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\XchangeApi;
-use Http\Discovery\NotFoundException;
 use Http\Mock\Client;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Swap\Service\Factory;
 use Swap\Service\Registry;
 
 class FactoryTest extends TestCase
 {
-    /**
-     * @dataProvider servicesProvider
-     */
-    public function testCoreServices($name, $class, array $options = [])
+    #[Test]
+    #[DataProvider('servicesProvider')]
+    public function coreServices($name, $class, array $options = [])
     {
         $factory = new Factory(new Client());
 
         $this->assertInstanceOf($class, $factory->create($name, $options));
     }
 
-    public function servicesProvider()
+    public static function servicesProvider(): array
     {
         return [
             ['central_bank_of_czech_republic', CentralBankOfCzechRepublic::class],
@@ -67,7 +67,8 @@ class FactoryTest extends TestCase
         ];
     }
 
-    public function testCustomServices()
+    #[Test]
+    public function customServices()
     {
         // Historical
         Registry::register('foo', OpenExchangeRates::class);
@@ -88,7 +89,8 @@ class FactoryTest extends TestCase
         $this->assertSame($service, $factory->create('baz'));
     }
 
-    public function testConstructInvalidClient()
+    #[Test]
+    public function constructInvalidClient()
     {
         $this->expectException(\LogicException::class);
         $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
@@ -97,16 +99,16 @@ class FactoryTest extends TestCase
         $factory = new Factory(new \stdClass());
     }
 
-    public function testWithNullAsClient()
+    #[Test]
+    public function withNullAsClientUsesDiscovery()
     {
-        $this->expectException(NotFoundException::class);
-        $expectedExceptionMessage = 'No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation"';
-        $this->expectExceptionMessage($expectedExceptionMessage);
-
         $factory = new Factory();
+
+        $this->assertInstanceOf(Factory::class, $factory);
     }
 
-    public function testSetInvalidClient()
+    #[Test]
+    public function setInvalidClient()
     {
         $this->expectException(\LogicException::class);
         $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
