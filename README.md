@@ -1,6 +1,7 @@
 # <img src="https://s3.amazonaws.com/swap.assets/swap_logo.png" height="30px" width="30px"/> Swap
 
-[![Build status](http://img.shields.io/travis/florianv/swap.svg?style=flat-square)](https://travis-ci.org/florianv/swap)
+[![Tests](https://github.com/florianv/swap/actions/workflows/tests.yml/badge.svg)](https://github.com/florianv/swap/actions/workflows/tests.yml)
+[![Psalm](https://github.com/florianv/swap/actions/workflows/psalm.yml/badge.svg)](https://github.com/florianv/swap/actions/workflows/psalm.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 
