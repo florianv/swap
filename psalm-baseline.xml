@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="6.15.1@28dc127af1b5aecd52314f6f645bafc10d0e11f9">
+<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
   <file src="src/Builder.php">
     <DeprecatedInterface>
       <code><![CDATA[HttpClient]]></code>
@@ -28,7 +28,6 @@
     </ArgumentTypeCoercion>
     <DeprecatedInterface>
       <code><![CDATA[HttpClient]]></code>
-      <code><![CDATA[RequestFactory]]></code>
     </DeprecatedInterface>
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$requestFactory]]></code>
@@ -51,6 +50,9 @@
       <code><![CDATA[$httpClient]]></code>
       <code><![CDATA[$httpClient]]></code>
     </PropertyTypeCoercion>
+    <UndefinedDocblockClass>
+      <code><![CDATA[RequestFactory]]></code>
+    </UndefinedDocblockClass>
     <UnsafeInstantiation>
       <code><![CDATA[new $classOrCallable($this->httpClient, $this->requestFactory, $args)]]></code>
     </UnsafeInstantiation>
@@ -71,18 +73,11 @@
     </MixedReturnStatement>
   </file>
   <file src="src/Swap.php">
-    <ClassMustBeFinal>
-      <code><![CDATA[Swap]]></code>
-    </ClassMustBeFinal>
     <MixedArgumentTypeCoercion>
       <code><![CDATA[$name]]></code>
     </MixedArgumentTypeCoercion>
     <MixedAssignment>
       <code><![CDATA[$value]]></code>
     </MixedAssignment>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[historical]]></code>
-      <code><![CDATA[latest]]></code>
-    </PossiblyUnusedMethod>
   </file>
 </files>

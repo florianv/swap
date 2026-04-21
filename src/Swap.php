@@ -19,7 +19,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Swap is an easy to use facade to retrieve exchange rates from various services.
- *
+ * @api
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 class Swap

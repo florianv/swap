@@ -1,6 +1,7 @@
 {
     "name": "florianv/swap",
     "description": "Exchange rates library for PHP",
+    "license": "MIT",
     "keywords": [
         "currency",
         "money",
@@ -8,7 +9,6 @@
         "conversion",
         "exchange rates"
     ],
-    "license": "MIT",
     "authors": [
         {
             "name": "Florian Voutzinos",
@@ -16,6 +16,24 @@
             "homepage": "https://voutzinos.com"
         }
     ],
+    "require": {
+        "php": "^8.2",
+        "florianv/exchanger": "^2.0",
+        "php-http/discovery": "^1.0"
+    },
+    "require-dev": {
+        "nyholm/psr7": "^1.0",
+        "php-http/message": "^1.7",
+        "php-http/mock-client": "^1.0",
+        "phpunit/phpunit": "^11.0 || ^12.0",
+        "roave/backward-compatibility-check": "^8.9",
+        "vimeo/psalm": "^6.0"
+    },
+    "suggest": {
+        "nyholm/psr7": "PSR-17 HTTP factory implementation",
+        "php-http/discovery": "Auto-discover PSR-18 HTTP client and PSR-17 request factory",
+        "symfony/http-client": "PSR-18 HTTP client implementation"
+    },
     "autoload": {
         "psr-4": {
             "Swap\\": "src/"
@@ -26,38 +44,21 @@
             "Swap\\Tests\\": "tests/"
         }
     },
-    "require": {
-        "php": "^8.2",
-        "florianv/exchanger": "^2.0",
-        "php-http/discovery": "^1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^11.0 || ^12.0",
-        "php-http/mock-client": "^1.0",
-        "php-http/message": "^1.7",
-        "nyholm/psr7": "^1.0",
-        "vimeo/psalm": "^6.0",
-        "roave/backward-compatibility-check": "^8.9"
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "psalm": "vendor/bin/psalm --no-progress",
-        "cs:fix": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --quiet",
-        "cs:check": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --verbose --dry-run"
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "branch-alias": {
             "dev-master": "4.0-dev"
         }
     },
-    "suggest": {
-        "php-http/discovery": "Auto-discover PSR-18 HTTP client and PSR-17 request factory",
-        "symfony/http-client": "PSR-18 HTTP client implementation",
-        "nyholm/psr7": "PSR-17 HTTP factory implementation"
-    },
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
+    "scripts": {
+        "cs:check": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --verbose --dry-run",
+        "cs:fix": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --quiet",
+        "psalm": "vendor/bin/psalm --no-progress",
+        "test": "vendor/bin/phpunit",
+        "upd": "@composer update --no-plugins"
     }
 }
