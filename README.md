@@ -9,23 +9,6 @@ Swap allows you to retrieve currency exchange rates from various services such a
 It is integrated to other libraries like [moneyphp/money](https://github.com/moneyphp/money) and provides
 a [Symfony Bundle](https://github.com/florianv/FlorianvSwapBundle) and a [Laravel Package](https://github.com/florianv/laravel-swap).
 
-## Sponsors
-
-<table>
-   <tr>
-      <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://fixer.io/">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
-     <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
-     <td><a href="https://exchangeratesapi.io/">exchangerates</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
-   </tr>
-</table>
-
 ## QuickStart
 
 ```bash
@@ -60,8 +43,6 @@ $rate->getDate()->format('Y-m-d');
 // Get the EUR/USD rate 15 days ago
 $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 ```
-
-> We recommend to use the [services that support our project](#sponsors), providing a free plan up to 100 requests per month.
 
 ## Documentation
 
