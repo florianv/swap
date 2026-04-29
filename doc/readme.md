@@ -1,88 +1,101 @@
 # Documentation
 
-## Sponsors
+## 📘 About this documentation
 
-<table>
-   <tr>
-      <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://fixer.io/">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
-     <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
-     <td><a href="https://exchangeratesapi.io/">exchangerates</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
-   </tr>   
-</table>
+This documentation covers the practical use of Swap, the PHP currency conversion library: configuration, caching, provider configuration, and how to write your own provider. For an overview of the library and the wider ecosystem (Exchanger, Laravel Swap, Symfony Swap), see the [README](../README.md).
 
 ## Index
+
 * [Installation](#installation)
 * [Configuration](#configuration)
+  * [Building Swap](#building-swap)
+  * [Adding multiple providers](#adding-multiple-providers)
+  * [How the fallback chain works](#how-the-fallback-chain-works)
 * [Usage](#usage)
-  * [Retrieving Rates](#retrieving-rates)
-  * [Rate Provider](#rate-provider)
-* [Cache](#cache)
- * [Rates Caching](#rates-caching)
- * [Query Cache Options](#query-cache-options)
- * [Requests Caching](#requests-caching)
-* [Creating a Service](#creating-a-service)
-  * [Standard Service](#standard-service)
-  * [Historical Service](#historical-service)
-* [Supported Services](#supported-services)  
-  
-## Installation
+  * [Retrieving rates](#retrieving-rates)
+  * [Inspecting the rate](#inspecting-the-rate)
+* [Caching](#caching)
+  * [PSR-16 SimpleCache (minimal setup)](#psr-16-simplecache-minimal-setup)
+  * [Per-query options](#per-query-options)
+  * [HTTP request caching](#http-request-caching)
+* [Provider configuration](#provider-configuration)
+* [Creating a custom service](#creating-a-custom-service)
+  * [Standard service](#standard-service)
+  * [Historical service](#historical-service)
+* [FAQ](#faq)
 
-Swap is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) 
-which provides the http layer used to send requests to exchange rate services. 
-This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
+## 📦 Installation
 
-Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). 
-Below is an example using the curl client:
+Swap requires PHP 8.2 or newer. It does not bundle an HTTP client; any PSR-18 client paired with a PSR-17 request factory works, and `php-http/discovery` finds them automatically.
+
+The simplest modern install:
 
 ```bash
-composer require php-http/curl-client nyholm/psr7 php-http/message florianv/swap
+composer require florianv/swap symfony/http-client nyholm/psr7
 ```
 
-## Configuration
+Other PSR-18 clients work the same way, for example Guzzle 7:
 
-Before starting to retrieve currency exchange rates, we need to build `Swap`. Fortunately, the `Builder` class helps us to perform this task.
+```bash
+composer require florianv/swap php-http/guzzle7-adapter nyholm/psr7
+```
 
-Let's say we want to use the [Fixer](https://fixer.io/) service and fallback to [currencylayer](https://currencylayer.com) in case of failure. 
-We would write the following:
+You can also pass a client explicitly via `Builder::useHttpClient()` if you do not want auto-discovery.
+
+## ⚙ Configuration
+
+### Building Swap
+
+`Swap` is built with the `Builder` class. The minimal case uses a single, free provider:
 
 ```php
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
-    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://currencylayer.com'])
-    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://exchangeratesapi.io/'])
-->build();
+    ->add('european_central_bank')
+    ->build();
 ```
 
-As you can see, you can use the `add()` method to add a service. You can add as many as you want, they will be called in a chain, in case of failure.
+`add()` registers a provider by its identifier (the string passed to `Builder::add()`, for example `european_central_bank`). The full list of identifiers is in the README's [Providers table](../README.md#providers).
 
-We recommend to use one of the [services that support our project](#sponsors), providing a free plan up to 100 requests per month.
+### Adding multiple providers
 
-The complete list of all supported services is available [here](#supported-services).
+You can chain several providers. Each one is configured with its own options array:
 
-## Usage
+```php
+use Swap\Builder;
 
-### Retrieving Rates
+$swap = (new Builder())
+    ->add('your_primary_provider', ['api_key' => 'YOUR_KEY'])
+    ->add('your_fallback_provider', ['api_key' => 'YOUR_KEY'])
+    ->add('european_central_bank') // free fallback for EUR-base pairs
+    ->build();
+```
 
-In order to get rates, you can use the `latest()` or `historical()` methods on `Swap`:
+Identifiers and the configuration keys each one accepts are documented in the [Provider configuration](#provider-configuration) section.
+
+### How the fallback chain works
+
+Swap calls providers in declaration order. For each provider:
+
+1. If the provider does not support the requested currency pair, it is skipped silently.
+2. If the provider throws an exception, the exception is collected and the next provider is tried.
+3. If a provider returns a rate, that rate is returned to the caller and the remaining providers are not called.
+
+If every provider was skipped or threw, Swap raises an `Exchanger\Exception\ChainException` containing all collected exceptions. The chain does not retry the same provider, and there is no built-in delay between attempts.
+
+## ⚡ Usage
+
+### Retrieving rates
+
+`Swap` exposes two methods, `latest()` for the most recent rate and `historical()` for a rate on a given date:
 
 ```php
 // Latest rate
 $rate = $swap->latest('EUR/USD');
 
-// 1.129
-echo $rate->getValue();
-
-// 2016-08-26
-echo $rate->getDate()->format('Y-m-d');
+echo $rate->getValue();                 // e.g. 1.0823
+echo $rate->getDate()->format('Y-m-d'); // e.g. 2026-04-29
 
 // Historical rate
 $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
@@ -90,139 +103,192 @@ $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
 
-### Rate provider
+Both methods accept an options array as a third argument; see [Per-query options](#per-query-options) for the supported keys.
 
-When using the chain service, it can be useful to know which service provided the rate.
+### Inspecting the rate
 
-You can use the `getProviderName()` function on a rate that gives you the name of the service that returned it:
+The returned `Exchanger\Contract\ExchangeRate` exposes:
 
 ```php
-$name = $rate->getProviderName();
+$rate->getValue();         // float
+$rate->getDate();          // DateTimeInterface
+$rate->getCurrencyPair();  // Exchanger\CurrencyPair
+$rate->getProviderName();  // string, the identifier that returned the rate
 ```
 
-For example, if Fixer returned the rate, it will be identical to `fixer`.
+`getProviderName()` is useful when several providers are chained: the returned value is the identifier of the provider that actually answered, for example `european_central_bank`.
 
-## Cache
+## 💾 Caching
 
-### Rates Caching
+### PSR-16 SimpleCache (minimal setup)
 
-`Exchanger` provides a [PSR-16 Simple Cache](http://www.php-fig.org/psr/psr-16) integration allowing you to cache rates during a given time using the adapter of your choice.
+Swap caches results through a PSR-16 `SimpleCache`. Any PSR-16 implementation works. A minimal Symfony Cache example:
 
-The following example uses the `Predis` cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/predis-adapter`.
-
-You will also need to install a "bridge" that allows to adapt the PSR-6 adapters to PSR-16 using `composer require cache/simple-cache-bridge` (https://github.com/php-cache/simple-cache-bridge).
- 
 ```bash
- $ composer require cache/predis-adapter
- ```
+composer require symfony/cache
+```
+
+```php
+use Swap\Builder;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Psr16Cache;
+
+$cache = new Psr16Cache(new FilesystemAdapter());
+
+$swap = (new Builder(['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']))
+    ->useSimpleCache($cache)
+    ->add('european_central_bank')
+    ->build();
+```
+
+All rates returned by Swap are now cached for 3600 seconds, keyed with the prefix `myapp-`.
+
+If only PSR-6 adapters are available, you can bridge them to PSR-16 with [`cache/simple-cache-bridge`](https://github.com/php-cache/simple-cache-bridge). For example with Predis:
+
+```bash
+composer require cache/predis-adapter cache/simple-cache-bridge
+```
 
 ```php
 use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 
-$client = new \Predis\Client('tcp:/127.0.0.1:6379');
-$psr6pool = new PredisCachePool($client);
-$simpleCache = new SimpleCacheBridge($psr6pool);
-
-$swap = (new Builder(['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']))
-    ->useSimpleCache($simpleCache)
-    ->build();
+$client = new \Predis\Client('tcp://127.0.0.1:6379');
+$cache  = new SimpleCacheBridge(new PredisCachePool($client));
 ```
 
-All rates will now be cached in Redis during 3600 seconds, and cache keys will be prefixed with 'myapp-'
+### Per-query options
 
-### Query Cache Options
+Cache behavior can be overridden per call.
 
-You can override `Swap` caching options per request.
+#### `cache_ttl`
 
-#### cache_ttl
-
-Set cache TTL in seconds. Default: `null` - cache entries permanently
+Cache TTL in seconds. Default: `null` (cache entries do not expire).
 
 ```php
-// Override the global cache_ttl only for this query
 $rate = $swap->latest('EUR/USD', ['cache_ttl' => 60]);
 $rate = $swap->historical('EUR/USD', $date, ['cache_ttl' => 60]);
 ```
 
-#### cache
+#### `cache`
 
-Disable/Enable caching. Default: `true`
+Disable or enable caching for a single query. Default: `true`.
 
 ```php
-// Disable caching for this query
 $rate = $swap->latest('EUR/USD', ['cache' => false]);
 $rate = $swap->historical('EUR/USD', $date, ['cache' => false]);
 ```
 
-#### cache_key_prefix
+#### `cache_key_prefix`
 
-Set the cache key prefix. Default: empty string
+Override the cache key prefix for a single query. Default: empty string.
 
-There is a limitation of 64 characters for the key length in PSR-6, because of this, key prefix must not exceed 24 characters, as sha1() hash takes 40 symbols.
-
-PSR-6 do not allows characters `{}()/\@:` in key, these characters are replaced with `-`
+PSR-6 limits cache keys to 64 characters. The internal hash of the query takes 40 characters, so the prefix must not exceed 24 characters. PSR-6 also does not allow the characters `{}()/\@:` in keys; Swap replaces them with `-`.
 
 ```php
-// Override cache key prefix for this query
 $rate = $swap->latest('EUR/USD', ['cache_key_prefix' => 'currencies-special-']);
 $rate = $swap->historical('EUR/USD', $date, ['cache_key_prefix' => 'currencies-special-']);
 ```
 
-### Requests Caching
+### HTTP request caching
 
-By default, `Swap` queries the service for each rate you request, but some services like `Fixer` sends a whole file containing
-rates for each base currency. 
+Some providers return all rates for a given base currency in a single response. If you fetch several pairs sharing the same base (for example `EUR/USD` and then `EUR/GBP`), caching the underlying HTTP response avoids hitting the provider twice.
 
-It means that if you are requesting multiple rates using the same base currency like `EUR/USD`, then `EUR/GBP`, you may want
-to cache these responses in order to improve performances.
-
-#### Example
-
-Install the PHP HTTP Cache plugin and the PHP Cache Array adapter.
+Install the PHP HTTP cache plugin and a PSR-6 cache adapter:
 
 ```bash
-$ composer require php-http/cache-plugin cache/array-adapter
+composer require php-http/cache-plugin cache/array-adapter
 ```
 
-Modify the way you create your HTTP Client by decorating it with a `PluginClient` using the `Array` cache:
+Decorate your HTTP client with the cache plugin and pass it to `Builder::useHttpClient()`:
 
 ```php
-use Http\Client\Common\PluginClient;
-use Http\Client\Common\Plugin\CachePlugin;
-use Http\Message\StreamFactory\GuzzleStreamFactory;
-use Http\Adapter\Guzzle6\Client as GuzzleClient;
 use Cache\Adapter\PHPArray\ArrayCachePool;
+use Http\Adapter\Guzzle7\Client as GuzzleClient;
+use Http\Client\Common\Plugin\CachePlugin;
+use Http\Client\Common\PluginClient;
+use Http\Message\StreamFactory\GuzzleStreamFactory;
 use Swap\Builder;
 
-$pool = new ArrayCachePool();
+$pool          = new ArrayCachePool();
 $streamFactory = new GuzzleStreamFactory();
-$cachePlugin = new CachePlugin($pool, $streamFactory);
-$client = new PluginClient(new GuzzleClient(), [$cachePlugin]);
+$cachePlugin   = new CachePlugin($pool, $streamFactory);
+$client        = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
 $swap = (new Builder())
     ->useHttpClient($client)
-    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
-    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://currencylayer.com'])
-    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://exchangeratesapi.io/'])
+    ->add('european_central_bank')
     ->build();
 
-// A http request is sent
+// First call performs an HTTP request
 $rate = $swap->latest('EUR/USD');
 
-// A new request won't be sent
+// Second call hits the HTTP cache
 $rate = $swap->latest('EUR/GBP');
 ```
 
-## Creating a Service
+## 🔑 Provider configuration
 
-You want to add a new service to `Swap` ? Great!
+Public providers (central banks, national banks, `cryptonator`, `exchangeratehost`, `webservicex`) need no configuration. Add them by identifier:
 
-If your service must send http requests to retrieve rates, your class must extend the `HttpService` class, otherwise you can extend the more generic `Service` class.
+```php
+$swap = (new Builder())
+    ->add('european_central_bank')
+    ->add('national_bank_of_romania')
+    ->build();
+```
+
+Commercial providers require an API key. The option name varies by provider:
+
+| Identifier                       | Required option | Optional flags        |
+| -------------------------------- | --------------- | --------------------- |
+| `abstract_api`                   | `api_key`       |                       |
+| `apilayer_currency_data`         | `api_key`       |                       |
+| `apilayer_exchange_rates_data`   | `api_key`       |                       |
+| `apilayer_fixer`                 | `api_key`       |                       |
+| `coin_layer`                     | `access_key`    | `paid` (bool)         |
+| `currency_converter`             | `access_key`    | `enterprise` (bool)   |
+| `currency_data_feed`             | `api_key`       |                       |
+| `currency_layer`                 | `access_key`    | `enterprise` (bool)   |
+| `exchange_rates_api`             | `access_key`    |                       |
+| `fastforex`                      | `api_key`       |                       |
+| `fixer`                          | `access_key`    |                       |
+| `fixer_apilayer`                 | `api_key`       |                       |
+| `forge`                          | `api_key`       |                       |
+| `open_exchange_rates`            | `app_id`        | `enterprise` (bool)   |
+| `xchangeapi`                     | `api-key`       | (note the hyphen)     |
+| `xignite`                        | `token`         |                       |
+
+Example:
+
+```php
+$swap = (new Builder())
+    ->add('apilayer_fixer',      ['api_key'    => 'YOUR_KEY'])
+    ->add('open_exchange_rates', ['app_id'     => 'YOUR_APP_ID', 'enterprise' => false])
+    ->add('xignite',             ['token'      => 'YOUR_TOKEN'])
+    ->build();
+```
+
+The `array` provider is a special case used in tests and fixtures. It accepts a nested structure of latest and historical rates:
+
+```php
+$swap = (new Builder())
+    ->add('array', [
+        ['EUR/USD' => 1.1, 'EUR/GBP' => 1.5],          // latest rates
+        ['2017-01-01' => ['EUR/USD' => 1.5]],          // historical rates
+    ])
+    ->build();
+```
+
+The full provider list with capabilities (base currency, quote currency, historical support) is in the README's [Providers table](../README.md#providers).
+
+## 🧩 Creating a custom service
+
+You can register your own provider as long as it implements the same contract used internally. If your service makes HTTP requests, extend `Exchanger\Service\HttpService`; otherwise extend the simpler `Exchanger\Service\Service`.
 
 ### Standard service
 
-In the following example, we are creating a `Constant` service that returns a constant rate value.
+The example below registers a `Constant` service that returns a fixed rate value:
 
 ```php
 use Exchanger\Contract\ExchangeRateQuery;
@@ -232,28 +298,14 @@ use Swap\Service\Registry;
 
 class ConstantService extends HttpService
 {
-    /**
-     * Gets the exchange rate.
-     *
-     * @param ExchangeRateQuery $exchangeQuery
-     *
-     * @return ExchangeRate
-     */
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
-        // If you want to make a request you can use
-        // $content = $this->request('http://example.com');
+        // To call an HTTP endpoint:
+        // $content = $this->request('https://example.com');
 
         return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
     }
 
-    /**
-     * Processes the service options.
-     *
-     * @param array &$options
-     *
-     * @return void
-     */
     public function processOptions(array &$options): void
     {
         if (!isset($options['value'])) {
@@ -261,124 +313,77 @@ class ConstantService extends HttpService
         }
     }
 
-    /**
-     * Tells if the service supports the exchange rate query.
-     *
-     * @param ExchangeRateQuery $exchangeQuery
-     *
-     * @return bool
-     */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
-        // For example, our service only supports EUR as base currency
+        // Example: only support EUR-base pairs.
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
 
-    /**
-     * Gets the name of the exchange rate service.
-     *
-     * @return string
-     */
     public function getName(): string
     {
         return 'constant';
     }
 }
 
-// Register the service so it's available using Builder::add()
+// Register the service so Builder::add() recognizes its identifier
 Registry::register('constant', ConstantService::class);
 
-// Now you can use the add() method add your service name and pass your options
 $swap = (new Builder())
     ->add('constant', ['value' => 10])
     ->build();
 
-// 10
-echo $swap->latest('EUR/USD')->getValue();
+echo $swap->latest('EUR/USD')->getValue(); // 10
 ```
 
 ### Historical service
 
-If your service supports retrieving historical rates, you need to use the `SupportsHistoricalQueries` trait.
-
-You will need to rename the `getExchangeRate` method to `getLatestExchangeRate` and switch its visibility to protected, and implement a new `getHistoricalExchangeRate` method:
+To support historical rates, use the `SupportsHistoricalQueries` trait. Rename `getExchangeRate` to `getLatestExchangeRate` (now `protected`) and implement `getHistoricalExchangeRate`:
 
 ```php
+use Exchanger\Contract\ExchangeRateQuery;
+use Exchanger\Contract\ExchangeRate;
+use Exchanger\HistoricalExchangeRateQuery;
+use Exchanger\Service\HttpService;
 use Exchanger\Service\SupportsHistoricalQueries;
 
 class ConstantService extends HttpService
 {
     use SupportsHistoricalQueries;
-    
-    /**
-     * Gets the exchange rate.
-     *
-     * @param ExchangeRateQuery $exchangeQuery
-     *
-     * @return ExchangeRate
-     */
+
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
     }
 
-    /**
-     * Gets an historical rate.
-     *
-     * @param HistoricalExchangeRateQuery $exchangeQuery
-     *
-     * @return ExchangeRate
-     */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
     }
-}    
+}
 ```
 
-## Supported Services
+## ❓ FAQ
 
-Here is the complete list of supported services and their possible configurations:
+#### What happens when every provider fails?
 
-```php
-use Swap\Builder;
+Swap throws an `Exchanger\Exception\ChainException`. Calling `$exception->getExceptions()` on it returns the list of exceptions collected from each provider in the chain.
 
-$swap = (new Builder())
-    ->add('apilayer_fixer', ['api_key' => 'Get your key here: https://fixer.io/'])
-    ->add('apilayer_currency_data', ['api_key' => 'Get your key here: https://currencylayer.com'])
-    ->add('apilayer_exchange_rates_data', ['api_key' => 'Get your key here: https://exchangeratesapi.io/'])
-    ->add('abstract_api', ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
-    ->add('coin_layer', ['access_key' => 'secret', 'paid' => false])
-    ->add('fixer', ['access_key' => 'your-access-key'])
-    ->add('currency_layer', ['access_key' => 'secret', 'enterprise' => false])
-    ->add('exchange_rates_api', ['access_key' => 'secret'])
-    ->add('european_central_bank')
-    ->add('national_bank_of_romania')
-    ->add('central_bank_of_republic_turkey')
-    ->add('central_bank_of_czech_republic')
-    ->add('russian_central_bank')
-    ->add('bulgarian_national_bank')
-    ->add('webservicex')
-    ->add('forge', ['api_key' => 'secret'])
-    ->add('cryptonator')
-    ->add('currency_data_feed', ['api_key' => 'secret'])
-    ->add('currency_converter', ['access_key' => 'secret', 'enterprise' => false])
-    ->add('open_exchange_rates', ['app_id' => 'secret', 'enterprise' => false])
-    ->add('xignite', ['token' => 'token'])
-    ->add('xchangeapi', ['api-key' => 'secret'])
-    ->add('array', [
-        [
-            'EUR/USD' => 1.1,
-            'EUR/GBP' => 1.5
-        ],
-        [
-            '2017-01-01' => [
-                'EUR/USD' => 1.5
-            ],
-            '2017-01-03' => [
-                'EUR/GBP' => 1.3
-            ],
-        ]
-    ])
-    ->build();
-```
+#### Can I use Swap without an API key?
+
+Yes. The European Central Bank, the national banks, `cryptonator`, `exchangeratehost`, and `webservicex` do not require an API key. See the [Providers table](../README.md#providers) for the full list.
+
+#### How do I cache rates?
+
+Configure any PSR-16 cache via `Builder::useSimpleCache()`. See [PSR-16 SimpleCache (minimal setup)](#psr-16-simplecache-minimal-setup).
+
+#### How do I disable cache for a single query?
+
+Pass `['cache' => false]` as the options argument: `$swap->latest('EUR/USD', ['cache' => false])`.
+
+#### How do I add my own provider?
+
+Implement `Exchanger\Contract\ExchangeRateService` (or extend `HttpService` / `Service`), register it with `Swap\Service\Registry::register()`, then call `Builder::add()` with your identifier. See [Creating a custom service](#creating-a-custom-service).
+
+#### Where is the full provider list with capabilities?
+
+In the README's [Providers table](../README.md#providers). It lists every supported identifier with its base currency, quote currency, and historical support.

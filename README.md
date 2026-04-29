@@ -9,7 +9,7 @@
 
 Swap is a mature PHP **currency conversion library** for retrieving and working with exchange rates. It provides a single, easy-to-use API on top of 30 exchange rate providers, ranging from public sources (the European Central Bank, several national banks, exchangerate.host) to commercial **exchange rate APIs** that require an API key. Caching, historical rates, and a fallback chain are built in. Used in real-world PHP applications since 2014.
 
-## What is Swap?
+## 💡 What is Swap?
 
 - Swap is a PHP library for currency conversion and exchange rate retrieval.
 - It supports 30 exchange rate providers behind a common interface.
@@ -17,12 +17,12 @@ Swap is a mature PHP **currency conversion library** for retrieving and working 
 - It supports historical rates.
 - It supports a fallback chain. When a provider errors, the next provider in the chain is tried.
 
-## When should you use Swap?
+## 🎯 When should you use Swap?
 
 - Use Swap when you need to retrieve exchange rates in a PHP application: currency conversion workflows, multi-currency pricing, invoice totals, reconciliation, or historical FX data.
 - Use the lower-level [Exchanger](https://github.com/florianv/exchanger) library when Swap's defaults are too opinionated and you want finer control over chain composition, caching, or HTTP plumbing.
 
-## Why not call an exchange rate API directly?
+## 🧠 Why not call an exchange rate API directly?
 
 You can. Here is what Swap does for you so you don't have to build it again:
 
@@ -33,7 +33,7 @@ You can. Here is what Swap does for you so you don't have to build it again:
 - **Typed result objects.** `getValue()`, `getDate()`, `getCurrencyPair()`, `getProviderName()` are uniform across providers, so no per-provider response parsing in your application code.
 - **HTTP plumbing.** PSR-18 / PSR-17 friendly, auto-discovered via `php-http/discovery`. Any compliant HTTP client (Symfony HTTP Client, Guzzle, etc.) works without custom wiring.
 
-## Installation
+## 📦 Installation
 
 Swap requires PHP 8.2 or newer.
 
@@ -43,7 +43,7 @@ composer require florianv/swap symfony/http-client nyholm/psr7
 
 `symfony/http-client` is the PSR-18 HTTP client and `nyholm/psr7` provides the PSR-17 factories. Any PSR-18 / PSR-17 implementation works (see the [documentation](doc/readme.md) for alternatives such as Guzzle).
 
-## Quickstart
+## ⚡ Quickstart
 
 ```php
 use Swap\Builder;
@@ -70,7 +70,7 @@ $past = $swap->historical('EUR/USD', new \DateTime('-15 days'));
 
 Swap retrieves the rate; your application multiplies the amount by `$rate->getValue()` to perform the conversion.
 
-## Configuring multiple providers (fallback chain)
+## 🔁 Configuring multiple providers (fallback chain)
 
 ```php
 $swap = (new Builder())
@@ -82,7 +82,7 @@ $swap = (new Builder())
 
 Providers are tried in order. If a provider does not support the requested currency pair, it is skipped silently. If a provider throws an error, the next provider is tried. If every provider fails, a `ChainException` is thrown with all collected errors.
 
-## Common use cases
+## 🛠 Common use cases
 
 - Display localized prices in multi-currency storefronts.
 - Compute invoice totals across currencies.
@@ -90,7 +90,7 @@ Providers are tried in order. If a provider does not support the requested curre
 - Power internal FX dashboards with rate history.
 - Build currency conversion infrastructure for fintech and ERP applications.
 
-## Which package should I use?
+## 🧭 Which package should I use?
 
 The Swap ecosystem is a layered toolkit for currency conversion in PHP:
 
@@ -101,7 +101,7 @@ The Swap ecosystem is a layered toolkit for currency conversion in PHP:
 
 All four packages are MIT-licensed and require PHP 8.2 or newer.
 
-## Providers
+## 📊 Providers
 
 Swap supports 30 exchange rate providers via [Exchanger](https://github.com/florianv/exchanger). Pass the **identifier** to `Builder::add()`.
 
@@ -145,7 +145,7 @@ Swap supports 30 exchange rate providers via [Exchanger](https://github.com/flor
 
 You can also add your own provider by implementing the `Exchanger\Contract\ExchangeRateService` interface and passing the instance to `Builder::addExchangeRateService()`.
 
-## Caching, HTTP client, and error handling
+## ⚙ Caching, HTTP client, and error handling
 
 - **Caching.** Swap uses PSR-16 `SimpleCache`. Configure once on the builder:
 
@@ -160,11 +160,11 @@ You can also add your own provider by implementing the `Exchanger\Contract\Excha
 
 - **Errors.** When every configured provider has either skipped (unsupported pair) or thrown, Swap raises an `Exchanger\Exception\ChainException` containing all collected exceptions.
 
-## Documentation
+## 📚 Documentation
 
 The full documentation is in [`doc/readme.md`](doc/readme.md), and is also published at [florianv.github.io/swap](https://florianv.github.io/swap/).
 
-## Related packages
+## 🧩 Related packages
 
 The Swap ecosystem:
 
