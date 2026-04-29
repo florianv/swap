@@ -1,28 +1,55 @@
 # Documentation
 
-## 📘 About this documentation
+## 💡 What is Swap?
 
-This documentation covers the practical use of Swap, the PHP currency conversion library: configuration, caching, provider configuration, and how to write your own provider. For an overview of the library and the wider ecosystem (Exchanger, Laravel Swap, Symfony Swap), see the [README](../README.md).
+- Swap is a PHP library for currency conversion and exchange rate retrieval.
+- It exposes a wide range of exchange rate providers behind a common interface.
+- It caches results via PSR-16 SimpleCache.
+- It supports historical rates.
+- It supports a fallback chain. When a provider errors, the next provider in the chain is tried.
+
+For the wider ecosystem (Exchanger, Laravel Swap, Symfony Swap), see the [README](../README.md).
+
+## 🎯 When should you use Swap?
+
+- Use Swap when you need to retrieve exchange rates in a PHP application: currency conversion workflows, multi-currency pricing, invoice totals, reconciliation, or historical FX data.
+- Use the lower-level [Exchanger](https://github.com/florianv/exchanger) library when Swap's defaults are too opinionated and you want finer control over chain composition, caching, or HTTP plumbing.
+
+## 🧠 Why not call an exchange rate API directly?
+
+You can integrate a single exchange rate API directly in your application.
+
+Swap is useful when you need more than a single provider:
+
+- **Provider abstraction** — switch providers without rewriting your code
+- **Fallback support** — if one provider fails, another can be used automatically
+- **Unified interface** — all providers share the same API
+- **Caching** — reduce API calls and improve performance
+- **Flexibility** — combine public and commercial providers
+
+For simple use cases, calling a single API may be enough.
+
+Swap becomes valuable when you need reliability, flexibility, or long-term maintainability.
 
 ## Index
 
-* [Installation](#installation)
-* [Configuration](#configuration)
+* [Installation](#-installation)
+* [Configuration](#-configuration)
   * [Building Swap](#building-swap)
   * [Adding multiple providers](#adding-multiple-providers)
   * [How the fallback chain works](#how-the-fallback-chain-works)
-* [Usage](#usage)
+* [Usage](#-usage)
   * [Retrieving rates](#retrieving-rates)
   * [Inspecting the rate](#inspecting-the-rate)
-* [Caching](#caching)
+* [Caching](#-caching)
   * [PSR-16 SimpleCache (minimal setup)](#psr-16-simplecache-minimal-setup)
   * [Per-query options](#per-query-options)
   * [HTTP request caching](#http-request-caching)
-* [Provider configuration](#provider-configuration)
-* [Creating a custom service](#creating-a-custom-service)
+* [Provider configuration](#-provider-configuration)
+* [Creating a custom service](#-creating-a-custom-service)
   * [Standard service](#standard-service)
   * [Historical service](#historical-service)
-* [FAQ](#faq)
+* [FAQ](#-faq)
 
 ## 📦 Installation
 
@@ -56,7 +83,7 @@ $swap = (new Builder())
     ->build();
 ```
 
-`add()` registers a provider by its identifier (the string passed to `Builder::add()`, for example `european_central_bank`). The full list of identifiers is in the README's [Providers table](../README.md#providers).
+`add()` registers a provider by its identifier (the string passed to `Builder::add()`, for example `european_central_bank`). The full list of identifiers is in the README's [Providers table](../README.md#-providers).
 
 ### Adding multiple providers
 
@@ -72,7 +99,7 @@ $swap = (new Builder())
     ->build();
 ```
 
-Identifiers and the configuration keys each one accepts are documented in the [Provider configuration](#provider-configuration) section.
+Identifiers and the configuration keys each one accepts are documented in the [Provider configuration](#-provider-configuration) section.
 
 ### How the fallback chain works
 
@@ -159,48 +186,29 @@ $cache  = new SimpleCacheBridge(new PredisCachePool($client));
 
 ### Per-query options
 
-Cache behavior can be overridden per call.
+Cache behavior can be overridden per call by passing an options array to `latest()` or `historical()`.
 
-#### `cache_ttl`
+| Option             | Type   | Default | Effect                                                                                                |
+| ------------------ | ------ | ------- | ----------------------------------------------------------------------------------------------------- |
+| `cache_ttl`        | int    | `null`  | Cache TTL in seconds. `null` means entries do not expire.                                             |
+| `cache`            | bool   | `true`  | Set to `false` to bypass the cache for this call.                                                     |
+| `cache_key_prefix` | string | `""`    | Prefix for the cache key. Max 24 characters (PSR-6 limits keys to 64 chars; the internal hash takes 40). |
 
-Cache TTL in seconds. Default: `null` (cache entries do not expire).
-
-```php
-$rate = $swap->latest('EUR/USD', ['cache_ttl' => 60]);
-$rate = $swap->historical('EUR/USD', $date, ['cache_ttl' => 60]);
-```
-
-#### `cache`
-
-Disable or enable caching for a single query. Default: `true`.
+PSR-6 does not allow the characters `{}()/\@:` in keys; Swap replaces them with `-`.
 
 ```php
 $rate = $swap->latest('EUR/USD', ['cache' => false]);
-$rate = $swap->historical('EUR/USD', $date, ['cache' => false]);
-```
-
-#### `cache_key_prefix`
-
-Override the cache key prefix for a single query. Default: empty string.
-
-PSR-6 limits cache keys to 64 characters. The internal hash of the query takes 40 characters, so the prefix must not exceed 24 characters. PSR-6 also does not allow the characters `{}()/\@:` in keys; Swap replaces them with `-`.
-
-```php
+$rate = $swap->latest('EUR/USD', ['cache_ttl' => 60]);
 $rate = $swap->latest('EUR/USD', ['cache_key_prefix' => 'currencies-special-']);
-$rate = $swap->historical('EUR/USD', $date, ['cache_key_prefix' => 'currencies-special-']);
 ```
 
 ### HTTP request caching
 
-Some providers return all rates for a given base currency in a single response. If you fetch several pairs sharing the same base (for example `EUR/USD` and then `EUR/GBP`), caching the underlying HTTP response avoids hitting the provider twice.
-
-Install the PHP HTTP cache plugin and a PSR-6 cache adapter:
+Some providers return all rates for a given base currency in a single response. If you fetch several pairs sharing the same base (for example `EUR/USD` and then `EUR/GBP`), caching the underlying HTTP response avoids hitting the provider twice. Decorate your HTTP client with the PHP HTTP cache plugin and pass it to `Builder::useHttpClient()`:
 
 ```bash
 composer require php-http/cache-plugin cache/array-adapter
 ```
-
-Decorate your HTTP client with the cache plugin and pass it to `Builder::useHttpClient()`:
 
 ```php
 use Cache\Adapter\PHPArray\ArrayCachePool;
@@ -220,11 +228,8 @@ $swap = (new Builder())
     ->add('european_central_bank')
     ->build();
 
-// First call performs an HTTP request
-$rate = $swap->latest('EUR/USD');
-
-// Second call hits the HTTP cache
-$rate = $swap->latest('EUR/GBP');
+$rate = $swap->latest('EUR/USD'); // performs an HTTP request
+$rate = $swap->latest('EUR/GBP'); // hits the HTTP cache
 ```
 
 ## 🔑 Provider configuration
@@ -263,9 +268,9 @@ Example:
 
 ```php
 $swap = (new Builder())
-    ->add('apilayer_fixer',      ['api_key'    => 'YOUR_KEY'])
-    ->add('open_exchange_rates', ['app_id'     => 'YOUR_APP_ID', 'enterprise' => false])
-    ->add('xignite',             ['token'      => 'YOUR_TOKEN'])
+    ->add('apilayer_fixer',      ['api_key' => 'YOUR_KEY'])
+    ->add('open_exchange_rates', ['app_id'  => 'YOUR_APP_ID', 'enterprise' => false])
+    ->add('xignite',             ['token'   => 'YOUR_TOKEN'])
     ->build();
 ```
 
@@ -280,7 +285,7 @@ $swap = (new Builder())
     ->build();
 ```
 
-The full provider list with capabilities (base currency, quote currency, historical support) is in the README's [Providers table](../README.md#providers).
+The full provider list with capabilities (base currency, quote currency, historical support) is in the README's [Providers table](../README.md#-providers).
 
 ## 🧩 Creating a custom service
 
@@ -370,7 +375,11 @@ Swap throws an `Exchanger\Exception\ChainException`. Calling `$exception->getExc
 
 #### Can I use Swap without an API key?
 
-Yes. The European Central Bank, the national banks, `cryptonator`, `exchangeratehost`, and `webservicex` do not require an API key. See the [Providers table](../README.md#providers) for the full list.
+Yes. The European Central Bank, the national banks, `cryptonator`, `exchangeratehost`, and `webservicex` do not require an API key. See the [Providers table](../README.md#-providers) for the full list.
+
+#### How does Swap relate to Exchanger?
+
+Swap is the high-level, easy-to-use API. Exchanger is the lower-level provider layer Swap is built on. Reach for Exchanger directly only when you need finer control over chain composition, caching, or HTTP plumbing. See the README's [Which package should I use?](../README.md#-which-package-should-i-use) section.
 
 #### How do I cache rates?
 
@@ -382,8 +391,8 @@ Pass `['cache' => false]` as the options argument: `$swap->latest('EUR/USD', ['c
 
 #### How do I add my own provider?
 
-Implement `Exchanger\Contract\ExchangeRateService` (or extend `HttpService` / `Service`), register it with `Swap\Service\Registry::register()`, then call `Builder::add()` with your identifier. See [Creating a custom service](#creating-a-custom-service).
+Implement `Exchanger\Contract\ExchangeRateService` (or extend `HttpService` / `Service`), register it with `Swap\Service\Registry::register()`, then call `Builder::add()` with your identifier. See [Creating a custom service](#-creating-a-custom-service).
 
 #### Where is the full provider list with capabilities?
 
-In the README's [Providers table](../README.md#providers). It lists every supported identifier with its base currency, quote currency, and historical support.
+In the README's [Providers table](../README.md#-providers). It lists every supported identifier with its base currency, quote currency, and historical support.
