@@ -3,7 +3,13 @@ title: "Swap: PHP currency conversion library"
 description: PHP currency conversion library for retrieving exchange rates from 30 providers, with caching and fallback. Maintained since 2014.
 ---
 
-Swap is a mature PHP **currency conversion library** for retrieving and working with exchange rates. It provides a single, easy-to-use API on top of multiple exchange rate providers, ranging from public sources (the European Central Bank, several national banks, exchangerate.host) to commercial **exchange rate APIs** that require an API key. Caching, historical rates, and a fallback chain are built in. Used in real-world PHP applications since 2014.
+**Resilient currency conversion in PHP, with fallback, caching, and zero vendor lock-in.**
+
+Most exchange rate APIs are a single point of failure. Swap lets you build resilient currency infrastructure on top of multiple providers.
+
+> Used in production PHP applications since 2014.
+
+Swap is a mature PHP **currency conversion library** for retrieving and working with exchange rates. It provides a single, easy-to-use API on top of multiple exchange rate providers, ranging from public sources (the European Central Bank, several national banks, exchangerate.host) to commercial **exchange rate APIs** that require an API key. Caching, historical rates, and a fallback chain are built in.
 
 ## What is Swap?
 
@@ -75,7 +81,7 @@ Swap retrieves the rate; your application multiplies the amount by `$rate->getVa
 
 Source code, full documentation, providers list, and issue tracker:
 
-**[View on GitHub →](https://github.com/florianv/swap)**
+**[→ View on GitHub](https://github.com/florianv/swap)**
 
 ## Related packages
 
@@ -87,3 +93,7 @@ Source code, full documentation, providers list, and issue tracker:
 ## Documentation
 
 The full documentation, including the providers table, caching options, and how to write your own provider, is in [doc/readme.md](https://github.com/florianv/swap/blob/master/doc/readme.md) on the GitHub repository.
+
+---
+
+_Swap is open to selected partnerships with exchange rate providers._
