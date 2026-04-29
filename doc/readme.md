@@ -128,7 +128,7 @@ echo $rate->getDate()->format('Y-m-d'); // e.g. 2026-04-29
 $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 ```
 
-> Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
+> Currencies are expressed as their [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code.
 
 Both methods accept an options array as a third argument; see [Per-query options](#per-query-options) for the supported keys.
 
