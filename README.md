@@ -7,12 +7,12 @@
 
 > _The easy-to-use PHP currency conversion library. Retrieve exchange rates from 30 providers, with caching and fallback. Maintained since 2014._
 
-Swap is a mature PHP **currency conversion library** for retrieving and working with exchange rates. It provides a single, easy-to-use API on top of 30 exchange rate providers, ranging from public sources (the European Central Bank, several national banks, exchangerate.host) to commercial **exchange rate APIs** that require an API key. Caching, historical rates, and a fallback chain are built in. Used in real-world PHP applications since 2014.
+Swap is a mature PHP **currency conversion library** for retrieving and working with exchange rates. It provides a single, easy-to-use API on top of multiple exchange rate providers, ranging from public sources (the European Central Bank, several national banks, exchangerate.host) to commercial **exchange rate APIs** that require an API key. Caching, historical rates, and a fallback chain are built in. Used in real-world PHP applications since 2014.
 
 ## 💡 What is Swap?
 
 - Swap is a PHP library for currency conversion and exchange rate retrieval.
-- It supports 30 exchange rate providers behind a common interface.
+- It exposes a wide range of exchange rate providers behind a common interface.
 - It caches results via PSR-16 SimpleCache.
 - It supports historical rates.
 - It supports a fallback chain. When a provider errors, the next provider in the chain is tried.
@@ -22,16 +22,21 @@ Swap is a mature PHP **currency conversion library** for retrieving and working 
 - Use Swap when you need to retrieve exchange rates in a PHP application: currency conversion workflows, multi-currency pricing, invoice totals, reconciliation, or historical FX data.
 - Use the lower-level [Exchanger](https://github.com/florianv/exchanger) library when Swap's defaults are too opinionated and you want finer control over chain composition, caching, or HTTP plumbing.
 
-## 🧠 Why not call an exchange rate API directly?
+## Why not call an exchange rate API directly?
 
-You can. Here is what Swap does for you so you don't have to build it again:
+You can integrate a single exchange rate API directly in your application.
 
-- **Provider abstraction.** Swap one provider for another without rewriting application code; all 30 providers expose the same interface.
-- **Fallback chain.** Try a primary provider first, fall back to others on error. Unsupported currency pairs are skipped silently.
-- **Caching.** PSR-16 SimpleCache integration with per-query TTL and per-query disable.
-- **Historical rates.** One method (`historical()`) regardless of the underlying endpoint shape.
-- **Typed result objects.** `getValue()`, `getDate()`, `getCurrencyPair()`, `getProviderName()` are uniform across providers, so no per-provider response parsing in your application code.
-- **HTTP plumbing.** PSR-18 / PSR-17 friendly, auto-discovered via `php-http/discovery`. Any compliant HTTP client (Symfony HTTP Client, Guzzle, etc.) works without custom wiring.
+Swap is useful when you need more than a single provider:
+
+- **Provider abstraction** — switch providers without rewriting your code
+- **Fallback support** — if one provider fails, another can be used automatically
+- **Unified interface** — all providers share the same API
+- **Caching** — reduce API calls and improve performance
+- **Flexibility** — combine public and commercial providers
+
+For simple use cases, calling a single API may be enough.
+
+Swap becomes valuable when you need reliability, flexibility, or long-term maintainability.
 
 ## 📦 Installation
 
@@ -103,6 +108,8 @@ All four packages are MIT-licensed and require PHP 8.2 or newer.
 
 ## 📊 Providers
 
+Start with a single provider (for example the European Central Bank), then add others as needed.
+
 Swap supports 30 exchange rate providers via [Exchanger](https://github.com/florianv/exchanger). Pass the **identifier** to `Builder::add()`.
 
 ### Public providers (no API key required)
@@ -173,7 +180,7 @@ The Swap ecosystem:
 - [**Laravel Swap**](https://github.com/florianv/laravel-swap): Laravel application of Swap.
 - [**Symfony Swap**](https://github.com/florianv/symfony-swap): Symfony integration of Swap.
 
-## Sponsorship
+## 🤝 Sponsorship
 
 The Swap ecosystem is open to selected sponsorships from exchange rate API providers and financial infrastructure companies.
 
@@ -185,15 +192,15 @@ Sponsorship can include:
 
 For inquiries, contact the maintainer via [GitHub](https://github.com/florianv).
 
-## Contributing
+## 🙌 Contributing
 
 Issues and pull requests are welcome. Please see the existing [issues](https://github.com/florianv/swap/issues) before opening a new one.
 
-## License
+## 📄 License
 
 The MIT License (MIT). Please see [LICENSE](https://github.com/florianv/swap/blob/master/LICENSE) for more information.
 
-## Credits
+## 👏 Credits
 
 - [Florian Voutzinos](https://github.com/florianv)
 - [All contributors](https://github.com/florianv/swap/contributors)
