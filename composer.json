@@ -1,13 +1,19 @@
 {
     "name": "florianv/swap",
-    "description": "Exchange rates library for PHP",
+    "description": "PHP currency conversion library — exchange rates from 30 providers, with caching and fallback.",
     "license": "MIT",
     "keywords": [
         "currency",
         "money",
         "rate",
         "conversion",
-        "exchange rates"
+        "exchange rates",
+        "currency conversion",
+        "currency conversion library",
+        "php currency conversion",
+        "exchange rate api",
+        "forex",
+        "forex api"
     ],
     "authors": [
         {
