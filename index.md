@@ -1,5 +1,5 @@
 ---
-title: Swap – PHP currency conversion library
+title: "Swap: PHP currency conversion library"
 description: PHP currency conversion library for retrieving exchange rates from 30 providers, with caching and fallback. Maintained since 2014.
 ---
 
@@ -24,11 +24,11 @@ You can integrate a single exchange rate API directly in your application.
 
 Swap is useful when you need more than a single provider:
 
-- **Provider abstraction** — switch providers without rewriting your code
-- **Fallback support** — if one provider fails, another can be used automatically
-- **Unified interface** — all providers share the same API
-- **Caching** — reduce API calls and improve performance
-- **Flexibility** — combine public and commercial providers
+- **Provider abstraction:** switch providers without rewriting your code
+- **Fallback support:** if one provider fails, another can be used automatically
+- **Unified interface:** all providers share the same API
+- **Caching:** reduce API calls and improve performance
+- **Flexibility:** combine public and commercial providers
 
 For simple use cases, calling a single API may be enough.
 
@@ -79,10 +79,10 @@ Source code, full documentation, providers list, and issue tracker:
 
 ## Related packages
 
-- [Swap](https://github.com/florianv/swap) – easy-to-use PHP currency conversion library (this package).
-- [Exchanger](https://github.com/florianv/exchanger) – lower-level, more granular alternative; direct access to provider implementations.
-- [Laravel Swap](https://github.com/florianv/laravel-swap) – Laravel application of Swap.
-- [Symfony Swap](https://github.com/florianv/symfony-swap) – Symfony integration of Swap.
+- [Swap](https://github.com/florianv/swap): easy-to-use PHP currency conversion library (this package).
+- [Exchanger](https://github.com/florianv/exchanger): lower-level, more granular alternative; direct access to provider implementations.
+- [Laravel Swap](https://github.com/florianv/laravel-swap): Laravel application of Swap.
+- [Symfony Swap](https://github.com/florianv/symfony-swap): Symfony integration of Swap.
 
 ## Documentation
 

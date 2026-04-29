@@ -1,4 +1,4 @@
-title: Swap – PHP currency conversion library
+title: "Swap: PHP currency conversion library"
 description: PHP currency conversion library for retrieving exchange rates from 30 providers, with caching and fallback. Maintained since 2014.
 theme: jekyll-theme-cayman
 show_downloads: false
