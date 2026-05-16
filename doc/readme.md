@@ -3,13 +3,13 @@
 <table>
    <tr>
       <td width="220" align="center">
-         <a href="https://fastforex.io" target="_blank" rel="noopener">
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener">
             <img src="https://console.fastforex.io/img/fastforex/logo-bk-1k.svg" width="180px" alt="fastFOREX"/>
          </a>
       </td>
       <td>
-         <strong>Sponsored by <a href="https://fastforex.io" target="_blank" rel="noopener">fastFOREX</a>.</strong> Real-time JSON API, 160+ currencies, 500+ cryptocurrencies, 21 ms average response. <strong>Free tier</strong>; paid plans from $18/month.
-         <a href="https://fastforex.io" target="_blank" rel="noopener"><strong>→ Get a free fastFOREX API key</strong></a>
+         <strong>Sponsored by <a href="https://www.fastforex.io" target="_blank" rel="noopener">fastFOREX</a>.</strong> Real-time JSON API, 160+ currencies, 55+ years of history, 500+ cryptocurrencies. <strong>Free tier</strong>; paid plans from $18/month.
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener"><strong>→ Get a free fastFOREX API key</strong></a>
       </td>
    </tr>
 </table>
@@ -62,7 +62,7 @@ You can also pass a client explicitly via `Builder::useHttpClient()` if you do n
 
 ### Building Swap
 
-`Swap` is built with the `Builder` class. A typical setup uses [fastFOREX](https://fastforex.io) (the project's sponsor) as the primary provider:
+`Swap` is built with the `Builder` class. A typical setup uses [fastFOREX](https://www.fastforex.io) (the project's sponsor) as the primary provider:
 
 ```php
 use Swap\Builder;
@@ -262,7 +262,7 @@ $rate = $swap->latest('EUR/GBP'); // hits the HTTP cache
 
 ### Commercial providers
 
-Commercial providers require an API key. The option name varies by provider. The project's sponsor [fastFOREX](https://fastforex.io) (`fastforex`) is the recommended starting point.
+Commercial providers require an API key. The option name varies by provider. The project's sponsor [fastFOREX](https://www.fastforex.io) (`fastforex`) is the recommended starting point.
 
 | Identifier                       | Required option | Optional flags        |
 | -------------------------------- | --------------- | --------------------- |

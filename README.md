@@ -10,13 +10,13 @@
 <table>
    <tr>
       <td width="220" align="center">
-         <a href="https://fastforex.io" target="_blank" rel="noopener">
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener">
             <img src="https://console.fastforex.io/img/fastforex/logo-bk-1k.svg" width="180px" alt="fastFOREX"/>
          </a>
       </td>
       <td>
-         <strong>Sponsored by <a href="https://fastforex.io" target="_blank" rel="noopener">fastFOREX</a>.</strong> Real-time JSON API, 160+ currencies, 500+ cryptocurrencies, 21 ms average response. <strong>Free tier</strong>; paid plans from $18/month.
-         <a href="https://fastforex.io" target="_blank" rel="noopener"><strong>→ Get a free fastFOREX API key</strong></a>
+         <strong>Sponsored by <a href="https://www.fastforex.io" target="_blank" rel="noopener">fastFOREX</a>.</strong> Real-time JSON API, 160+ currencies, 55+ years of history, 500+ cryptocurrencies. <strong>Free tier</strong>; paid plans from $18/month.
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener"><strong>→ Get a free fastFOREX API key</strong></a>
       </td>
    </tr>
 </table>
@@ -43,12 +43,12 @@ composer require florianv/swap symfony/http-client nyholm/psr7
 
 ## ⚡ Quickstart
 
-The recommended setup uses **[fastFOREX](https://fastforex.io)** (the project's sponsor) as the primary provider. [Grab a free key](https://fastforex.io) and you're ready.
+The recommended setup uses **[fastFOREX](https://www.fastforex.io)** (the project's sponsor) as the primary provider. [Grab a free key](https://www.fastforex.io) and you're ready.
 
 ```php
 use Swap\Builder;
 
-// Recommended: fastFOREX. Get a free API key at https://fastforex.io
+// Recommended: fastFOREX. Get a free API key at https://www.fastforex.io
 $swap = (new Builder())
     ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
     ->build();
@@ -107,7 +107,7 @@ Swap supports 30 exchange rate providers. Pass the **identifier** to `Builder::a
 
 | Service                                  | Identifier      | Base                     | Quote  | Historical |
 | ---------------------------------------- | --------------- | ------------------------ | ------ | ---------- |
-| ⭐ **[fastFOREX](https://fastforex.io)**  | **`fastforex`** | **\***                   | **\*** | **Yes**    |
+| ⭐ **[fastFOREX](https://www.fastforex.io)**  | **`fastforex`** | **\***                   | **\*** | **Yes**    |
 |                                          |                 |                          |        |            |
 | AbstractAPI                              | `abstract_api`                 | *                    | *     | Yes        |
 | coinlayer                                | `coin_layer`                   | * (crypto)           | *     | Yes        |
