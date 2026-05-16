@@ -1,35 +1,20 @@
 # Documentation
 
-## 💡 What is Swap?
+<table>
+   <tr>
+      <td width="220" align="center">
+         <a href="https://fastforex.io" target="_blank" rel="noopener">
+            <img src="https://console.fastforex.io/img/fastforex/logo-bk-1k.svg" width="180px" alt="fastFOREX"/>
+         </a>
+      </td>
+      <td>
+         <strong>Sponsored by <a href="https://fastforex.io" target="_blank" rel="noopener">fastFOREX</a>.</strong> Real-time JSON API, 160+ currencies, 500+ cryptocurrencies, 21 ms average response. <strong>Free tier</strong>; paid plans from $18/month.
+         <a href="https://fastforex.io" target="_blank" rel="noopener"><strong>→ Get a free fastFOREX API key</strong></a>
+      </td>
+   </tr>
+</table>
 
-- Swap is a PHP library for currency conversion and exchange rate retrieval.
-- It exposes a wide range of exchange rate providers behind a common interface.
-- It caches results via PSR-16 SimpleCache.
-- It supports historical rates.
-- It supports a fallback chain. When a provider errors, the next provider in the chain is tried.
-
-For the wider ecosystem (Exchanger, Laravel Swap, Symfony Swap), see the [README](../README.md).
-
-## 🎯 When should you use Swap?
-
-- Use Swap when you need to retrieve exchange rates in a PHP application: currency conversion workflows, multi-currency pricing, invoice totals, reconciliation, or historical FX data.
-- Use the lower-level [Exchanger](https://github.com/florianv/exchanger) library when Swap's defaults are too opinionated and you want finer control over chain composition, caching, or HTTP plumbing.
-
-## 🧠 Why not call an exchange rate API directly?
-
-You can integrate a single exchange rate API directly in your application.
-
-Swap is useful when you need more than a single provider:
-
-- **Provider abstraction** — switch providers without rewriting your code
-- **Fallback support** — if one provider fails, another can be used automatically
-- **Unified interface** — all providers share the same API
-- **Caching** — reduce API calls and improve performance
-- **Flexibility** — combine public and commercial providers
-
-For simple use cases, calling a single API may be enough.
-
-Swap becomes valuable when you need reliability, flexibility, or long-term maintainability.
+This is the technical reference for Swap. For the project overview and ecosystem (Exchanger, Laravel Swap, Symfony Swap), see the [README](../README.md).
 
 ## Index
 
@@ -41,11 +26,15 @@ Swap becomes valuable when you need reliability, flexibility, or long-term maint
 * [Usage](#-usage)
   * [Retrieving rates](#retrieving-rates)
   * [Inspecting the rate](#inspecting-the-rate)
+  * [Converting amounts](#converting-amounts)
 * [Caching](#-caching)
   * [PSR-16 SimpleCache (minimal setup)](#psr-16-simplecache-minimal-setup)
   * [Per-query options](#per-query-options)
   * [HTTP request caching](#http-request-caching)
 * [Provider configuration](#-provider-configuration)
+  * [Commercial providers](#commercial-providers)
+  * [Public providers](#public-providers)
+  * [Example](#example)
 * [Creating a custom service](#-creating-a-custom-service)
   * [Standard service](#standard-service)
   * [Historical service](#historical-service)
@@ -73,17 +62,25 @@ You can also pass a client explicitly via `Builder::useHttpClient()` if you do n
 
 ### Building Swap
 
-`Swap` is built with the `Builder` class. The minimal case uses a single, free provider:
+`Swap` is built with the `Builder` class. A typical setup uses [fastFOREX](https://fastforex.io) (the project's sponsor) as the primary provider:
 
 ```php
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->add('european_central_bank')
+    ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
     ->build();
 ```
 
-`add()` registers a provider by its identifier (the string passed to `Builder::add()`, for example `european_central_bank`). The full list of identifiers is in the README's [Providers table](../README.md#-providers).
+`add()` registers a provider by its identifier (here `fastforex`). The full list lives in [Provider configuration](#-provider-configuration).
+
+For a no-key starting point, the European Central Bank publishes EUR-base rates for free:
+
+```php
+$swap = (new Builder())
+    ->add('european_central_bank')
+    ->build();
+```
 
 ### Adding multiple providers
 
@@ -93,8 +90,7 @@ You can chain several providers. Each one is configured with its own options arr
 use Swap\Builder;
 
 $swap = (new Builder())
-    ->add('your_primary_provider', ['api_key' => 'YOUR_KEY'])
-    ->add('your_fallback_provider', ['api_key' => 'YOUR_KEY'])
+    ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
     ->add('european_central_bank') // free fallback for EUR-base pairs
     ->build();
 ```
@@ -145,6 +141,36 @@ $rate->getProviderName();  // string, the identifier that returned the rate
 
 `getProviderName()` is useful when several providers are chained: the returned value is the identifier of the provider that actually answered, for example `european_central_bank`.
 
+### Converting amounts
+
+`Swap` returns rates, not amounts. Conversion stays explicit in your application:
+
+```php
+$rate = $swap->latest('EUR/USD');
+
+$amountEur = 100.00;
+$amountUsd = $amountEur * $rate->getValue();
+```
+
+For financial code with proper rounding semantics, pair Swap with [moneyphp/money](https://github.com/moneyphp/money). Money ships a first-class `SwapExchange` that wraps any `Swap\SwapInterface` directly:
+
+```php
+use Money\Money;
+use Money\Currency;
+use Money\Converter;
+use Money\Currencies\ISOCurrencies;
+use Money\Exchange\SwapExchange;
+
+$exchange  = new SwapExchange($swap);
+$converter = new Converter(new ISOCurrencies(), $exchange);
+
+$eur100 = Money::EUR(100);                              // €1.00 (100 minor units)
+$usd    = $converter->convert($eur100, new Currency('USD'));
+
+// Money 4.x also exposes the rate pair alongside the converted amount:
+[$usd, $pair] = $converter->convertAndReturnWithCurrencyPair($eur100, new Currency('USD'));
+```
+
 ## 💾 Caching
 
 ### PSR-16 SimpleCache (minimal setup)
@@ -164,7 +190,7 @@ $cache = new Psr16Cache(new FilesystemAdapter());
 
 $swap = (new Builder(['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']))
     ->useSimpleCache($cache)
-    ->add('european_central_bank')
+    ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
     ->build();
 ```
 
@@ -225,7 +251,7 @@ $client        = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
 $swap = (new Builder())
     ->useHttpClient($client)
-    ->add('european_central_bank')
+    ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
     ->build();
 
 $rate = $swap->latest('EUR/USD'); // performs an HTTP request
@@ -234,19 +260,14 @@ $rate = $swap->latest('EUR/GBP'); // hits the HTTP cache
 
 ## 🔑 Provider configuration
 
-Public providers (central banks, national banks, `cryptonator`, `exchangeratehost`, `webservicex`) need no configuration. Add them by identifier:
+### Commercial providers
 
-```php
-$swap = (new Builder())
-    ->add('european_central_bank')
-    ->add('national_bank_of_romania')
-    ->build();
-```
-
-Commercial providers require an API key. The option name varies by provider:
+Commercial providers require an API key. The option name varies by provider. The project's sponsor [fastFOREX](https://fastforex.io) (`fastforex`) is the recommended starting point.
 
 | Identifier                       | Required option | Optional flags        |
 | -------------------------------- | --------------- | --------------------- |
+| ⭐ **`fastforex`**                | **`api_key`**   |                       |
+|                                  |                 |                       |
 | `abstract_api`                   | `api_key`       |                       |
 | `apilayer_currency_data`         | `api_key`       |                       |
 | `apilayer_exchange_rates_data`   | `api_key`       |                       |
@@ -256,7 +277,6 @@ Commercial providers require an API key. The option name varies by provider:
 | `currency_data_feed`             | `api_key`       |                       |
 | `currency_layer`                 | `access_key`    | `enterprise` (bool)   |
 | `exchange_rates_api`             | `access_key`    |                       |
-| `fastforex`                      | `api_key`       |                       |
 | `fixer`                          | `access_key`    |                       |
 | `fixer_apilayer`                 | `api_key`       |                       |
 | `forge`                          | `api_key`       |                       |
@@ -264,13 +284,42 @@ Commercial providers require an API key. The option name varies by provider:
 | `xchangeapi`                     | `api-key`       | (note the hyphen)     |
 | `xignite`                        | `token`         |                       |
 
-Example:
+> Note: `cryptonator`, `exchangeratehost` and `webservicex` are commercial upstream services but the current Exchanger wrapper does not enforce any option for them. They can be added with `->add('exchangeratehost')` until the wrapper is updated to require an API key.
+
+### Public providers
+
+Public providers (the European Central Bank, the national banks) need no configuration. Add them by identifier:
 
 ```php
 $swap = (new Builder())
+    ->add('european_central_bank')
+    ->add('national_bank_of_romania')
+    ->build();
+```
+
+| Identifier                            | Base           | Quote          | Historical |
+| ------------------------------------- | -------------- | -------------- | ---------- |
+| `bulgarian_national_bank`             | *              | BGN            | Yes        |
+| `central_bank_of_czech_republic`      | *              | CZK            | Yes        |
+| `central_bank_of_republic_turkey`     | *              | TRY            | Yes        |
+| `central_bank_of_republic_uzbekistan` | *              | UZS            | Yes        |
+| `european_central_bank`               | EUR            | *              | Yes        |
+| `national_bank_of_georgia`            | *              | GEL            | Yes        |
+| `national_bank_of_romania`            | (limited list) | (limited list) | Yes        |
+| `national_bank_of_republic_belarus`   | *              | BYN            | Yes        |
+| `national_bank_of_ukraine`            | *              | UAH            | Yes        |
+| `russian_central_bank`                | *              | RUB            | Yes        |
+
+### Example
+
+Chaining fastFOREX as the primary provider with a couple of fallbacks:
+
+```php
+$swap = (new Builder())
+    ->add('fastforex',           ['api_key' => getenv('FASTFOREX_API_KEY')])
     ->add('apilayer_fixer',      ['api_key' => 'YOUR_KEY'])
     ->add('open_exchange_rates', ['app_id'  => 'YOUR_APP_ID', 'enterprise' => false])
-    ->add('xignite',             ['token'   => 'YOUR_TOKEN'])
+    ->add('european_central_bank') // free fallback for EUR-base pairs
     ->build();
 ```
 
@@ -284,8 +333,6 @@ $swap = (new Builder())
     ])
     ->build();
 ```
-
-The full provider list with capabilities (base currency, quote currency, historical support) is in the README's [Providers table](../README.md#-providers).
 
 ## 🧩 Creating a custom service
 
@@ -375,7 +422,7 @@ Swap throws an `Exchanger\Exception\ChainException`. Calling `$exception->getExc
 
 #### Can I use Swap without an API key?
 
-Yes. The European Central Bank, the national banks, `cryptonator`, `exchangeratehost`, and `webservicex` do not require an API key. See the [Providers table](../README.md#-providers) for the full list.
+Yes. The European Central Bank and the national banks listed under [Public providers](#public-providers) require no key. A few commercial providers (`cryptonator`, `exchangeratehost`, `webservicex`) can also currently be used without one, since the Exchanger wrapper does not yet enforce an option for them.
 
 #### How does Swap relate to Exchanger?
 
@@ -395,4 +442,4 @@ Implement `Exchanger\Contract\ExchangeRateService` (or extend `HttpService` / `S
 
 #### Where is the full provider list with capabilities?
 
-In the README's [Providers table](../README.md#-providers). It lists every supported identifier with its base currency, quote currency, and historical support.
+In the [Provider configuration](#-provider-configuration) section above, split into Commercial and Public tables with identifier, base currency, quote currency and historical support.
