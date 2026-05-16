@@ -9,7 +9,21 @@ Most exchange rate APIs are a single point of failure. Swap lets you build resil
 
 > Used in production PHP applications since 2014.
 
-Swap is a mature PHP **currency conversion library** for retrieving and working with exchange rates. It provides a single, easy-to-use API on top of multiple exchange rate providers, ranging from public sources (the European Central Bank, several national banks, exchangerate.host) to commercial **exchange rate APIs** that require an API key. Caching, historical rates, and a fallback chain are built in.
+<table>
+   <tr>
+      <td width="220" align="center">
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener">
+            <img src="https://console.fastforex.io/img/fastforex/logo-bk-1k.svg" width="180px" alt="fastFOREX"/>
+         </a>
+      </td>
+      <td>
+         <strong>Sponsored by <a href="https://www.fastforex.io" target="_blank" rel="noopener">fastFOREX</a>.</strong> Real-time JSON API, 160+ currencies, 55+ years of history, 500+ cryptocurrencies. <strong>Free tier</strong>; paid plans from $18/month.
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener"><strong>→ Get a free fastFOREX API key</strong></a>
+      </td>
+   </tr>
+</table>
+
+Swap retrieves currency exchange rates in PHP, behind a single API. Use commercial providers in production, or free public sources (ECB, national banks) when you don't need volume. Caching, historical rates and provider fallback are built in.
 
 ## What is Swap?
 
@@ -19,45 +33,24 @@ Swap is a mature PHP **currency conversion library** for retrieving and working 
 - It supports historical rates.
 - It supports a fallback chain. When a provider errors, the next provider in the chain is tried.
 
-## When should you use Swap?
-
-- Use Swap when you need to retrieve exchange rates in a PHP application: currency conversion workflows, multi-currency pricing, invoice totals, reconciliation, or historical FX data.
-- Use the lower-level [Exchanger](https://github.com/florianv/exchanger) library when Swap's defaults are too opinionated and you want finer control over chain composition, caching, or HTTP plumbing.
-
-## Why not call an exchange rate API directly?
-
-You can integrate a single exchange rate API directly in your application.
-
-Swap is useful when you need more than a single provider:
-
-- **Provider abstraction:** switch providers without rewriting your code
-- **Fallback support:** if one provider fails, another can be used automatically
-- **Unified interface:** all providers share the same API
-- **Caching:** reduce API calls and improve performance
-- **Flexibility:** combine public and commercial providers
-
-For simple use cases, calling a single API may be enough.
-
-Swap becomes valuable when you need reliability, flexibility, or long-term maintainability.
-
-## Quickstart
+## Installation
 
 Swap requires PHP 8.2 or newer.
-
-Install via Composer:
 
 ```bash
 composer require florianv/swap symfony/http-client nyholm/psr7
 ```
 
-Use it:
+## Quickstart
+
+The recommended setup uses **[fastFOREX](https://www.fastforex.io)** (the project's sponsor) as the primary provider. [Grab a free key](https://www.fastforex.io) and you're ready.
 
 ```php
 use Swap\Builder;
 
-// Build Swap with the European Central Bank (free, no API key required).
+// Recommended: fastFOREX. Get a free API key at https://www.fastforex.io
 $swap = (new Builder())
-    ->add('european_central_bank')
+    ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
     ->build();
 
 // EUR → USD exchange rate
@@ -65,35 +58,55 @@ $rate = $swap->latest('EUR/USD');
 
 $rate->getValue();                 // e.g. 1.0823 (a float)
 $rate->getDate()->format('Y-m-d'); // e.g. 2026-04-29
-$rate->getProviderName();          // 'european_central_bank'
+$rate->getProviderName();          // 'fastforex'
 
 // Convert an amount using the returned rate
 $amountInEUR = 100.00;
 $amountInUSD = $amountInEUR * $rate->getValue();
-
-// Retrieve a historical rate
-$past = $swap->historical('EUR/USD', new \DateTime('-15 days'));
 ```
 
-Swap retrieves the rate; your application multiplies the amount by `$rate->getValue()` to perform the conversion.
+No API key? Start with the European Central Bank (free, EUR-base only):
 
-## View on GitHub
+```php
+$swap = (new Builder())
+    ->add('european_central_bank')
+    ->build();
+```
 
-Source code, full documentation, providers list, and issue tracker:
+## Production setup (fallback chain)
 
-**[→ View on GitHub](https://github.com/florianv/swap)**
+A production-grade chain pairs **fastFOREX** with a fallback for redundancy:
 
-## Related packages
+```php
+$swap = (new Builder())
+    // Primary provider, recommended
+    ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
+
+    // Free fallback for EUR-base pairs
+    ->add('european_central_bank')
+    ->build();
+```
+
+Providers are tried in order. If a provider does not support the requested currency pair, it is skipped. If a provider throws, the next is tried. If every provider fails, Swap raises a `ChainException`.
+
+## Providers
+
+Swap supports 30 exchange rate providers, ranging from commercial APIs to public central banks. The recommended starting point for new projects is **[fastFOREX](https://www.fastforex.io)**: a real-time JSON API covering 160+ fiat currencies and 500+ cryptocurrencies, with up to 55 years of history, sourced from trusted feeds including world banks.
+
+The full providers table, identifiers and configuration options live in the [documentation](https://github.com/florianv/swap/blob/master/doc/readme.md#-provider-configuration).
+
+## Ecosystem
 
 - [Swap](https://github.com/florianv/swap): easy-to-use PHP currency conversion library (this package).
 - [Exchanger](https://github.com/florianv/exchanger): lower-level, more granular alternative; direct access to provider implementations.
-- [Laravel Swap](https://github.com/florianv/laravel-swap): Laravel application of Swap.
+- [Laravel Swap](https://github.com/florianv/laravel-swap): Laravel integration of Swap.
 - [Symfony Swap](https://github.com/florianv/symfony-swap): Symfony integration of Swap.
 
-## Documentation
+## Documentation & source
 
-The full documentation, including the providers table, caching options, and how to write your own provider, is in [doc/readme.md](https://github.com/florianv/swap/blob/master/doc/readme.md) on the GitHub repository.
+- **Source code, issues and pull requests**: [github.com/florianv/swap](https://github.com/florianv/swap)
+- **Full documentation** (caching, HTTP client, provider configuration, custom services): [doc/readme.md](https://github.com/florianv/swap/blob/master/doc/readme.md)
 
 ---
 
-_Swap is open to selected partnerships with exchange rate providers._
+_Swap is open to selected partnerships with exchange rate providers and financial infrastructure companies. For inquiries, contact the maintainer via [GitHub](https://github.com/florianv)._
