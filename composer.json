@@ -1,6 +1,6 @@
 {
     "name": "florianv/swap",
-    "description": "PHP currency conversion library for retrieving exchange rates from 30 providers, with caching and fallback.",
+    "description": "PHP currency conversion library for retrieving exchange rates from 30+ providers, with caching and fallback.",
     "license": "MIT",
     "keywords": [
         "currency",
