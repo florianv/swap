@@ -5,7 +5,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 
-> _The easy-to-use PHP currency conversion library. Retrieve exchange rates from 30 providers, with caching and fallback. Maintained since 2014._
+> _The easy-to-use PHP currency conversion library. Retrieve exchange rates from 31 providers, with caching and fallback. Maintained since 2014._
 
 <table>
    <tr>
@@ -101,7 +101,7 @@ For amount conversion (including the [moneyphp/money](https://github.com/moneyph
 
 ## 📊 Providers
 
-Swap supports 30 exchange rate providers. Pass the **identifier** to `Builder::add()`.
+Swap supports 31 exchange rate providers. Pass the **identifier** to `Builder::add()`.
 
 ### Commercial providers (require an API key)
 
@@ -123,6 +123,7 @@ Swap supports 30 exchange rate providers. Pass the **identifier** to `Builder::a
 | Fixer (direct)                           | `fixer`                        | EUR (free), * (paid) | *     | Yes        |
 | 1Forge                                   | `forge`                        | *                    | *     | No         |
 | Open Exchange Rates                      | `open_exchange_rates`          | USD (free), * (paid) | *     | Yes        |
+| UniRateAPI                               | `unirate_api`                  | *                    | *     | Yes        |
 | WebserviceX                              | `webservicex`                  | *                    | *     | No         |
 | xChangeApi.com                           | `xchangeapi`                   | *                    | *     | Yes        |
 | Xignite                                  | `xignite`                      | *                    | *     | Yes        |
@@ -162,7 +163,7 @@ You can also add your own provider by implementing the `Exchanger\Contract\Excha
 The Swap ecosystem is a layered toolkit for currency conversion in PHP:
 
 - [**Swap**](https://github.com/florianv/swap). The easy-to-use, high-level API (this package).
-- [**Exchanger**](https://github.com/florianv/exchanger). Lower-level, more granular alternative; direct access to the 30 provider implementations and the `ExchangeRateService` interface.
+- [**Exchanger**](https://github.com/florianv/exchanger). Lower-level, more granular alternative; direct access to the 31 provider implementations and the `ExchangeRateService` interface.
 - [**Laravel Swap**](https://github.com/florianv/laravel-swap). Laravel application of Swap.
 - [**Symfony Swap**](https://github.com/florianv/symfony-swap). Symfony integration of Swap.
 

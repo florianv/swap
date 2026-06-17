@@ -281,6 +281,7 @@ Commercial providers require an API key. The option name varies by provider. The
 | `fixer_apilayer`                 | `api_key`       |                       |
 | `forge`                          | `api_key`       |                       |
 | `open_exchange_rates`            | `app_id`        | `enterprise` (bool)   |
+| `unirate_api`                    | `api_key`       |                       |
 | `xchangeapi`                     | `api-key`       | (note the hyphen)     |
 | `xignite`                        | `token`         |                       |
 
