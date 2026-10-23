@@ -24,7 +24,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "florianv/exchanger": "^2.0",
+        "florianv/exchanger": "^2.11",
         "php-http/discovery": "^1.0"
     },
     "require-dev": {
