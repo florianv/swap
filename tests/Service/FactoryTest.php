@@ -35,17 +35,23 @@ use PHPUnit\Framework\TestCase;
 use Swap\Service\Factory;
 use Swap\Service\Registry;
 
-class FactoryTest extends TestCase
+final class FactoryTest extends TestCase
 {
+    /**
+     * @param class-string $class
+     */
     #[Test]
     #[DataProvider('servicesProvider')]
-    public function coreServices($name, $class, array $options = [])
+    public function coreServices(string $name, string $class, array $options = []): void
     {
         $factory = new Factory(new Client());
 
         $this->assertInstanceOf($class, $factory->create($name, $options));
     }
 
+    /**
+     * @return list<array{0: string, 1: class-string, 2?: array}>
+     */
     public static function servicesProvider(): array
     {
         return [
@@ -68,7 +74,7 @@ class FactoryTest extends TestCase
     }
 
     #[Test]
-    public function customServices()
+    public function customServices(): void
     {
         // Historical
         Registry::register('foo', OpenExchangeRates::class);
@@ -78,7 +84,7 @@ class FactoryTest extends TestCase
 
         // Callback
         $service = new PhpArray([], []);
-        Registry::register('baz', function () use ($service) {
+        Registry::register('baz', function () use ($service): PhpArray {
             return $service;
         });
 
@@ -90,17 +96,18 @@ class FactoryTest extends TestCase
     }
 
     #[Test]
-    public function constructInvalidClient()
+    public function constructInvalidClient(): void
     {
         $this->expectException(\LogicException::class);
         $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
         $this->expectExceptionMessage($expectedExceptionMessage);
 
-        $factory = new Factory(new \stdClass());
+        /** @psalm-suppress InvalidArgument The runtime type check is under test. */
+        new Factory(new \stdClass());
     }
 
     #[Test]
-    public function withNullAsClientUsesDiscovery()
+    public function withNullAsClientUsesDiscovery(): void
     {
         // php-http/mock-client (dev dep) provides client-implementation,
         // so PSR-18 discovery succeeds and Factory can create services.
@@ -110,13 +117,14 @@ class FactoryTest extends TestCase
     }
 
     #[Test]
-    public function setInvalidClient()
+    public function setInvalidClient(): void
     {
         $this->expectException(\LogicException::class);
         $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $factory = new Factory(new Client());
+        /** @psalm-suppress InvalidArgument The runtime type check is under test. */
         $factory->setHttpClient(new \stdClass());
     }
 }

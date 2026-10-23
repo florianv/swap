@@ -2,6 +2,7 @@
 
 [![Tests](https://github.com/florianv/swap/actions/workflows/tests.yml/badge.svg)](https://github.com/florianv/swap/actions/workflows/tests.yml)
 [![Psalm](https://github.com/florianv/swap/actions/workflows/psalm.yml/badge.svg)](https://github.com/florianv/swap/actions/workflows/psalm.yml)
+[![Type coverage](https://shepherd.dev/github/florianv/swap/coverage.svg)](https://shepherd.dev/github/florianv/swap)
 [![Total Downloads](https://img.shields.io/packagist/dt/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 [![Version](http://img.shields.io/packagist/v/florianv/swap.svg?style=flat-square)](https://packagist.org/packages/florianv/swap)
 

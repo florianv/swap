@@ -65,7 +65,7 @@ final class DocumentationTest extends TestCase
     public static function provideRegisteredIdentifiers(): iterable
     {
         foreach (array_keys(Registry::getServices()) as $identifier) {
-            yield $identifier => [$identifier];
+            yield (string) $identifier => [(string) $identifier];
         }
     }
 

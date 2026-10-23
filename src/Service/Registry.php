@@ -13,19 +13,22 @@ declare(strict_types=1);
 
 namespace Swap\Service;
 
+use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Service\Registry as ExchangerRegistry;
 
 /**
  * Holds services.
+ *
+ * @api
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Registry
 {
     /**
-     * The registered services.
+     * The registered services: a service class, or a factory called without arguments that returns the service.
      *
-     * @var array
+     * @var array<string, class-string<ExchangeRateService>|callable(): ExchangeRateService>
      */
     private static $services = [];
 
@@ -54,7 +57,7 @@ final class Registry
      *
      * @param string $name The service name
      *
-     * @return string|null
+     * @return class-string<ExchangeRateService>|callable(): ExchangeRateService|null The service class or factory, or null if not registered
      */
     public function get(string $name)
     {
@@ -64,8 +67,8 @@ final class Registry
     /**
      * Registers a new service.
      *
-     * @param string          $name            The service name
-     * @param string|callable $classOrCallable The class name or a callable
+     * @param string                                                         $name            The service name
+     * @param class-string<ExchangeRateService>|callable(): ExchangeRateService $classOrCallable The service class, or a factory called without arguments that returns the service
      *
      * @throws \InvalidArgumentException
      */
@@ -79,6 +82,7 @@ final class Registry
      */
     private function registerServices(): void
     {
+        /** @var array<string, class-string<ExchangeRateService>> $services */
         $services = ExchangerRegistry::getServices();
 
         foreach ($services as $name => $class) {

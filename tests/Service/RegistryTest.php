@@ -13,17 +13,18 @@ declare(strict_types=1);
 
 namespace Swap\Tests\Service;
 
+use Exchanger\Contract\ExchangeRateService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Swap\Service\Registry;
 use Exchanger\Service\Registry as ExchangerRegistry;
 
-class RegistryTest extends TestCase
+final class RegistryTest extends TestCase
 {
     #[Test]
     #[DataProvider('serviceProviders')]
-    public function coreServices($name, $class)
+    public function coreServices(string $name, string $class): void
     {
         $registry = new Registry();
 
@@ -31,9 +32,13 @@ class RegistryTest extends TestCase
         $this->assertEquals($class, $registry->get($name));
     }
 
+    /**
+     * @return list<array{string, string}>
+     */
     public static function serviceProviders(): array
     {
         $data = [];
+        /** @var array<string, string> $services */
         $services = ExchangerRegistry::getServices();
 
         foreach ($services as $name => $class) {
@@ -44,7 +49,7 @@ class RegistryTest extends TestCase
     }
 
     #[Test]
-    public function register()
+    public function register(): void
     {
         $registry = new Registry();
 
@@ -52,7 +57,7 @@ class RegistryTest extends TestCase
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals('Foo', $registry->get('foo'));
 
-        $callable = function () {};
+        $callable = fn(): ExchangeRateService => $this->createStub(ExchangeRateService::class);
         $registry->register('foo', $callable);
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals($callable, $registry->get('foo'));

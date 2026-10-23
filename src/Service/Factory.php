@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace Swap\Service;
 
+use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Service\HttpService;
 use Http\Client\HttpClient;
 use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
-use Http\Message\RequestFactory;
 use Psr\Http\Message\RequestFactoryInterface;
 
 /**
  * Helps building services.
+ *
+ * @api
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -31,14 +33,16 @@ final class Factory
     /**
      * The client.
      *
-     * @var HttpClient
+     * @psalm-suppress DeprecatedInterface HTTPlug clients stay accepted for BC until 5.0.
+     *
+     * @var HttpClient|ClientInterface
      */
     private $httpClient;
 
     /**
      * The request factory.
      *
-     * @var RequestFactory
+     * @var RequestFactoryInterface
      */
     private $requestFactory;
 
@@ -98,21 +102,23 @@ final class Factory
      * @param string $serviceName
      * @param array  $args
      *
-     * @return \Exchanger\Contract\ExchangeRateService
+     * @return ExchangeRateService
      */
     public function create(string $serviceName, array $args = [])
     {
-        if (!$this->registry->has($serviceName)) {
+        $classOrCallable = $this->registry->get($serviceName);
+
+        if (null === $classOrCallable) {
             throw new \LogicException(sprintf('The service "%s" is not registered.', $serviceName));
         }
 
-        $classOrCallable = $this->registry->get($serviceName);
-
         if (is_callable($classOrCallable)) {
+            /** @var ExchangeRateService Callables registered for a service must return it. */
             return call_user_func($classOrCallable);
         }
 
         if (is_subclass_of($classOrCallable, HttpService::class)) {
+            /** @psalm-suppress UnsafeInstantiation HttpService subclasses keep its constructor signature. */
             return new $classOrCallable($this->httpClient, $this->requestFactory, $args);
         }
 

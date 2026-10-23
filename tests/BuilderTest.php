@@ -22,13 +22,11 @@ use Psr\Http\Client\ClientInterface;
 use Swap\Builder;
 use Swap\Swap;
 
-class BuilderTest extends TestCase
+final class BuilderTest extends TestCase
 {
-    /**
-     * @var Builder
-     */
-    private $builder;
+    private Builder $builder;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,13 +36,13 @@ class BuilderTest extends TestCase
     }
 
     #[Test]
-    public function buildNoServicesAdded()
+    public function buildNoServicesAdded(): void
     {
         $this->assertInstanceOf(Swap::class, $this->builder->build());
     }
 
     #[Test]
-    public function buildSomeOptionsAdded()
+    public function buildSomeOptionsAdded(): void
     {
         $builder = new Builder(['cache_ttl']);
         $builder->useHttpClient($this->createStub(ClientInterface::class));
@@ -53,7 +51,7 @@ class BuilderTest extends TestCase
     }
 
     #[Test]
-    public function buildMultipleServicesAdded()
+    public function buildMultipleServicesAdded(): void
     {
         $this->builder->add('fixer', ['access_key' => 'access_key']);
         $this->builder->add('open_exchange_rates', ['app_id' => 'secret']);
@@ -61,18 +59,19 @@ class BuilderTest extends TestCase
     }
 
     #[Test]
-    public function useInvalidClient()
+    public function useInvalidClient(): void
     {
         $this->expectException(\LogicException::class);
         $expectedExceptionMessage = 'Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface';
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $builder = new Builder();
+        /** @psalm-suppress InvalidArgument The runtime type check is under test. */
         $builder->useHttpClient(new \stdClass());
     }
 
     #[Test]
-    public function addServiceDirectly()
+    public function addServiceDirectly(): void
     {
         $mockExchangeRateService = $this->createMock(ExchangeRateService::class);
 

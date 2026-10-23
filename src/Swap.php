@@ -85,8 +85,9 @@ class Swap
             $exchangeQueryBuilder->setDate($date);
         }
 
+        /** @var mixed $value */
         foreach ($options as $name => $value) {
-            $exchangeQueryBuilder->addOption($name, $value);
+            $exchangeQueryBuilder->addOption((string) $name, $value);
         }
 
         $query = $exchangeQueryBuilder->build();
