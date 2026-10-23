@@ -175,7 +175,7 @@ Caching (PSR-16), HTTP client selection (PSR-18 / Guzzle / `useHttpClient`), err
 
 ## 🙌 Contributing
 
-Issues and pull requests are welcome. Please see the existing [issues](https://github.com/florianv/swap/issues) before opening a new one.
+Issues and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first, including the rules for AI-assisted contributions, and check the existing [issues](https://github.com/florianv/swap/issues) before opening a new one. New providers are added in [Exchanger](https://github.com/florianv/exchanger).
 
 ## 📄 License
 
