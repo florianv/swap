@@ -16,6 +16,9 @@ namespace Swap;
 use Exchanger\Contract\ExchangeRateProvider;
 use Exchanger\ExchangeRateQueryBuilder;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
+use Exchanger\Exception\Exception;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\SimpleCache\InvalidArgumentException as CacheInvalidArgumentException;
 
 /**
  * Swap is an easy to use facade to retrieve exchange rates from various services.
@@ -48,6 +51,17 @@ class Swap
      * @param array  $options      An array of query options
      *
      * @return ExchangeRateContract
+     *
+     * @throws \InvalidArgumentException     When the currency pair is not in the form "EUR/USD".
+     * @throws Exception                     When no rate can be provided. The subclass tells why:
+     *                                       UnsupportedCurrencyPairException, UnsupportedDateException,
+     *                                       UnsupportedExchangeQueryException, ChainException or CacheException.
+     *                                       A Swap made by Builder wraps services in a Chain, so failures of
+     *                                       the services themselves arrive as one ChainException.
+     * @throws ClientExceptionInterface      When the HTTP request to the provider fails.
+     * @throws \RuntimeException             When the provider's response cannot be parsed, for services that
+     *                                       don't wrap parse errors in Exception yet.
+     * @throws CacheInvalidArgumentException When the PSR-16 cache rejects the cache key.
      */
     public function latest(string $currencyPair, array $options = []): ExchangeRateContract
     {
@@ -62,6 +76,17 @@ class Swap
      * @param array              $options      An array of query options
      *
      * @return ExchangeRateContract
+     *
+     * @throws \InvalidArgumentException     When the currency pair is not in the form "EUR/USD".
+     * @throws Exception                     When no rate can be provided. The subclass tells why:
+     *                                       UnsupportedCurrencyPairException, UnsupportedDateException,
+     *                                       UnsupportedExchangeQueryException, ChainException or CacheException.
+     *                                       A Swap made by Builder wraps services in a Chain, so failures of
+     *                                       the services themselves arrive as one ChainException.
+     * @throws ClientExceptionInterface      When the HTTP request to the provider fails.
+     * @throws \RuntimeException             When the provider's response cannot be parsed, for services that
+     *                                       don't wrap parse errors in Exception yet.
+     * @throws CacheInvalidArgumentException When the PSR-16 cache rejects the cache key.
      */
     public function historical(string $currencyPair, \DateTimeInterface $date, array $options = []): ExchangeRateContract
     {
