@@ -3,7 +3,13 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         cacheDirectory=".phpunit.cache">
+         cacheDirectory=".phpunit.cache"
+         failOnEmptyTestSuite="true"
+         failOnWarning="true"
+         failOnPhpunitDeprecation="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         displayDetailsOnSkippedTests="true">
     <testsuites>
         <testsuite name="Swap Tests Suite">
             <directory>tests</directory>

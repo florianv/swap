@@ -34,7 +34,7 @@ class BuilderTest extends TestCase
         parent::setUp();
 
         $this->builder = new Builder();
-        $this->builder->useHttpClient($this->createMock(ClientInterface::class));
+        $this->builder->useHttpClient($this->createStub(ClientInterface::class));
     }
 
     #[Test]
@@ -47,7 +47,7 @@ class BuilderTest extends TestCase
     public function buildSomeOptionsAdded()
     {
         $builder = new Builder(['cache_ttl']);
-        $builder->useHttpClient($this->createMock(ClientInterface::class));
+        $builder->useHttpClient($this->createStub(ClientInterface::class));
 
         $this->assertInstanceOf(Swap::class, $builder->build());
     }
