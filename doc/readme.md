@@ -238,16 +238,14 @@ composer require php-http/cache-plugin cache/array-adapter
 
 ```php
 use Cache\Adapter\PHPArray\ArrayCachePool;
-use Http\Adapter\Guzzle7\Client as GuzzleClient;
 use Http\Client\Common\Plugin\CachePlugin;
 use Http\Client\Common\PluginClient;
-use Http\Message\StreamFactory\GuzzleStreamFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Swap\Builder;
+use Symfony\Component\HttpClient\Psr18Client;
 
-$pool          = new ArrayCachePool();
-$streamFactory = new GuzzleStreamFactory();
-$cachePlugin   = new CachePlugin($pool, $streamFactory);
-$client        = new PluginClient(new GuzzleClient(), [$cachePlugin]);
+$cachePlugin = new CachePlugin(new ArrayCachePool(), new Psr17Factory());
+$client      = new PluginClient(new Psr18Client(), [$cachePlugin]);
 
 $swap = (new Builder())
     ->useHttpClient($client)
