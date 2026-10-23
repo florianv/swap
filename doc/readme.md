@@ -305,6 +305,7 @@ $swap = (new Builder())
 | `central_bank_of_republic_turkey`     | *              | TRY            | Yes        |
 | `central_bank_of_republic_uzbekistan` | *              | UZS            | Yes        |
 | `european_central_bank`               | EUR            | *              | Yes        |
+| `national_bank_of_denmark`            | (limited list) | (limited list) | Yes        |
 | `national_bank_of_georgia`            | *              | GEL            | Yes        |
 | `national_bank_of_romania`            | (limited list) | (limited list) | Yes        |
 | `national_bank_of_republic_belarus`   | *              | BYN            | Yes        |
