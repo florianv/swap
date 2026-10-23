@@ -27,6 +27,8 @@ use Swap\Tests\Fixtures\NamedService;
 
 final class BuilderTest extends TestCase
 {
+    use ResetsRegistry;
+
     private Builder $builder;
 
     #[\Override]
@@ -105,34 +107,7 @@ final class BuilderTest extends TestCase
     }
 
     #[Test]
-    public function addSameServiceTwiceKeepsBothInCallOrder(): void
-    {
-        $this->builder->add('named', ['name' => 'a']);
-        $this->builder->add('named', ['name' => 'b']);
-
-        $this->assertSame('a', $this->builder->build()->latest('EUR/USD')->getProviderName());
-    }
-
-    #[Test]
-    public function addSameServiceTwiceInReverseOrder(): void
-    {
-        $this->builder->add('named', ['name' => 'b']);
-        $this->builder->add('named', ['name' => 'a']);
-
-        $this->assertSame('b', $this->builder->build()->latest('EUR/USD')->getProviderName());
-    }
-
-    #[Test]
-    public function addSameServiceTwiceFallsBackToTheSecondInstance(): void
-    {
-        $this->builder->add('named', ['name' => 'a', 'fail' => true]);
-        $this->builder->add('named', ['name' => 'b']);
-
-        $this->assertSame('b', $this->builder->build()->latest('EUR/USD')->getProviderName());
-    }
-
-    #[Test]
-    public function addSameServiceTwiceTriesBothInstances(): void
+    public function addingTheSameServiceNameAgainReplacesItsOptions(): void
     {
         $this->builder->add('named', ['name' => 'a', 'fail' => true]);
         $this->builder->add('named', ['name' => 'b', 'fail' => true]);
@@ -143,8 +118,27 @@ final class BuilderTest extends TestCase
         } catch (ChainException $e) {
             $messages = array_map(static fn(\Throwable $e): string => $e->getMessage(), $e->getExceptions());
 
-            $this->assertSame(['Service "a" failed.', 'Service "b" failed.'], $messages);
+            $this->assertSame(['Service "b" failed.'], $messages);
         }
+    }
+
+    #[Test]
+    public function addingTheSameServiceNameAgainKeepsItsPosition(): void
+    {
+        $this->builder->add('named', ['name' => 'a']);
+        $this->builder->addExchangeRateService(new NamedService('direct'));
+        $this->builder->add('named', ['name' => 'b']);
+
+        $this->assertSame('b', $this->builder->build()->latest('EUR/USD')->getProviderName());
+    }
+
+    #[Test]
+    public function severalInstancesOfTheSameServiceCanBeAddedDirectly(): void
+    {
+        $this->builder->addExchangeRateService(new NamedService('a', true));
+        $this->builder->addExchangeRateService(new NamedService('b'));
+
+        $this->assertSame('b', $this->builder->build()->latest('EUR/USD')->getProviderName());
     }
 
     #[Test]

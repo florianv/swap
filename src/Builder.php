@@ -32,9 +32,9 @@ use Psr\Http\Message\RequestFactoryInterface;
 final class Builder
 {
     /**
-     * The services, in the order they were added.
+     * The services, keyed by service name (options) or object hash (instances), in the order they were added.
      *
-     * @var list<array{string, array}|ExchangeRateService>
+     * @var array<string, array|ExchangeRateService>
      */
     private $services = [];
 
@@ -81,8 +81,9 @@ final class Builder
     /**
      * Adds a service by service name.
      *
-     * Each call adds a new service, so the same service can be added several times
-     * with different options. Services are tried in the order they were added.
+     * Services are tried in the order they were added. Adding a service name again replaces
+     * its options and keeps its position. To use several instances of the same service, for
+     * example with different options, pass them to addExchangeRateService().
      *
      * @param string $serviceName
      * @param array  $options
@@ -91,7 +92,7 @@ final class Builder
      */
     public function add(string $serviceName, array $options = []): self
     {
-        $this->services[] = [$serviceName, $options];
+        $this->services[$serviceName] = $options;
 
         return $this;
     }
@@ -105,9 +106,7 @@ final class Builder
      */
     public function addExchangeRateService(ExchangeRateService $exchangeRateService): self
     {
-        if (!\in_array($exchangeRateService, $this->services, true)) {
-            $this->services[] = $exchangeRateService;
-        }
+        $this->services[spl_object_hash($exchangeRateService)] = $exchangeRateService;
 
         return $this;
     }
@@ -173,11 +172,11 @@ final class Builder
         /** @var ExchangeRateService[] $services */
         $services = [];
 
-        foreach ($this->services as $service) {
-            if ($service instanceof ExchangeRateService) {
-                $services[] = $service;
+        foreach ($this->services as $name => $optionsOrService) {
+            if ($optionsOrService instanceof ExchangeRateService) {
+                $services[] = $optionsOrService;
             } else {
-                $services[] = $serviceFactory->create($service[0], $service[1]);
+                $services[] = $serviceFactory->create($name, $optionsOrService);
             }
         }
 

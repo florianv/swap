@@ -17,19 +17,13 @@ use Exchanger\Contract\ExchangeRateService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Swap\Tests\ResetsRegistry;
 use Swap\Service\Registry;
 use Exchanger\Service\Registry as ExchangerRegistry;
 
 final class RegistryTest extends TestCase
 {
-    #[\Override]
-    protected function tearDown(): void
-    {
-        // register() is global by design: forget what this test registered.
-        (new \ReflectionProperty(Registry::class, 'services'))->setValue(null, []);
-
-        parent::tearDown();
-    }
+    use ResetsRegistry;
 
     #[Test]
     #[DataProvider('serviceProviders')]

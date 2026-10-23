@@ -105,7 +105,7 @@ Swap calls providers in declaration order. For each provider:
 2. If the provider throws an exception, the exception is collected and the next provider is tried.
 3. If a provider returns a rate, that rate is returned to the caller and the remaining providers are not called.
 
-If every provider was skipped or threw, Swap raises an `Exchanger\Exception\ChainException` containing all collected exceptions. The chain does not retry the same provider, and there is no built-in delay between attempts.
+If every provider that was tried threw, Swap raises an `Exchanger\Exception\ChainException` containing all collected exceptions. If no provider supports the query at all, Swap throws `Exchanger\Exception\UnsupportedExchangeQueryException` without calling any of them. The chain does not retry the same provider, and there is no built-in delay between attempts.
 
 ## ⚡ Usage
 
@@ -126,7 +126,7 @@ $rate = $swap->historical('EUR/USD', (new \DateTime())->modify('-15 days'));
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
 
-Both methods accept an options array as a third argument; see [Per-query options](#per-query-options) for the supported keys.
+Both methods accept an options array, as the second argument of `latest()` and the third argument of `historical()`; see [Per-query options](#per-query-options) for the supported keys.
 
 ### Inspecting the rate
 
@@ -139,7 +139,7 @@ $rate->getCurrencyPair();  // Exchanger\CurrencyPair
 $rate->getProviderName();  // string, the identifier that returned the rate
 ```
 
-`getProviderName()` is useful when several providers are chained: the returned value is the identifier of the provider that actually answered, for example `european_central_bank`.
+`getProviderName()` is useful when several providers are chained: the returned value is the identifier of the provider that actually answered, for example `european_central_bank`. Several instances of the same service report the same identifier.
 
 ### Converting amounts
 
@@ -152,7 +152,7 @@ $amountEur = 100.00;
 $amountUsd = $amountEur * $rate->getValue();
 ```
 
-For financial code with proper rounding semantics, pair Swap with [moneyphp/money](https://github.com/moneyphp/money). Money ships a first-class `SwapExchange` that wraps any `Swap\SwapInterface` directly:
+For financial code with proper rounding semantics, pair Swap with [moneyphp/money](https://github.com/moneyphp/money). Money ships a first-class `SwapExchange` that wraps a `Swap\Swap` instance directly:
 
 ```php
 use Money\Money;
@@ -249,11 +249,11 @@ $client      = new PluginClient(new Psr18Client(), [$cachePlugin]);
 
 $swap = (new Builder())
     ->useHttpClient($client)
-    ->add('fastforex', ['api_key' => getenv('FASTFOREX_API_KEY')])
+    ->add('european_central_bank')
     ->build();
 
 $rate = $swap->latest('EUR/USD'); // performs an HTTP request
-$rate = $swap->latest('EUR/GBP'); // hits the HTTP cache
+$rate = $swap->latest('EUR/GBP'); // hits the HTTP cache: the ECB returns all rates in one response
 ```
 
 ## 🔑 Provider configuration
@@ -336,7 +336,7 @@ $swap = (new Builder())
 
 ## 🧩 Creating a custom service
 
-You can register your own provider as long as it implements the same contract used internally. If your service makes HTTP requests, extend `Exchanger\Service\HttpService`; otherwise extend the simpler `Exchanger\Service\Service`.
+You can register your own provider as long as it implements the same contract used internally. A service registered by name is created by `Swap\Service\Factory`, which passes the options from `Builder::add()` to the constructor of `Exchanger\Service\HttpService`, so extend `HttpService` even if your service makes no HTTP requests. A service that extends `Exchanger\Service\Service` directly can still be used: create it yourself and pass it to `Builder::addExchangeRateService()`.
 
 ### Standard service
 
@@ -394,7 +394,7 @@ To support historical rates, use the `SupportsHistoricalQueries` trait. Rename `
 ```php
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\ExchangeRate;
-use Exchanger\HistoricalExchangeRateQuery;
+use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Service\HttpService;
 use Exchanger\Service\SupportsHistoricalQueries;
 
@@ -438,7 +438,7 @@ Pass `['cache' => false]` as the options argument: `$swap->latest('EUR/USD', ['c
 
 #### How do I add my own provider?
 
-Implement `Exchanger\Contract\ExchangeRateService` (or extend `HttpService` / `Service`), register it with `Swap\Service\Registry::register()`, then call `Builder::add()` with your identifier. See [Creating a custom service](#-creating-a-custom-service).
+Extend `Exchanger\Service\HttpService`, register it with `Swap\Service\Registry::register()`, then call `Builder::add()` with your identifier. If you register a callable instead of a class, it is called without arguments, so it must build the service with its options itself. A service you create yourself can also be passed to `Builder::addExchangeRateService()`. See [Creating a custom service](#-creating-a-custom-service).
 
 #### Where is the full provider list with capabilities?
 

@@ -32,11 +32,14 @@ use Http\Mock\Client;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Swap\Tests\ResetsRegistry;
 use Swap\Service\Factory;
 use Swap\Service\Registry;
 
 final class FactoryTest extends TestCase
 {
+    use ResetsRegistry;
+
     /**
      * @param class-string $class
      */
