@@ -82,8 +82,6 @@ final class Registry
      *
      * @param string                                                         $name            The service name
      * @param class-string<ExchangeRateService>|callable(): ExchangeRateService $classOrCallable The service class, or a factory called without arguments that returns the service
-     *
-     * @throws \InvalidArgumentException
      */
     public static function register(string $name, $classOrCallable): void
     {

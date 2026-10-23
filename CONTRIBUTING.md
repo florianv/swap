@@ -16,9 +16,10 @@ When you report a bug, include the Swap and Exchanger versions, the PHP version,
 composer install
 composer test      # PHPUnit
 composer psalm     # static analysis
+composer cs:check  # coding style; composer cs:fix applies it
 ```
 
-CI runs the tests on PHP 8.2 to 8.5, plus Psalm and a backward compatibility check. A pull request is ready for review when they all pass.
+CI runs the tests on PHP 8.2 to 8.5, plus Psalm, the coding style check and a backward compatibility check. A pull request is ready for review when they all pass.
 
 ## Pull requests
 
@@ -46,7 +47,7 @@ Autocomplete of a few lines doesn't need disclosure.
 **Review it yourself first.** Before you submit, you must have:
 
 - read and understood every changed line, and be able to explain it without asking the AI again;
-- run `composer test` and `composer psalm` locally;
+- run `composer test`, `composer psalm` and `composer cs:check` locally;
 - checked every claim about a provider or about Exchanger against its documentation or code. AI tools invent options, identifiers and behaviour;
 - removed anything you can't justify: unrelated changes, speculative improvements, filler text.
 
