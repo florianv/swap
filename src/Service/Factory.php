@@ -35,7 +35,7 @@ final class Factory
      *
      * @psalm-suppress DeprecatedInterface HTTPlug clients stay accepted for BC until 5.0.
      *
-     * @var HttpClient|ClientInterface
+     * @var ClientInterface|HttpClient
      */
     private $httpClient;
 
@@ -54,7 +54,12 @@ final class Factory
     private $registry;
 
     /**
-     * @param HttpClient|ClientInterface|null $httpClient
+     * Without a client, a PSR-18 client is discovered with php-http/discovery.
+     *
+     * The client should be a PSR-18 ClientInterface. HTTPlug's HttpClient is still
+     * accepted for backward compatibility, but it is deprecated.
+     *
+     * @param ClientInterface|HttpClient|null $httpClient
      * @param RequestFactoryInterface|null    $requestFactory
      */
     public function __construct($httpClient = null, ?RequestFactoryInterface $requestFactory = null)
@@ -75,7 +80,10 @@ final class Factory
     /**
      * Sets the http client.
      *
-     * @param HttpClient|ClientInterface $httpClient
+     * The client should be a PSR-18 ClientInterface. HTTPlug's HttpClient is still
+     * accepted for backward compatibility, but it is deprecated.
+     *
+     * @param ClientInterface|HttpClient $httpClient
      */
     public function setHttpClient($httpClient): void
     {

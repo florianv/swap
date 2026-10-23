@@ -50,7 +50,7 @@ final class Builder
      *
      * @psalm-suppress DeprecatedInterface HTTPlug clients stay accepted for BC until 5.0.
      *
-     * @var HttpClient|ClientInterface|null
+     * @var ClientInterface|HttpClient|null
      */
     private $httpClient = null;
 
@@ -110,7 +110,10 @@ final class Builder
     /**
      * Uses the given http client.
      *
-     * @param HttpClient|ClientInterface $httpClient
+     * The client should be a PSR-18 ClientInterface. HTTPlug's HttpClient is still
+     * accepted for backward compatibility, but it is deprecated.
+     *
+     * @param ClientInterface|HttpClient $httpClient
      *
      * @return Builder
      */
