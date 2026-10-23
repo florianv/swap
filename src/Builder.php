@@ -32,9 +32,9 @@ use Psr\Http\Message\RequestFactoryInterface;
 final class Builder
 {
     /**
-     * The services.
+     * The services, in the order they were added.
      *
-     * @var array<string, array|ExchangeRateService>
+     * @var list<array{string, array}|ExchangeRateService>
      */
     private $services = [];
 
@@ -81,6 +81,9 @@ final class Builder
     /**
      * Adds a service by service name.
      *
+     * Each call adds a new service, so the same service can be added several times
+     * with different options. Services are tried in the order they were added.
+     *
      * @param string $serviceName
      * @param array  $options
      *
@@ -88,7 +91,7 @@ final class Builder
      */
     public function add(string $serviceName, array $options = []): self
     {
-        $this->services[$serviceName] = $options;
+        $this->services[] = [$serviceName, $options];
 
         return $this;
     }
@@ -102,7 +105,9 @@ final class Builder
      */
     public function addExchangeRateService(ExchangeRateService $exchangeRateService): self
     {
-        $this->services[spl_object_hash($exchangeRateService)] = $exchangeRateService;
+        if (!\in_array($exchangeRateService, $this->services, true)) {
+            $this->services[] = $exchangeRateService;
+        }
 
         return $this;
     }
@@ -168,11 +173,11 @@ final class Builder
         /** @var ExchangeRateService[] $services */
         $services = [];
 
-        foreach ($this->services as $name => $optionsOrService) {
-            if ($optionsOrService instanceof ExchangeRateService) {
-                $services[] = $optionsOrService;
+        foreach ($this->services as $service) {
+            if ($service instanceof ExchangeRateService) {
+                $services[] = $service;
             } else {
-                $services[] = $serviceFactory->create($name, $optionsOrService);
+                $services[] = $serviceFactory->create($service[0], $service[1]);
             }
         }
 
