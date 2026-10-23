@@ -20,17 +20,17 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Swap\Swap;
 
-class SwapTest extends TestCase
+final class SwapTest extends TestCase
 {
     #[Test]
-    public function latest()
+    public function latest(): void
     {
         $exchangeRateProvider = $this->createMock(ExchangeRateProvider::class);
 
         $exchangeRateProvider
             ->expects($this->once())
             ->method('getExchangeRate')
-            ->with($this->callback(function ($exchangeRateQuery) {
+            ->with($this->callback(function (mixed $exchangeRateQuery): bool {
                 return $exchangeRateQuery instanceof ExchangeRateQuery;
             }));
 
@@ -39,14 +39,14 @@ class SwapTest extends TestCase
     }
 
     #[Test]
-    public function historical()
+    public function historical(): void
     {
         $exchangeRateProvider = $this->createMock(ExchangeRateProvider::class);
 
         $exchangeRateProvider
             ->expects($this->once())
             ->method('getExchangeRate')
-            ->with($this->callback(function ($exchangeRateQuery) {
+            ->with($this->callback(function (mixed $exchangeRateQuery): bool {
                 return $exchangeRateQuery instanceof HistoricalExchangeRateQuery;
             }));
 
