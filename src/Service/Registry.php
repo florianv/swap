@@ -18,6 +18,8 @@ use Exchanger\Service\Registry as ExchangerRegistry;
 /**
  * Holds services.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Registry
@@ -25,7 +27,7 @@ final class Registry
     /**
      * The registered services.
      *
-     * @var array
+     * @var array<string, string|callable>
      */
     private static $services = [];
 
@@ -54,7 +56,7 @@ final class Registry
      *
      * @param string $name The service name
      *
-     * @return string|null
+     * @return string|callable|null
      */
     public function get(string $name)
     {
@@ -79,6 +81,7 @@ final class Registry
      */
     private function registerServices(): void
     {
+        /** @var array<string, class-string> $services */
         $services = ExchangerRegistry::getServices();
 
         foreach ($services as $name => $class) {

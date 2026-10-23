@@ -25,6 +25,8 @@ use Psr\Http\Message\RequestFactoryInterface;
 /**
  * Helps building Swap.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Builder
@@ -32,7 +34,7 @@ final class Builder
     /**
      * The services.
      *
-     * @var array
+     * @var array<string, array|ExchangeRateService>
      */
     private $services = [];
 
@@ -46,23 +48,25 @@ final class Builder
     /**
      * The http client.
      *
-     * @var HttpClient
+     * @psalm-suppress DeprecatedInterface HTTPlug clients stay accepted for BC until 5.0.
+     *
+     * @var HttpClient|ClientInterface|null
      */
-    private $httpClient;
+    private $httpClient = null;
 
     /**
      * The request factory.
      *
-     * @var RequestFactoryInterface
+     * @var RequestFactoryInterface|null
      */
-    private $requestFactory;
+    private $requestFactory = null;
 
     /**
      * The cache.
      *
-     * @var CacheInterface
+     * @var CacheInterface|null
      */
-    private $cache;
+    private $cache = null;
 
     /**
      * Constructor.
@@ -162,7 +166,6 @@ final class Builder
         $services = [];
 
         foreach ($this->services as $name => $optionsOrService) {
-            /** @var array|ExchangeRateService $optionsOrService */
             if ($optionsOrService instanceof ExchangeRateService) {
                 $services[] = $optionsOrService;
             } else {
