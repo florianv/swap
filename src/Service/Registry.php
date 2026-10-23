@@ -26,18 +26,29 @@ use Exchanger\Service\Registry as ExchangerRegistry;
 final class Registry
 {
     /**
-     * The registered services: a service class, or a factory called without arguments that returns the service.
+     * The services registered with register(), shared by all instances: a service class, or a factory
+     * called without arguments that returns the service.
      *
      * @var array<string, class-string<ExchangeRateService>|callable(): ExchangeRateService>
      */
     private static $services = [];
 
     /**
+     * The core services of this instance.
+     *
+     * @var array<string, class-string<ExchangeRateService>>
+     */
+    private $coreServices;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->registerServices();
+        /** @var array<string, class-string<ExchangeRateService>> $services */
+        $services = ExchangerRegistry::getServices();
+
+        $this->coreServices = $services;
     }
 
     /**
@@ -49,7 +60,7 @@ final class Registry
      */
     public function has(string $name): bool
     {
-        return isset(self::$services[$name]);
+        return isset(self::$services[$name]) || isset($this->coreServices[$name]);
     }
 
     /**
@@ -61,11 +72,13 @@ final class Registry
      */
     public function get(string $name)
     {
-        return self::$services[$name] ?? null;
+        return self::$services[$name] ?? $this->coreServices[$name] ?? null;
     }
 
     /**
      * Registers a new service.
+     *
+     * The service is visible to every instance, and replaces a core service of the same name.
      *
      * @param string                                                         $name            The service name
      * @param class-string<ExchangeRateService>|callable(): ExchangeRateService $classOrCallable The service class, or a factory called without arguments that returns the service
@@ -75,18 +88,5 @@ final class Registry
     public static function register(string $name, $classOrCallable): void
     {
         self::$services[$name] = $classOrCallable;
-    }
-
-    /**
-     * Registers the core services.
-     */
-    private function registerServices(): void
-    {
-        /** @var array<string, class-string<ExchangeRateService>> $services */
-        $services = ExchangerRegistry::getServices();
-
-        foreach ($services as $name => $class) {
-            self::register($name, $class);
-        }
     }
 }

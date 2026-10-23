@@ -15,12 +15,15 @@ namespace Swap\Tests;
 
 use Exchanger\Contract\ExchangeRateService;
 use Exchanger\CurrencyPair;
+use Exchanger\Exception\ChainException;
 use Exchanger\ExchangeRate;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Swap\Builder;
+use Swap\Service\Registry;
 use Swap\Swap;
+use Swap\Tests\Fixtures\NamedService;
 
 final class BuilderTest extends TestCase
 {
@@ -30,6 +33,8 @@ final class BuilderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Registry::register('named', NamedService::class);
 
         $this->builder = new Builder();
         $this->builder->useHttpClient($this->createStub(ClientInterface::class));
@@ -97,5 +102,72 @@ final class BuilderTest extends TestCase
         $retrievedRate = $swap->latest('EUR/USD');
 
         $this->assertSame($rate, $retrievedRate);
+    }
+
+    #[Test]
+    public function addSameServiceTwiceKeepsBothInCallOrder(): void
+    {
+        $this->builder->add('named', ['name' => 'a']);
+        $this->builder->add('named', ['name' => 'b']);
+
+        $this->assertSame('a', $this->builder->build()->latest('EUR/USD')->getProviderName());
+    }
+
+    #[Test]
+    public function addSameServiceTwiceInReverseOrder(): void
+    {
+        $this->builder->add('named', ['name' => 'b']);
+        $this->builder->add('named', ['name' => 'a']);
+
+        $this->assertSame('b', $this->builder->build()->latest('EUR/USD')->getProviderName());
+    }
+
+    #[Test]
+    public function addSameServiceTwiceFallsBackToTheSecondInstance(): void
+    {
+        $this->builder->add('named', ['name' => 'a', 'fail' => true]);
+        $this->builder->add('named', ['name' => 'b']);
+
+        $this->assertSame('b', $this->builder->build()->latest('EUR/USD')->getProviderName());
+    }
+
+    #[Test]
+    public function addSameServiceTwiceTriesBothInstances(): void
+    {
+        $this->builder->add('named', ['name' => 'a', 'fail' => true]);
+        $this->builder->add('named', ['name' => 'b', 'fail' => true]);
+
+        try {
+            $this->builder->build()->latest('EUR/USD');
+            $this->fail('Expected a ChainException.');
+        } catch (ChainException $e) {
+            $messages = array_map(static fn(\Throwable $e): string => $e->getMessage(), $e->getExceptions());
+
+            $this->assertSame(['Service "a" failed.', 'Service "b" failed.'], $messages);
+        }
+    }
+
+    #[Test]
+    public function differentServicesKeepCallOrder(): void
+    {
+        $this->builder->addExchangeRateService(new NamedService('direct'));
+        $this->builder->add('named', ['name' => 'by-name']);
+
+        $this->assertSame('direct', $this->builder->build()->latest('EUR/USD')->getProviderName());
+    }
+
+    #[Test]
+    public function addingTheSameInstanceTwiceKeepsOneEntry(): void
+    {
+        $failing = new NamedService('failing', true);
+        $this->builder->addExchangeRateService($failing);
+        $this->builder->addExchangeRateService($failing);
+
+        try {
+            $this->builder->build()->latest('EUR/USD');
+            $this->fail('Expected a ChainException.');
+        } catch (ChainException $e) {
+            $this->assertCount(1, $e->getExceptions());
+        }
     }
 }
