@@ -3,6 +3,7 @@
 /.github export-ignore
 /doc export-ignore
 /tests export-ignore
+CONTRIBUTING.md export-ignore
 .editorconfig export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
