@@ -52,8 +52,7 @@ class RegistryTest extends TestCase
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals('Foo', $registry->get('foo'));
 
-        $callable = function () {
-        };
+        $callable = function () {};
         $registry->register('foo', $callable);
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals($callable, $registry->get('foo'));

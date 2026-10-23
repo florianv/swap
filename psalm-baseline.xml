@@ -68,8 +68,8 @@
       <code><![CDATA[$class]]></code>
     </MixedAssignment>
     <MixedReturnStatement>
-      <code><![CDATA[isset(self::$services[$name]) ? self::$services[$name] : null]]></code>
-      <code><![CDATA[isset(self::$services[$name]) ? self::$services[$name] : null]]></code>
+      <code><![CDATA[self::$services[$name] ?? null]]></code>
+      <code><![CDATA[self::$services[$name] ?? null]]></code>
     </MixedReturnStatement>
   </file>
   <file src="src/Swap.php">
