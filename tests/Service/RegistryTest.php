@@ -22,6 +22,15 @@ use Exchanger\Service\Registry as ExchangerRegistry;
 
 final class RegistryTest extends TestCase
 {
+    #[\Override]
+    protected function tearDown(): void
+    {
+        // register() is global by design: forget what this test registered.
+        (new \ReflectionProperty(Registry::class, 'services'))->setValue(null, []);
+
+        parent::tearDown();
+    }
+
     #[Test]
     #[DataProvider('serviceProviders')]
     public function coreServices(string $name, string $class): void
@@ -61,5 +70,41 @@ final class RegistryTest extends TestCase
         $registry->register('foo', $callable);
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals($callable, $registry->get('foo'));
+    }
+
+    #[Test]
+    public function constructingDoesNotTouchSharedState(): void
+    {
+        new Registry();
+
+        $this->assertSame([], (new \ReflectionProperty(Registry::class, 'services'))->getValue());
+    }
+
+    #[Test]
+    public function registeredServiceReplacesCoreServiceInNewInstances(): void
+    {
+        Registry::register('european_central_bank', 'Foo');
+
+        $this->assertSame('Foo', (new Registry())->get('european_central_bank'));
+    }
+
+    #[Test]
+    public function newInstanceDoesNotResetAnotherInstance(): void
+    {
+        $first = new Registry();
+        Registry::register('european_central_bank', 'Foo');
+        $second = new Registry();
+
+        $this->assertSame('Foo', $first->get('european_central_bank'));
+        $this->assertSame('Foo', $second->get('european_central_bank'));
+    }
+
+    #[Test]
+    public function unknownServiceIsNotRegistered(): void
+    {
+        $registry = new Registry();
+
+        $this->assertFalse($registry->has('unknown'));
+        $this->assertNull($registry->get('unknown'));
     }
 }
