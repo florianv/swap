@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Swap\Tests\Service;
 
+use Exchanger\Contract\ExchangeRateService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -56,7 +57,7 @@ final class RegistryTest extends TestCase
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals('Foo', $registry->get('foo'));
 
-        $callable = function (): void {};
+        $callable = fn(): ExchangeRateService => $this->createStub(ExchangeRateService::class);
         $registry->register('foo', $callable);
         $this->assertTrue($registry->has('foo'));
         $this->assertEquals($callable, $registry->get('foo'));

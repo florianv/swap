@@ -122,7 +122,6 @@ final class Factory
             return new $classOrCallable($this->httpClient, $this->requestFactory, $args);
         }
 
-        /** @var class-string<ExchangeRateService> $classOrCallable Registered class names must name a service. */
         $r = new \ReflectionClass($classOrCallable);
 
         return $r->newInstanceArgs($args);
