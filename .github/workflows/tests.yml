@@ -5,9 +5,17 @@ on:
     branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     strategy:
       fail-fast: false
@@ -26,7 +34,9 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --no-interaction --prefer-dist
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: highest
 
       - name: Run tests
         run: vendor/bin/phpunit

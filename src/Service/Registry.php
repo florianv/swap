@@ -58,7 +58,7 @@ final class Registry
      */
     public function get(string $name)
     {
-        return isset(self::$services[$name]) ? self::$services[$name] : null;
+        return self::$services[$name] ?? null;
     }
 
     /**
