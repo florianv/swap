@@ -274,8 +274,8 @@ Commercial providers require an API key. The option name varies by provider. The
 | `currency_converter`             | `access_key`    | `enterprise` (bool)   |
 | `currency_data_feed`             | `api_key`       |                       |
 | `currency_layer`                 | `access_key`    | `enterprise` (bool)   |
-| `exchange_rates_api`             | `access_key`    |                       |
-| `fixer`                          | `access_key`    |                       |
+| `exchange_rates_api`             | `access_key`    | `enterprise` (bool)   |
+| `fixer`                          | `access_key`    | `enterprise` (bool)   |
 | `fixer_apilayer`                 | `api_key`       |                       |
 | `forge`                          | `api_key`       |                       |
 | `open_exchange_rates`            | `app_id`        | `enterprise` (bool)   |
